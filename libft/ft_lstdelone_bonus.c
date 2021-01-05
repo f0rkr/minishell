@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 15:51:13 by mashad            #+#    #+#             */
-/*   Updated: 2020/12/31 12:34:11 by mashad           ###   ########.fr       */
+/*   Updated: 2019/10/20 16:46:57 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	if (lst)
 	{
-		if (lst->type && del)
-			(*del)(lst->type);
+		if (lst->content && del)
+			(*del)(lst->content);
 		free(lst);
 	}
 }

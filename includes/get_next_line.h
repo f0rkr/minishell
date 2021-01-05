@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/22 14:51:19 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/05 16:08:00 by mashad           ###   ########.fr       */
+/*   Created: 2019/10/11 11:17:21 by sdunckel          #+#    #+#             */
+/*   Updated: 2021/01/05 16:12:25 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char			*p;
-	unsigned int	i;
+# include <stdlib.h>
+# include <unistd.h>
+# include "libft.h"
 
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (ft_strlen(s) < start)
-		len = 0;
-	if (!(p = malloc(len + 1)))
-		return (NULL);
-	if (p == NULL)
-		return (0);
-	while (s[start] && len--)
-	{
-		p[i] = s[start];
-		i++;
-		start++;
-	}
-	p[i] = '\0';
-	return (char *)(p);
-}
+# define BUFFER_SIZE 1024
+size_t	ft_strlen_gnl(char *s, int gnl);
+int		ft_char(char c, char *str);
+char	*ft_strjoin_gnl(char *s1, char *s2);
+char	*ft_substr_gnl(char *s, unsigned int start, size_t len);
+void	*ft_calloc(size_t count, size_t size);
+int		get_next_line(int fd, char **line);
+
+#endif

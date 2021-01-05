@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 15:52:27 by mashad            #+#    #+#             */
-/*   Updated: 2020/12/31 12:33:27 by mashad           ###   ########.fr       */
+/*   Updated: 2019/10/20 16:48:52 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	{
 		if (node == NULL)
 		{
-			if (!(rs = ft_lstnew(f(lst->type))) && !f(lst->type))
+			if (!(rs = ft_lstnew(f(lst->content))) && !f(lst->content))
 				return (NULL);
 			node = rs;
 		}
 		else
 		{
-			if (!(node->next = ft_lstnew(f(lst->type))))
+			if (!(node->next = ft_lstnew(f(lst->content))))
 				ft_lstclear(&rs, del);
 			node = node->next;
 		}

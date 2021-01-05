@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 15:50:56 by mashad            #+#    #+#             */
-/*   Updated: 2020/12/31 12:26:55 by mashad           ###   ########.fr       */
+/*   Updated: 2019/10/19 12:42:48 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	{
 		tmp = node;
 		node = node->next;
-		if (del)
-			del(tmp);
+		if (tmp->content && del)
+			del(tmp->content);
 		free(tmp);
 	}
 	*lst = NULL;
