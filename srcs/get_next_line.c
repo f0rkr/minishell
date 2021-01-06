@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 10:47:15 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/05 16:13:08 by mashad           ###   ########.fr       */
+/*   Updated: 2021/01/06 09:13:12 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		get_next_line(int fd, char **line)
 	while ((ft_char('\n', s[fd])) < 0 && (ret = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[ret] = '\0';
-		s[fd] = ft_strjoin(s[fd], buf);
+		s[fd] = ft_strjoin_gnl(s[fd], buf);
 	}
 	*line = ft_substr_gnl(s[fd], 0, ft_strlen_gnl(s[fd], 1));
 	if ((ft_char('\n', s[fd])) < 0)

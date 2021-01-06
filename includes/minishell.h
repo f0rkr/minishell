@@ -6,7 +6,7 @@
 # define EXIT 0
 # define BUFFER_SIZE 1024
 
-# include "libft.h"
+# include "../libft/libft.h"
 # include <sys/stat.h>
 # include <dirent.h>
 # include <sys/wait.h>
