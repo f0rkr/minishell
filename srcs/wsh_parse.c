@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/06 16:57:29 by mashad           ###   ########.fr       */
+/*   Updated: 2021/01/06 17:32:59 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ int     wsh_scan_token(char *str, const char *string)
 	scount = INIT;
 	while (!ft_isin(string[counter], " ;|") && string[counter] != '\0')
 	{
-		if (ft_isin(string[counter], "\'\""))
+		if (ft_isin(string[counter], "\'\"") && string[counter-1] != '\\' && string[counter-2] != '\\' && string[counter-3] != '\\')
 			return (wsh_readQuotes(str, string, &counter));
+		while (string[counter] == '\\')
+			counter++;
 		str[scount++] = string[counter++];
 	}
-	if (ft_isalnum(str[scount-1]))
+	if (ft_isalnum(str[scount-1]) || ft_isin(str[scount-1], ">\""))
 		str[scount] = '\0';
 	else
 	{
