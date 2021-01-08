@@ -6,49 +6,40 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/06 17:32:59 by mashad           ###   ########.fr       */
+/*   Updated: 2021/01/08 14:51:51 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		wsh_readQuotes(char *str, const char *string, int *counter)
+int		is_and(const char *str, int p, int q_flag)
 {
-	int i;
-
-	i = 0;
-	(*counter)++;
-	while (!ft_isin(string[*counter], "\'\"") && string[*counter] != '\0')
-		str[i++] = string[(*counter)++];
-	str[i] = '\0';
-	++(*counter);
-	return (1);
+	if (str[p] == AND && str[p-1] != ESC && !q_flag)
+		return (1);
+	return (0);
 }
 
-int     wsh_scan_token(char *str, const char *string)
+int     wsh_scan_commands(char *str, const char *string)
 {
 	static int 			counter = INIT;
 	int					scount;
-
+	int					quote_flag;
+	
 	scount = INIT;
-	while (!ft_isin(string[counter], " ;|") && string[counter] != '\0')
+	quote_flag = 0;
+	while (!is_and(string, counter, quote_flag) && string[counter] != EOL)
 	{
-		if (ft_isin(string[counter], "\'\"") && string[counter-1] != '\\' && string[counter-2] != '\\' && string[counter-3] != '\\')
-			return (wsh_readQuotes(str, string, &counter));
-		while (string[counter] == '\\')
-			counter++;
+		if (ft_isin(string[counter], "\'\"") && string[counter-1] != ESC && quote_flag == 0)
+			quote_flag = 1;
+		else if (ft_isin(string[counter], "\'\"") && quote_flag == 1)
+			quote_flag = 0;
 		str[scount++] = string[counter++];
 	}
-	if (ft_isalnum(str[scount-1]) || ft_isin(str[scount-1], ">\""))
-		str[scount] = '\0';
-	else
+	str[scount] = EOL;
+	counter++;
+	if (string[counter] == EOL)
 	{
-		str[scount++] = string[counter++];
-		str[scount] = '\0';	
-	}
-	if (string[counter] == '\0')
-	{
-		counter = INIT;
+		counter = 0;
 		return (0);
 	}
 	return (1);
@@ -62,7 +53,7 @@ int		wsh_tokenizer(char cmd[][50], char *string)
 	i = 0;
 	if (!(token = (char *)malloc(sizeof(char) * 50)))
 		return (ERROR);
-    while (wsh_scan_token(token, (const char *) string))
+    while (wsh_scan_commands(token, (const char *) string))
     	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
 	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
 	cmd[i][0] = '\0';
@@ -79,10 +70,6 @@ void	*wsh_parse( char *cmd )
     i = 0;
     if (wsh_tokenizer(array, cmd) == ERROR)
 		return (NULL);
-	while (array[i][0] != '\0')
-    {
-        printf("%s\n", array[i]);
-        i++;
-    }
+	
 	return (0);
 }

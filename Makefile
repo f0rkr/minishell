@@ -5,7 +5,7 @@ LIBFT_NAME = libft.a
 MAKE = make
 NAME = minishell
 flags = -Wall -Wextra -Werror
-SRCS = srcs/minishell.c srcs/get_next_line.c srcs/get_next_line_utils.c srcs/wsh_exec.c srcs/wsh_garbageCollector.c srcs/wsh_parse.c srcs/wsh_read.c
+SRCS = srcs/minishell.c srcs/get_next_line.c srcs/get_next_line_utils.c srcs/wsh_exec.c srcs/wsh_garbageCollector.c srcs/wsh_parsing/wsh_parse.c srcs/wsh_read.c
 BSRCS = includes/
 all : $(NAME)
 $(NAME):

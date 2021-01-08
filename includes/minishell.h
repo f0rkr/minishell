@@ -7,6 +7,7 @@
 # define BUFFER_SIZE 1024
 
 # include "../libft/libft.h"
+# include "parsing.h"
 # include <sys/stat.h>
 # include <dirent.h>
 # include <sys/wait.h>
@@ -15,14 +16,19 @@
 # include <sys/errno.h>
 
 /*
-** DEFINE ELEMENTS TYPE
+** DEFINE SPECIAL CHARACTERS
 */
 
-# define PIPE			1337
-# define AND			1338
-# define REDIRECTION	1339
-# define BUILTIN		1340
-# define COMMAND		1341
+# define PIPE			'|'
+# define AND			';'
+# define OUTRID			'>'
+# define INRID			'<'
+# define DRID			">>"
+# define ESC			'\\'
+# define DQUOTE			'\"'
+# define SQUOTE			'\''
+# define VAR			'$'
+# define EOL			'\0'
 
 /*
 ** WESH SHELL STRUCT
