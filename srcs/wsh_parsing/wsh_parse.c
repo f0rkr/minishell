@@ -12,40 +12,7 @@
 
 #include "minishell.h"
 
-int		is_and(const char *str, int p, int q_flag)
-{
-	if (str[p] == AND && str[p-1] != ESC && !q_flag)
-		return (1);
-	return (0);
-}
-
-int     wsh_scan_commands(char *str, const char *string)
-{
-	static int 			counter = INIT;
-	int					scount;
-	int					quote_flag;
-	
-	scount = INIT;
-	quote_flag = 0;
-	while (!is_and(string, counter, quote_flag) && string[counter] != EOL)
-	{
-		if (ft_isin(string[counter], "\'\"") && string[counter-1] != ESC && quote_flag == 0)
-			quote_flag = 1;
-		else if (ft_isin(string[counter], "\'\"") && quote_flag == 1)
-			quote_flag = 0;
-		str[scount++] = string[counter++];
-	}
-	str[scount] = EOL;
-	counter++;
-	if (string[counter] == EOL)
-	{
-		counter = 0;
-		return (0);
-	}
-	return (1);
-}
-
-int		wsh_tokenizer(char cmd[][50], char *string)
+int		wsh_tokenizer(char cmd[][50], char *string, int pipe)
 {
     char    *token;
 	int		i;
@@ -53,7 +20,7 @@ int		wsh_tokenizer(char cmd[][50], char *string)
 	i = 0;
 	if (!(token = (char *)malloc(sizeof(char) * 50)))
 		return (ERROR);
-    while (wsh_scan_commands(token, (const char *) string))
+    while (wsh_scan_commands(token, (const char *) string, pipe))
     	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
 	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
 	cmd[i][0] = '\0';
@@ -62,14 +29,45 @@ int		wsh_tokenizer(char cmd[][50], char *string)
     return (1);
 }
 
-void	*wsh_parse( char *cmd )
+t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 {
-    char array[50][50];
-    int i;
+	char	**tokens;
+	int		counter;
+
+	counter = 0;
+	if (!(wsh_token->next = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
+		return (NULL);
+	while (pipe[counter][0] != '\0')
+	{
+		
+		counter++;
+	}
+	return (wsh_token);
+}
+
+t_wsh_tokens	*wsh_parse( char *cmd )
+{
+    char			array[50][50];
+	char			pipe[50][50];
+	t_wsh_tokens	*wsh_token;
+	t_wsh_tokens	*wsh_token_first;
+    int				i;
+	int				j;
     
     i = 0;
-    if (wsh_tokenizer(array, cmd) == ERROR)
+	j = 0;
+	if (!(wsh_token = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
 		return (NULL);
-	
-	return (0);
+    if (wsh_tokenizer(array, cmd, 0) == ERROR)
+		return (NULL);
+	wsh_token_first = wsh_token;
+	while (array[i][0] != '\0')
+	{
+		if (wsh_tokenizer(pipe, array[i], 1) == ERROR)
+			return (NULL);
+		wsh_token = wsh_fillCommands(wsh_token, pipe);
+		wsh_token = wsh_token->next;
+		i++;
+	}
+	return (wsh_token_first);
 }

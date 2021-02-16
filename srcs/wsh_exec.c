@@ -10,8 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-void    *wsh_exec( void *ast_parsed )
+#include "minishell.h"
+
+void    *wsh_exec( t_wsh_list *wsh_list )
 {
-    (void)ast_parsed;
-    return (0);
+	printf("%d\n", wsh_list->ast_parsed->next->type);
+	// while ( wsh_list->ast_parsed )
+	// {
+	// 	if (wsh_list->ast_parsed->type == BUILTIN)
+	// 		wsh_builtins(wsh_list->ast_parsed, wsh_list);
+	// 	// working to another time
+	// 	wsh_list->ast_parsed = wsh_list->ast_parsed->next;
+	// }
+	return (0);
 }

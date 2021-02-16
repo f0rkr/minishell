@@ -15,5 +15,6 @@
 
 extern int		wsh_readSquotes(char *str, const char *string, int *counter);
 extern int		wsh_readDquotes(char *str, const char *string, int *counter);
-
+extern int		wsh_scan_commands(char *str, const char *string, int pipe);
+extern int		is_and(const char *str, int p, int q_flag, int pipe);
 #endif

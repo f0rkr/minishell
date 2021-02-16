@@ -24,6 +24,8 @@ typedef struct		s_list
 }					t_list;
 
 void				*ft_calloc(size_t count, size_t size);
+void				*ft_malloc(size_t n);
+void				ft_free(void);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
 int					ft_isprint(int c);

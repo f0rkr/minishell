@@ -24,7 +24,7 @@ int				wsh_loop(t_wsh_list *wsh_list)
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->string);
 		if (wsh_list->garbage_flag != ERROR)
-			wsh_exec(wsh_list->ast_parsed);
+			wsh_exec(wsh_list);
 		if (wsh_garbageCollector(wsh_list) == ERROR)
 			return (ERROR);
 	}
