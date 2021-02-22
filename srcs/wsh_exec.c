@@ -14,7 +14,10 @@
 
 void    *wsh_exec( t_wsh_list *wsh_list )
 {
-	printf("%d\n", wsh_list->ast_parsed->next->type);
+	printf("%d\n", wsh_list->ast_parsed->next->next->next->std_in);
+	//printf("%s\n", wsh_list->ast_parsed->next->wsh_command);
+	int i = 0;
+	(void)i;
 	// while ( wsh_list->ast_parsed )
 	// {
 	// 	if (wsh_list->ast_parsed->type == BUILTIN)

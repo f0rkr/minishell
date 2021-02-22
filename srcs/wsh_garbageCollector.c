@@ -29,6 +29,6 @@ int     wsh_garbageCollector(t_wsh_list *wsh_list)
         wsh_list->garbage_flag = INIT;
         return (ERROR);
     }
-    ft_free();
+    //ft_free();
     return (EXIT);
 }
