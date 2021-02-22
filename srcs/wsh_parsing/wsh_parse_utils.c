@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 11:36:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/08 11:51:39 by mashad           ###   ########.fr       */
+/*   Updated: 2021/02/22 16:48:24 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ extern int		is_and(const char *str, int p, int q_flag, int pipe)
 {
 	if (str[p] == AND && str[p-1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == PIPE && pipe && str[p-1] != ESC && !q_flag)
+	if (str[p] == PIPE && pipe == 1 && str[p-1] != ESC && !q_flag)
+		return (1);
+	if (str[p] == SPACE && pipe == 2 && str[p-1] != ESC && !q_flag)
 		return (1);
 	return (0);
 }

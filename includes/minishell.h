@@ -18,7 +18,7 @@
 /*
 ** DEFINE SPECIAL CHARACTERS
 */
-
+# define SPACE			' '
 # define PIPE			'|'
 # define AND			';'
 # define OUTRID			'>'

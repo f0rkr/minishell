@@ -15,7 +15,7 @@ $(NAME):
 bonus:
 	@$(CC) $(flags) -I $(BSRCS) $(LIBFT_DIR)/$(LIBFT_NAME) -o $(NAME)
 
-run:
+run: re
 	@./$(NAME)
 clean: 
 	@rm -rf $(LIBFT_DIR)/*.o
