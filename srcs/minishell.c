@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/06 09:40:38 by mashad           ###   ########.fr       */
+/*   Updated: 2021/02/26 17:19:22 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,21 @@ int				wsh_loop(t_wsh_list *wsh_list)
 ** WESH SHELL STRUCT INIT
 */
 
-t_wsh_list		wsh_init()
+t_wsh_list		wsh_init(char *env[])
 {
 	t_wsh_list wsh_list;
+	int			i;
 
+	i = 0;
 	wsh_list.string = NULL;
 	wsh_list.ast_parsed = NULL;
 	wsh_list.garbage_flag = INIT;
+	wsh_list.wsh_envs = (char **)malloc(sizeof(char) * 4029);
+	while (env[i])
+	{
+		wsh_list.wsh_envs[i] = ft_strdup(env[i]);
+		i++;
+	}
 	return (wsh_list);
 }
 
@@ -51,7 +59,7 @@ int				main(int argc, char **argv, char **env)
 
 	(void)argv;
 	(void)env;
-	wsh_list = wsh_init();
+	wsh_list = wsh_init(env);
 	if ( argc != 1)
 		return (ERROR);
 	if (wsh_loop(&wsh_list) == ERROR)

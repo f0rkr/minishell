@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 11:36:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/02/22 16:48:24 by mashad           ###   ########.fr       */
+/*   Updated: 2021/02/26 15:23:10 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ extern int		wsh_scan_commands(char *str, const char *string, int pipe)
 	
 	scount = INIT;
 	quote_flag = 0;
+	while (string[counter] == ' ')
+		counter++;
 	while (!is_and(string, counter, quote_flag, pipe) && string[counter] != EOL)
 	{
 		if (ft_isin(string[counter], "\'\"") && string[counter-1] != ESC && quote_flag == 0)

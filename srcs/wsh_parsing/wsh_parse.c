@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/02/22 17:32:55 by mashad           ###   ########.fr       */
+/*   Updated: 2021/02/26 16:20:04 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,35 +60,39 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 	g_j = 1;
 	i = 0;
 	token = wsh_token;
-	if (wsh_tokenizer(cmd, (char *)pipe[counter], 2) == ERROR)
-		return (NULL);
-	if (!(wsh_token->wsh_param = (char **)ft_malloc(sizeof(char *) * 100)) ||
-	!(wsh_token->wsh_arg = (char **)ft_malloc(sizeof(char *) * 100)))
-		return (NULL);
 	while (pipe[counter][0] != '\0')
 	{
-		wsh_token->type = 1;
-		wsh_token->wsh_command = cmd[i++];
+		i = 0;
+		if (wsh_tokenizer(cmd, (char *)pipe[counter], 2) == ERROR)
+			return (NULL);
+		if (!(wsh_token->wsh_param = (char **)ft_malloc(sizeof(char *) * 100)) ||
+		!(wsh_token->wsh_arg = (char **)ft_malloc(sizeof(char *) * 100)))
+			return (NULL);
+		wsh_token->wsh_arg[0] = ft_strdup("");
+		wsh_token->wsh_param[0] = ft_strdup("");
+		if (ft_isbuiltin((const char *)cmd[i]))
+			wsh_token->type = BUILTIN;
+		else
+			wsh_token->type = CMD;
+		wsh_token->wsh_command = ft_strdup(cmd[i++]);
 		j = 0;
 		if (cmd[i])
 		{
 			while (cmd[i][0] == '-')
 			{
 				wsh_token->wsh_arg[j++] = ft_strdup(cmd[i]);
+				wsh_token->wsh_arg[j] = ft_strdup("");
 				i++;
 			}
 			j = 0;
 			while (cmd[i][0] != '\0')
 			{
 				wsh_token->wsh_param[j++] = ft_strdup(cmd[i]);
+				wsh_token->wsh_param[j] = ft_strdup("");
 				i++;
 			}
-			if (wsh_token->wsh_param)
-				wsh_token->wsh_param[j] = ft_strdup("");
-			if (wsh_token->wsh_arg)
-				wsh_token->wsh_arg[j] = ft_strdup("");
 		}
-		if (!(wsh_token->next = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
+		if (!(wsh_token->next = (t_wsh_tokens *)ft_malloc(sizeof(t_wsh_tokens))))
 			return (NULL);
 		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
 		wsh_token = wsh_token->next;

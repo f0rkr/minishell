@@ -71,6 +71,8 @@ void			wsh_builtins( t_wsh_tokens *wsh_token ,t_wsh_list *wsh_list);
 char    		*wsh_read( int *garbage_flag );
 t_wsh_tokens	*wsh_parse( char *cmd );
 void			*wsh_exec( t_wsh_list *wsh_list );
+int				ft_isbuiltin(const char *command);
+int				wsh_exec_builtin(t_wsh_list *wsh_list);
 int     		wsh_garbageCollector(t_wsh_list *wsh_list);
 
 #endif
