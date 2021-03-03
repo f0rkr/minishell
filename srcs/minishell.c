@@ -20,13 +20,13 @@ int				wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
 
-	wsh_tmp = wsh_list->ast_parsed;
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
 		wsh_list->string = wsh_read(&wsh_list->garbage_flag);
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->string);
+		wsh_tmp = wsh_list->ast_parsed;
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_exec(wsh_list);
 		wsh_list->ast_parsed = wsh_tmp;
