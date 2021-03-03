@@ -92,11 +92,12 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 				i++;
 			}
 		}
-		if (!(wsh_token->next = wsh_token_init()))
-			return (NULL);
-		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
-		wsh_token = wsh_token->next;
 		counter++;
+		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
+		if (pipe[counter][0] != '\0')
+			if (!(wsh_token->next = wsh_token_init()))
+				return (NULL);
+		wsh_token = wsh_token->next;
 	}
 	return (wsh_token);
 }
@@ -121,8 +122,7 @@ t_wsh_tokens	*wsh_parse(char *cmd)
 		if (wsh_tokenizer(pipe, array[i], 1) == ERROR)
 			return (NULL);
 		wsh_token->std_in = 0;
-		if (!(wsh_token = wsh_fillCommands(wsh_token, pipe)))
-			return (NULL);
+		wsh_token = wsh_fillCommands(wsh_token, pipe);
 		i++;
 	}
 	return (wsh_token_first);

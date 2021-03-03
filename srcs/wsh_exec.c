@@ -14,7 +14,7 @@
 
 void    *wsh_exec(t_wsh_list *wsh_list)
 {
-	while (wsh_list->ast_parsed->next)
+	while (wsh_list->ast_parsed)
 	{
 		if (wsh_list->ast_parsed->type == BUILTIN)
 			wsh_exec_builtin(wsh_list);
