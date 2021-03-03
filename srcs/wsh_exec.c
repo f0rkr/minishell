@@ -14,14 +14,11 @@
 
 void    *wsh_exec(t_wsh_list *wsh_list)
 {
-	t_wsh_tokens	*wsh_tmp;
-
-	wsh_tmp = wsh_list->ast_parsed
-	while (wsh_tmp->next)
+	while (wsh_list->ast_parsed->next)
 	{
-		if (wsh_tmp->type == BUILTIN)
+		if (wsh_list->ast_parsed->type == BUILTIN)
 			wsh_exec_builtin(wsh_list);
-		wsh_tmp = wsh_tmp->next;
+		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 	}
 	return (0);
 }

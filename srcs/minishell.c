@@ -18,6 +18,9 @@
 
 int				wsh_loop(t_wsh_list *wsh_list)
 {
+	t_wsh_list	*wsh_tmp;
+
+	wsh_tmp = wsh_list;
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
@@ -25,8 +28,8 @@ int				wsh_loop(t_wsh_list *wsh_list)
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->string);
 		if (wsh_list->garbage_flag != ERROR)
-			wsh_exec(wsh_list->ast_parsed);
-		if (wsh_garbageCollector(wsh_list) == ERROR)
+			wsh_exec(wsh_list);
+		if (wsh_garbageCollector(wsh_tmp) == ERROR)
 			return (ERROR);
 	}
 	wsh_list->garbage_flag = ENDEXEC;
