@@ -8,7 +8,7 @@ int		ft_isbuiltin(const char *command)
 	i = 0;
 	while (!ft_strncmp(command, builin[i], ft_strlen(builin[i])))
 		i++;
-	if (ft_strncmp(command, builin[i], ft_strlen(builin[i])))
+	if (ft_strncmp(command, builin[i], ft_strlen(builin[i])) == 0)
 		return (1);
 	return (0);
 }

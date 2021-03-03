@@ -63,10 +63,10 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 	while (pipe[counter][0] != '\0')
 	{
 		i = 0;
-		if (wsh_tokenizer(cmd, (char *)pipe[counter], 2) == ERROR)
+		if (!(wsh_tokenizer(cmd, (char *)pipe[counter], 2)))
 			return (NULL);
-		if (!(wsh_token->wsh_param = (char **)ft_malloc(sizeof(char *) * 100)) ||
-		!(wsh_token->wsh_arg = (char **)ft_malloc(sizeof(char *) * 100)))
+		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 100)) ||
+		!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 100)))
 			return (NULL);
 		wsh_token->wsh_arg[0] = ft_strdup("");
 		wsh_token->wsh_param[0] = ft_strdup("");
@@ -92,7 +92,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 				i++;
 			}
 		}
-		if (!(wsh_token->next = (t_wsh_tokens *)ft_malloc(sizeof(t_wsh_tokens))))
+		if (!(wsh_token->next = wsh_token_init()))
 			return (NULL);
 		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
 		wsh_token = wsh_token->next;
@@ -101,7 +101,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 	return (wsh_token);
 }
 
-t_wsh_tokens	*wsh_parse( char *cmd )
+t_wsh_tokens	*wsh_parse(char *cmd)
 {
 	char			array[50][50];
 	char			pipe[50][50];
@@ -112,8 +112,7 @@ t_wsh_tokens	*wsh_parse( char *cmd )
 
 	i = 0;
 	j = 0;
-	if (!(wsh_token = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
-		return (NULL);
+	wsh_token = wsh_token_init();
 	if (wsh_tokenizer(array, cmd, 0) == ERROR)
 		return (NULL);
 	wsh_token_first = wsh_token;
@@ -122,7 +121,8 @@ t_wsh_tokens	*wsh_parse( char *cmd )
 		if (wsh_tokenizer(pipe, array[i], 1) == ERROR)
 			return (NULL);
 		wsh_token->std_in = 0;
-		wsh_token = wsh_fillCommands(wsh_token, pipe);
+		if (!(wsh_token = wsh_fillCommands(wsh_token, pipe)))
+			return (NULL);
 		i++;
 	}
 	return (wsh_token_first);

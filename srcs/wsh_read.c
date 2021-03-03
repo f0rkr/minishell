@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*wsh_read( int *garbage_flag )
+char	*wsh_read(int *garbage_flag)
 {
 	char *string;
 

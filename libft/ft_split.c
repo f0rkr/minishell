@@ -74,7 +74,7 @@ static	char		**help(const char *s, char c, char **mots)
 		k = 0;
 		while (s[i] == c)
 			i++;
-		mots[j] = ft_malloc(sizeof(char) * long_mot(s, i, c) + 1);
+		mots[j] = malloc(sizeof(char) * long_mot(s, i, c) + 1);
 		if (mots[j] == NULL)
 			return (fr_ee(mots, j));
 		while (s[i] != c)
@@ -92,7 +92,7 @@ char				**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	mots = ft_malloc(sizeof(char *) * calc_num(s, c) + 1);
+	mots = malloc(sizeof(char *) * calc_num(s, c) + 1);
 	if (!mots)
 		return (NULL);
 	return (help(s, c, mots));
