@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/04 17:18:03 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/04 17:24:19 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,6 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 		}
 		counter++;
 		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
-		if (pipe[counter][0] != '\0')
-			if (!(wsh_token->next = wsh_token_init()))
-				return (NULL);
-			wsh_token = wsh_token->next;
 	}
 	return (wsh_token);
 }
@@ -123,10 +119,7 @@ t_wsh_tokens	*wsh_parse(char *cmd)
 			return (NULL);
 		wsh_token->std_in = 0;
 		wsh_token = wsh_fillCommands(wsh_token, pipe);
-		if (array[++i][0] != '\0')
-			if (!(wsh_token->next = wsh_token_init()))
-				return (NULL);
-			wsh_token = wsh_token->next;
+		i++;
 	}
 	return (wsh_token_first);
 }
