@@ -1,7 +1,40 @@
 #include "minishell.h"
 
+void	ft_printarg(t_wsh_tokens *wsh_token)
+{
+	int i;
+
+	i = 0;
+	while (!(ft_strncmp(wsh_token->wsh_arg[i], "-n", 3)))
+		i++;
+	while (wsh_token->wsh_arg[i] != '\0')
+	{
+		ft_putstr_fd(wsh_token->wsh_arg[i], 0);
+		if (wsh_token->wsh_arg[i + 1])
+			ft_putchar_fd(' ', 0);
+		i++;
+	}
+}
 void	wsh_echo(t_wsh_tokens *wsh_token)
 {
 	(void)wsh_token;
+	int i;
+	int newline;
+	
+	newline = 0;
+	i = 0;
+	if (!(ft_strncmp(wsh_token->wsh_arg[0], "-n", 3)) 
+	|| !wsh_token->wsh_arg[0])
+		newline = 1;
+	ft_printarg(wsh_token);
+	while (wsh_token->wsh_param[i][0] != '\0')
+	{
+		ft_putstr_fd(wsh_token->wsh_param[i], 0);
+		if (wsh_token->wsh_param[i + 1][0] != '\0')
+			ft_putchar_fd(' ', 0);
+		i++;
+	}
+	if (!newline)
+		ft_putchar_fd('\n', 0);
 	return ;
 }

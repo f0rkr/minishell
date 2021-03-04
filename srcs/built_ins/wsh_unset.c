@@ -12,16 +12,14 @@ char	**ft_tmparr(char **env, int i)
 	if (!(tmp = malloc(sizeof(char **) * (i - k))))
 		return (NULL);
 	i = k;
-	printf("%d", i);
 	while (env[i])
 	{
-		if (!(tmp[j] = malloc(sizeof(char *) * 1024)))
+		if (!(tmp[j] = malloc(sizeof(char *) * ft_strlen(env[i]))))
 			return (NULL);
-		ft_strlcpy(tmp[j], env[i], ft_strlen(env[i]));
+		ft_strlcpy(tmp[j], env[i], ft_strlen(env[i]) + 1);
 		i++;
 		j++;
 	}
-	printf("%s", tmp[0]);
 	tmp[j] = 0;
 	return (tmp);
 }
@@ -31,6 +29,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	int	i;
 	int j;
 	char **arr;
+	int k;
 
 	i = 0;
 	while (wsh_list->wsh_envs[i] != NULL)
@@ -42,14 +41,20 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 			{
 				if (!(ft_strncmp(wsh_list->wsh_envs[i], wsh_token->wsh_param[j], ft_strlen(wsh_token->wsh_param[j]))))
 				{
+					k = 0;
 					arr = ft_tmparr(wsh_list->wsh_envs, i + 1);
-					wsh_free((void *)wsh_list->wsh_envs[i]);
-					wsh_list->wsh_envs[i] = NULL;
+					while (arr[k])
+					{
+						wsh_list->wsh_envs[i + k] = arr[k];
+						k++;
+					}
+					wsh_list->wsh_envs[i + k] = NULL;
 				}
 			}
 			j++;
 		}
 		i++;
 	}
+	wsh_free((void **)arr);
 	return ;
 }

@@ -25,5 +25,7 @@ int		wsh_exec_builtin(t_wsh_list *wsh_list)
 		wsh_export(wsh_list->ast_parsed, wsh_list);
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "unset", 6))
 		wsh_unset(wsh_list->ast_parsed, wsh_list);
+	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "echo", 5))
+		wsh_echo(wsh_list->ast_parsed);
 	return (0);
 }
