@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	wsh_free(void **data)
+void	wsh_free(void *data)
 {
 	if (data != NULL)
 	{
@@ -27,13 +27,16 @@ void	wsh_loop_free(void **data)
 	int counter;
 
 	counter = 0;
-	while (data[counter])
+	if (data)
 	{
-		wsh_free(data[counter]);
-		data[counter] = NULL;
-		counter++;
+		while (data[counter])
+		{
+			wsh_free(data[counter]);
+			data[counter] = NULL;
+			counter++;
+		}
+		data = NULL;
 	}
-	data = NULL;
 	return ;
 }
 int     wsh_garbageCollector(t_wsh_list *wsh_list)

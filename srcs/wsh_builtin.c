@@ -6,11 +6,11 @@ int		ft_isbuiltin(const char *command)
 	int			i;
 
 	i = 0;
-	while (!ft_strncmp(command, builin[i], ft_strlen(builin[i])))
+	while (ft_strncmp(command, builin[i], ft_strlen(builin[i])) != 0)
 		i++;
-	if (ft_strncmp(command, builin[i], ft_strlen(builin[i])))
-		return (1);
-	return (0);
+	if (i == 7)
+		return (0);
+	return (1);
 }
 
 int		wsh_exec_builtin(t_wsh_list *wsh_list)

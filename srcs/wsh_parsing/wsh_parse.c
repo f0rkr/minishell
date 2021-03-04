@@ -29,75 +29,62 @@ int		wsh_tokenizer(char cmd[][50], char *string, int pipe)
 	return (1);
 }
 
-int	g_i;
-int g_j;
-
-int				ft_ispipe(t_wsh_tokens *wsh_token, char token[][50], int ret)
+void			*wsh_fillargs(t_wsh_tokens *wsh_token, char wsh_args[][50], int *position)
 {
-	int pip[2];
+	int		counter;
 
-	while (token[g_i][0] != '\0')
-		g_i++;
-	if (g_i == g_j)
-		return (ret);
-	if (pipe(pip)  == -1)
-		return (ret);	
-	wsh_token->next->std_in = pip[1];
-	g_j++;
-	return (pip[0]);
+	counter = 0;
+	if (wsh_args[*position][0] != '-')
+		return (NULL);
+	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 100)))
+		return (NULL);
+	while (wsh_args[*position][0] == '-' && wsh_args[*position][1] != '\0')
+		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
+	return (NULL);
+}
+
+void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][50], int *position)
+{
+	int		counter;
+
+	counter = 0;
+	if (wsh_params[*position][0] == '\0')
+		return (NULL);
+	if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 100)))
+		return (NULL);
+	while (wsh_params[*position][0] != '\0')
+		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+	return (NULL);
 }
 
 t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 {
-	t_wsh_tokens	*token;
-	int				counter;
-	char 			cmd[50][50];
-	int				i;
-	int				j;
+	int		counter;
+	int		i;
+	char	foreach[50][50];
+	int		j;
 
-	counter = 0;
-	g_i = 0;
-	g_j = 1;
 	i = 0;
-	token = wsh_token;
+	j = 0;
+	while (i < 50)
+		ft_memset(foreach[i++], '\0', 50);
+	i = 0;
+	counter = 0;
 	while (pipe[counter][0] != '\0')
 	{
-		i = 0;
-		if (!(wsh_tokenizer(cmd, (char *)pipe[counter], 2)))
+		if (wsh_tokenizer(foreach, pipe[counter], 2) == ERROR)
 			return (NULL);
-		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 100)) ||
-		!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 100)))
-			return (NULL);
-		wsh_token->wsh_arg[0] = ft_strdup("");
-		wsh_token->wsh_param[0] = ft_strdup("");
-		if (ft_isbuiltin((const char *)cmd[i]))
+		wsh_token->wsh_command = ft_strdup(foreach[i++]);
+		if (ft_isbuiltin(wsh_token->wsh_command))
 			wsh_token->type = BUILTIN;
-		else
-			wsh_token->type = CMD;
-		wsh_token->wsh_command = ft_strdup(cmd[i++]);
-		j = 0;
-		if (cmd[i])
+		wsh_fillargs(wsh_token, foreach, &i);
+		wsh_fillparams(wsh_token, foreach, &i);
+		if (pipe[++counter][0] != '\0')
 		{
-			while (cmd[i][0] == '-')
-			{
-				wsh_token->wsh_arg[j++] = ft_strdup(cmd[i]);
-				wsh_token->wsh_arg[j] = ft_strdup("");
-				i++;
-			}
-			j = 0;
-			while (cmd[i][0] != '\0')
-			{
-				wsh_token->wsh_param[j++] = ft_strdup(cmd[i]);
-				wsh_token->wsh_param[j] = ft_strdup("");
-				i++;
-			}
-		}
-		counter++;
-		wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
-		if (pipe[counter][0] != '\0')
 			if (!(wsh_token->next = wsh_token_init()))
 				return (NULL);
-		wsh_token = wsh_token->next;
+			wsh_token = wsh_token->next;
+		}
 	}
 	return (wsh_token);
 }
@@ -123,7 +110,12 @@ t_wsh_tokens	*wsh_parse(char *cmd)
 			return (NULL);
 		wsh_token->std_in = 0;
 		wsh_token = wsh_fillCommands(wsh_token, pipe);
-		i++;
+		if (array[++i][0] != '\0')
+		{
+			if (!(wsh_token->next = wsh_token_init()))
+				return (NULL);
+			wsh_token = wsh_token->next;
+		}
 	}
 	return (wsh_token_first);
 }

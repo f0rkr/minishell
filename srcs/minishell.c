@@ -46,7 +46,7 @@ t_wsh_tokens	*wsh_token_init()
 
 	if (!(wsh_token = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
 		return (NULL);
-	wsh_token->type = INIT;
+	wsh_token->type = CMD;
 	wsh_token->wsh_command = NULL;
 	wsh_token->wsh_arg = NULL;
 	wsh_token->wsh_param = NULL;
