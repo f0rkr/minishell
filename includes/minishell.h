@@ -80,5 +80,6 @@ int				ft_isbuiltin(const char *command);
 int				wsh_exec_builtin(t_wsh_list *wsh_list);
 int     		wsh_garbageCollector(t_wsh_list *wsh_list);
 t_wsh_tokens	*wsh_token_init();
-
+int				searcheq(char *str);
+void			wsh_free(void **data);
 #endif
