@@ -81,7 +81,7 @@ int				wsh_exec_builtin(t_wsh_list *wsh_list);
 int     		wsh_garbageCollector(t_wsh_list *wsh_list);
 t_wsh_tokens	*wsh_token_init();
 int				searcheq(char *str);
-void			wsh_free(void *data);
+void			wsh_free(void **data);
 char			**ft_tmparr(char **env, int i);
 char			*before_eq(char *str);
 #endif

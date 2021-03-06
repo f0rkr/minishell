@@ -55,7 +55,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 		}
 		i++;
 	}
-	printf("%s", arr[0]);
+	// printf("%s", arr[0]);
 	// if (k != 0)
 	// 	wsh_free((void **)arr);
 	return ;

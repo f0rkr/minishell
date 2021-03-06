@@ -49,7 +49,7 @@ t_wsh_list *wsh_list)
 	temp = (char *)ft_malloc(sizeof(char) * 4029);
 	wsh_unset(wsh_token, wsh_list);
 	while (wsh_list->wsh_envs[i++]);
-	i-=1;
+	i-=2;
 	ft_strlcpy(temp, wsh_list->wsh_envs[i], ft_strlen(wsh_list->wsh_envs[i])+1);
 	while (wsh_token->wsh_param[j] != NULL)
 	{
@@ -61,5 +61,6 @@ t_wsh_list *wsh_list)
 		j++;
 	}
 	wsh_list->wsh_envs[i++] = ft_strdup(temp);
+	// wsh_free((void **)temp);
 	return ;
 }
