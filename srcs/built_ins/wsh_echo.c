@@ -5,7 +5,6 @@ void	ft_printarg(t_wsh_tokens *wsh_token)
 	int i;
 
 	i = 0;
-
 	while (wsh_token->wsh_arg[i] && !(ft_strncmp(wsh_token->wsh_arg[i], "-n", 3)))
 		i++;
 	while (wsh_token->wsh_arg[i])
@@ -15,6 +14,7 @@ void	ft_printarg(t_wsh_tokens *wsh_token)
 		i++;
 	}
 }
+
 void	wsh_echo(t_wsh_tokens *wsh_token)
 {
 	int i;
@@ -31,7 +31,7 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	while (wsh_token->wsh_param && wsh_token->wsh_param[i])
 	{
 		ft_putstr_fd(wsh_token->wsh_param[i], 1);
-		if (wsh_token->wsh_param[i + 1] != NULL)
+		if (wsh_token->wsh_param[i + 1])
 			ft_putchar_fd(' ', 1);
 		i++;
 	}

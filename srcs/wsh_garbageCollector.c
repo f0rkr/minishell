@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:50:06 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/06 10:36:34 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/06 15:41:39 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int     wsh_garbageCollector(t_wsh_list *wsh_list)
 	}
     if (wsh_list->garbage_flag != LOOP)
 		wsh_loop_free((void **)wsh_list->wsh_envs);
-	wsh_free((void *) wsh_list->ast_parsed);
 	if (wsh_list->garbage_flag == ERROR)
     {
         wsh_list->garbage_flag = INIT;
