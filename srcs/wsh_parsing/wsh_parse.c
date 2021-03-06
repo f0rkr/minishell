@@ -37,9 +37,10 @@ void			*wsh_fillargs(t_wsh_tokens *wsh_token, char wsh_args[][1024], int *positi
 		return (NULL);
 	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024)))
 		return (NULL);
-	while (wsh_args[*position][0] == '-' && wsh_args[*position][1] != '\0')
+	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
 		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);	
+	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
+		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);	
 	return (NULL);
 }
 
