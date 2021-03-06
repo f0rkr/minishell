@@ -12,62 +12,63 @@
 
 #include "minishell.h"
 
-int		wsh_tokenizer(char cmd[][50], char *string, int pipe)
+int		wsh_tokenizer(char cmd[][1024], char *string, int pipe)
 {
 	char    *token;
 	int		i;
 
 	i = 0;
-	if (!(token = (char *)malloc(sizeof(char) * 50)))
+	if (!(token = (char *)malloc(sizeof(char) * 1024)))
 		return (ERROR);
 	while (wsh_scan_commands(token, (const char *) string, pipe))
 		ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
 	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token)+1);
-	cmd[i][0]= 0;
-	free(token);
-	token = NULL;
+	cmd[i][0]= '\0';
+	wsh_free((void **) &token);
 	return (1);
 }
 
-void			*wsh_fillargs(t_wsh_tokens *wsh_token, char wsh_args[][50], int *position)
+void			*wsh_fillargs(t_wsh_tokens *wsh_token, char wsh_args[][1024], int *position)
 {
 	int		counter;
 
 	counter = 0;
 	if (wsh_args[*position][0] != '-')
 		return (NULL);
-	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 100)))
+	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024)))
 		return (NULL);
 	while (wsh_args[*position][0] == '-' && wsh_args[*position][1] != '\0')
 		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
+	wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);	
 	return (NULL);
 }
 
-void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][50], int *position)
+void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
 {
 	int		counter;
 
 	counter = 0;
-	if (wsh_params[*position][0] == '\0')
+	if (wsh_params[*position][0] == '\0' || wsh_params[*position][0] == '-')
 		return (NULL);
-	if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 100)))
+	if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
 		return (NULL);
 	while (wsh_params[*position][0] != '\0')
 		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+	wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
 	return (NULL);
 }
 
-t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
+t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 {
 	int		counter;
 	int		i;
-	char	foreach[50][50];
+	char	foreach[1024][1024];
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (i < 50)
-		ft_memset(foreach[i++], '\0', 50);
+	while (i < 1024)
+		ft_memset(foreach[i++], '\0', 1024);
 	i = 0;
 	counter = 0;
 	while (pipe[counter][0] != '\0')
@@ -91,8 +92,8 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][50])
 
 t_wsh_tokens	*wsh_parse(char *cmd)
 {
-	char			array[50][50];
-	char			pipe[50][50];
+	char			array[1024][1024];
+	char			pipe[1024][1024];
 	t_wsh_tokens	*wsh_token;
 	t_wsh_tokens	*wsh_token_first;
 	int				i;

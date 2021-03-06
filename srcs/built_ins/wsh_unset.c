@@ -35,7 +35,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	while (wsh_list->wsh_envs[i] != NULL)
 	{
 		j = 0;
-		while (wsh_token->wsh_param[j][0] != '\0')
+		while (wsh_token->wsh_param[j])
 		{
 			if (wsh_list->wsh_envs[i][0] == wsh_token->wsh_param[j][0])
 			{
