@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/04 17:24:19 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/06 12:47:39 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][1024], int *po
 		return (NULL);
 	while (wsh_params[*position][0] != '\0')
 		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
-	wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+	if (wsh_params[*position] != NULL && wsh_params[*position][0] != '\0')
+		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
 	return (NULL);
 }
 
