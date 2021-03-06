@@ -46,7 +46,8 @@ t_wsh_list *wsh_list)
 	i = 0;
 	j = 0;
 	cond = 0;
-	temp = (char *)ft_malloc(sizeof(char) * 4029);
+	if (!(temp = (char *)malloc(sizeof(char) * 4029)))
+		return ;
 	wsh_unset(wsh_token, wsh_list);
 	while (wsh_list->wsh_envs[i++]);
 	i-=2;
@@ -57,10 +58,14 @@ t_wsh_list *wsh_list)
 		if (!(searcheq(wsh_token->wsh_param[j])))
 			cond = 1;
 		if (cond == 0)
+		{
+			if (wsh_list->wsh_envs[i])
+				wsh_free((void *) wsh_list->wsh_envs[i]);
 			wsh_list->wsh_envs[i++] = ft_strdup(wsh_token->wsh_param[j]);
+		}
 		j++;
 	}
 	wsh_list->wsh_envs[i++] = ft_strdup(temp);
-	// wsh_free((void **)temp);
+	wsh_free((void *)temp);
 	return ;
 }
