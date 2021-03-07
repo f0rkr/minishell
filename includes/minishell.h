@@ -84,4 +84,5 @@ int				searcheq(char *str);
 void			wsh_free(void *data);
 void			wsh_loop_free(void **data);
 char			*before_eq(char *str);
+void			wsh_execve(t_wsh_list *wsh_list);
 #endif

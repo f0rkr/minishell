@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/06 17:48:21 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/07 15:24:02 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 	{
 		if (wsh_list->ast_parsed->type == BUILTIN)
 			wsh_exec_builtin(wsh_list);
-		// else
-		// 	wsh_exec_cmd(wsh_list);
+		else
+			wsh_execve(wsh_list);
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 	}
 	return (0);
