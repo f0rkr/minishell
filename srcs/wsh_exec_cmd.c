@@ -13,35 +13,34 @@ char		*check_bin(char *cmd, char *command)
 		return (NULL);
 	while ((entry = readdir(folder)))
 	{
-		if (ft_strncmp(entry->d_name, command, ft_strlen(command)) == 0)
+		if (ft_strncmp(entry->d_name, command, ft_strlen(command)+1) == 0)
 			path = cmd;
 	}
 	closedir(folder);
 	return (path);
 }
 
-char        **wsh_set_arr(char *arr[], char *path, t_wsh_list *wsh_list)
+char        **wsh_set_arr(char *path, t_wsh_list *wsh_list)
 {
-    int i;
-    int j;
+    int 	i;
+    int 	j;
+	char	**arr;
 
     i = 0;
     j = 1;
-	if (!(arr = malloc(sizeof(char **) * 1024)))
+	if (!(arr = (char **) malloc(sizeof(char *) * 1024)))
 		return (NULL);
-	if (!(arr[0] = malloc(sizeof(char *) * ft_strlen(path) + 1)))
-		return (NULL);
-    arr[0] = path;
+    arr[0] = ft_strdup(path);
     while (wsh_list->ast_parsed->wsh_arg && wsh_list->ast_parsed->wsh_arg[i])
 	{
-		if (!(arr[i] = malloc(sizeof(char *)  * ft_strlen(wsh_list->ast_parsed->wsh_arg[i] + 1))))
+		if (!(arr[j] = malloc(sizeof(char)  * ft_strlen(wsh_list->ast_parsed->wsh_arg[i] + 1))))
 			return (NULL);
         arr[j++] = wsh_list->ast_parsed->wsh_arg[i++];
 	}
 	i = 0;
     while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
 	{
-		if (!(arr[i] = malloc(sizeof(char *)  * ft_strlen(wsh_list->ast_parsed->wsh_param[i] + 1))))
+		if (!(arr[j] = malloc(sizeof(char)  * ft_strlen(wsh_list->ast_parsed->wsh_param[i] + 1))))
 			return (NULL);
         arr[j++] = wsh_list->ast_parsed->wsh_param[i++];
 	}
@@ -63,25 +62,24 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		i++;
     cmd = ft_split(wsh_list->wsh_envs[i], ':');
     path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
-    i = 50;
+    i = 0;
     while (wsh_list->ast_parsed->wsh_command && cmd[i] && path == NULL)
 		path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
     tmp = ft_strjoin(path, "/");
     path = ft_strjoin(tmp, wsh_list->ast_parsed->wsh_command);
     wsh_free((void*) tmp);
-    arr = wsh_set_arr(arr, path, wsh_list);
-	i = 0;
-	while (arr[i])
-	{
-    	ft_putstr_fd(arr[i++], 1);
-		ft_putchar_fd('\n', 1);
-	}
-    i = fork();
-    if (i == 0)    
-        if (execve(path , arr, wsh_list->wsh_envs) == -1)
+    arr = wsh_set_arr(path, wsh_list);
+	i = fork();
+ 
+	if (i == 0)
+	{   
+        if (execve(arr[0] , arr, wsh_list->wsh_envs) == -1)
         {
             ft_putstr_fd("error\n", 2);
             exit(1);
         }
-    return ;
+	}
+	else
+		waitpid(i ,0 ,0);
+	return ;
 }
