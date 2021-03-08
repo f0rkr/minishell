@@ -74,22 +74,32 @@ void        wsh_execve(t_wsh_list *wsh_list)
 
     i = 0;
 	arr = NULL;
-    while (wsh_list->wsh_envs && wsh_list->wsh_envs[i] && ft_strncmp(wsh_list->wsh_envs[i], "PATH=", 5) != 0)
-		i++;
-    cmd = ft_split(wsh_list->wsh_envs[i], ':');
-    path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
-    i = 50;
-    while (wsh_list->ast_parsed->wsh_command && cmd[i] && path == NULL)
-		path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
+	if ((char)wsh_list->ast_parsed->wsh_command[0] == '.')
+	{
+		tmp = ft_strjoin(wsh_get_envar("PWD", wsh_list->wsh_envs), "/");
+		path = ft_strjoin(tmp, (wsh_list->ast_parsed->wsh_command + 2));
+		wsh_free((void*)tmp);
+	}
+	else
+	{
+		while (wsh_list->wsh_envs && wsh_list->wsh_envs[i] && ft_strncmp(wsh_list->wsh_envs[i], "PATH=", 5) != 0)
+			i++;
+		cmd = ft_split(wsh_list->wsh_envs[i], ':');
+		path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
+		i = 50;
+		while (wsh_list->ast_parsed->wsh_command && cmd[i] && path == NULL)
+			path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
+		tmp = ft_strjoin(path, "/");
+   		path = ft_strjoin(tmp, wsh_list->ast_parsed->wsh_command);
+		wsh_free((void*) tmp);
+		wsh_loop_free((void **)cmd);
+	}
 	if (path == NULL)
 		path = cmd[0] + 5;
-    tmp = ft_strjoin(path, "/");
-    path = ft_strjoin(tmp, wsh_list->ast_parsed->wsh_command);
-    wsh_free((void*) tmp);
     arr = wsh_set_arr(path, wsh_list);
 	i = fork();
 	if (i == 0)
-	{   
+	{  
         if (execve(arr[0] , arr, wsh_list->wsh_envs) == -1)
 		{
 			ft_error(path, wsh_list->ast_parsed->wsh_command);
@@ -98,7 +108,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	}
 	else
 		waitpid(i ,0 ,0);
-	wsh_loop_free((void **)cmd);
+	
 	wsh_loop_free((void **)arr);
 	return ;
 }

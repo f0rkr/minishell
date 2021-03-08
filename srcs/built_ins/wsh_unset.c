@@ -1,13 +1,23 @@
 #include "minishell.h"
 
-void	ft_tmparr(char tmp[][1024], char **env, int i)
+void	ft_tmparr(char tmp[][1024], char **env, int i, char **param)
 {
 	int		j;
 	int 	k;
 
-	j = 0;
 	k = i;
-	while (env[i++]);
+	j = 0;
+	while (env[i])
+	{
+		while (param[j])
+		{
+			if (ft_strncmp(env[i], param[j], ft_strlen(param[j])))
+				k++;
+			j++;
+		}
+		i++;
+	}
+	j = 0;
 	i = k;
 	while (env[i])
 	{
@@ -26,19 +36,21 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	char *tmp;
 	int k;
 
-	j = 0;
-	while (wsh_token->wsh_param[j] != NULL)
+	i = 0;
+	tmp = ft_strdup("");
+	while (wsh_list->wsh_envs[i] != NULL)
 	{
-		i = 0;
-		while (wsh_list->wsh_envs[i] != NULL)
+		j = 0;
+		while (wsh_token->wsh_param[j] != NULL)
 		{
 			if (wsh_list->wsh_envs[i] && wsh_token->wsh_param[j] && wsh_list->wsh_envs[i][0] == wsh_token->wsh_param[j][0])
 			{
+				wsh_free((void*)tmp);
 				tmp = before_eq(wsh_token->wsh_param[j]);
 				if (!(ft_strncmp(wsh_list->wsh_envs[i], tmp, ft_strlen(tmp))))
 				{
 					k = 0;
-					ft_tmparr(arr, wsh_list->wsh_envs, i + 1);
+					ft_tmparr(arr, wsh_list->wsh_envs, i + 1, wsh_token->wsh_param);
 					while (arr[k][0] != '\0')
 					{
 						if (wsh_list->wsh_envs[i + k])
@@ -59,11 +71,10 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 					wsh_list->wsh_envs[i + k] = NULL;
 				}
 			}
-			if (tmp != NULL)
-				wsh_free((void*)tmp);
-			i++;
+			j++;
 		}
-		j++;
+		i++;
 	}
+	wsh_free((void *)tmp);
 	return ;
 }

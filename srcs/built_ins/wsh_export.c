@@ -43,28 +43,32 @@ void	wsh_export(t_wsh_tokens *wsh_token,
 t_wsh_list *wsh_list)
 {
 	char	*temp;
+	char	*str;
 	int		i;
 	int 	j;
 	int		cond;
 
 	i = 0;
-	j = 0;
+	j = 1;
 	cond = 0;
 	if (!(temp = (char *)malloc(sizeof(char) * 4029)))
 		return ;
-	// while (wsh_token->wsh_param[i])
-	// {
-	// 	j = 0;
-	// 	while (wsh_token->wsh_param[i] && wsh_token->wsh_param[j])
-	// 	{
-	// 		if (ft_strncmp(wsh_token->wsh_param[i], wsh_token->wsh_param[j], ft_strlen(wsh_token->wsh_param[i]) + 1) == 0)
-
-	// 		j++;
-	// 	}
-	// 	i++;
-	// }
-	// i = 0;
-	// j = 0;
+	while (wsh_token->wsh_param[i])
+	{
+		j = i + 1;
+		while (wsh_token->wsh_param[i] && wsh_token->wsh_param[j] && i != j)
+		{
+			str = before_eq(wsh_token->wsh_param[i]);
+			if (ft_strncmp(wsh_token->wsh_param[i], wsh_token->wsh_param[j], ft_strlen(str)) == 0)
+				ft_strlcpy(wsh_token->wsh_param[i], "NAN", 4);
+			if (str)
+				wsh_free((void *)str);
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+	j = 0;
 	wsh_unset(wsh_token, wsh_list);
 	while (wsh_list->wsh_envs[i++]);
 	i-=2;
@@ -82,6 +86,8 @@ t_wsh_list *wsh_list)
 		}
 		j++;
 	}
+	if (wsh_list->wsh_envs[i])
+		wsh_free((void *) wsh_list->wsh_envs[i]);
 	wsh_list->wsh_envs[i++] = ft_strdup(temp);
 	if (temp)
 		wsh_free((void *)temp);

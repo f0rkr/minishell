@@ -47,7 +47,7 @@
 typedef struct		s_wsh_tokens
 {
 	int						type;
-	void					*wsh_command;
+	char					*wsh_command;
 	char					**wsh_arg;
 	char					**wsh_param;
 	int						std_in;
@@ -87,4 +87,5 @@ void			wsh_free(void *data);
 void			wsh_loop_free(void **data);
 char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);
+char			*wsh_get_envar(char *s, char **env);
 #endif
