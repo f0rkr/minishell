@@ -7,7 +7,7 @@ int		searcheq(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '=')
+		if (str[i] == '=' && i != 0)
 			return (1);
 		i++;
 	}
@@ -28,7 +28,11 @@ char	*before_eq(char *str)
 	{
 		ret[j] = str[i];
 		if (str[i] == '=')
+		{
+			if (str[i - 1]== ' ')
+				return (NULL);
 			break;
+		}
 		i++;
 		j++;
 	}
@@ -48,10 +52,23 @@ t_wsh_list *wsh_list)
 	cond = 0;
 	if (!(temp = (char *)malloc(sizeof(char) * 4029)))
 		return ;
+	// while (wsh_token->wsh_param[i])
+	// {
+	// 	j = 0;
+	// 	while (wsh_token->wsh_param[i] && wsh_token->wsh_param[j])
+	// 	{
+	// 		if (ft_strncmp(wsh_token->wsh_param[i], wsh_token->wsh_param[j], ft_strlen(wsh_token->wsh_param[i]) + 1) == 0)
+
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
+	// i = 0;
+	// j = 0;
 	wsh_unset(wsh_token, wsh_list);
 	while (wsh_list->wsh_envs[i++]);
 	i-=2;
-	ft_strlcpy(temp, wsh_list->wsh_envs[i], ft_strlen(wsh_list->wsh_envs[i])+1);
+	ft_strlcpy(temp, wsh_list->wsh_envs[i], (ft_strlen(wsh_list->wsh_envs[i]) + 1));
 	while (wsh_token->wsh_param[j] != NULL)
 	{
 		cond = 0;
@@ -66,6 +83,7 @@ t_wsh_list *wsh_list)
 		j++;
 	}
 	wsh_list->wsh_envs[i++] = ft_strdup(temp);
-	wsh_free((void *)temp);
+	if (temp)
+		wsh_free((void *)temp);
 	return ;
 }

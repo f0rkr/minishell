@@ -12,10 +12,19 @@ void	wsh_cd(t_wsh_tokens *wsh_token)
 			if (!(ft_isin('/', wsh_token->wsh_param[0] + (ft_strlen(wsh_token->wsh_param[0]) - 1))))
 				wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
 		if (chdir(wsh_token->wsh_param[0]) != 0)
-			ft_putstr_fd("directory not found\n", 2);
+		{	
+			opendir(wsh_token->wsh_param[0]);
+			if(errno != 0)
+			{
+				ft_putstr_fd("wsh: cd: ", 2);
+				ft_putstr_fd(tmp, 2);
+				ft_putstr_fd(": ", 2);
+				ft_putendl_fd(strerror(errno), 2);
+			}
+		}
 	}
-	else
-		chdir("/Users/oel-ouar/");
+	// else ($HOME)
+	// 	chdir("/Users/oel-ouar/");
 	free(tmp);
 	return ;
 }

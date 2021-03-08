@@ -11,6 +11,8 @@
 # include <signal.h>
 # include <stdio.h>
 # include <sys/errno.h>
+# include <string.h>
+# include <fcntl.h>
 
 /*
 ** DEFINE SPECIAL CHARACTERS

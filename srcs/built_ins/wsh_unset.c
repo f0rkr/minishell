@@ -26,11 +26,11 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	char *tmp;
 	int k;
 
-	i = 0;
-	while (wsh_list->wsh_envs[i] != NULL)
+	j = 0;
+	while (wsh_token->wsh_param[j] != NULL)
 	{
-		j = 0;
-		while (wsh_token->wsh_param[j] != NULL)
+		i = 0;
+		while (wsh_list->wsh_envs[i] != NULL)
 		{
 			if (wsh_list->wsh_envs[i] && wsh_token->wsh_param[j] && wsh_list->wsh_envs[i][0] == wsh_token->wsh_param[j][0])
 			{
@@ -43,7 +43,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 					{
 						if (wsh_list->wsh_envs[i + k])
 						{
-							free(wsh_list->wsh_envs[i + k]);
+							wsh_free((void*)wsh_list->wsh_envs[i + k]);
 							wsh_list->wsh_envs[i + k] = NULL;
 						}
 						wsh_list->wsh_envs[i + k] = ft_strdup(arr[k]);
@@ -51,7 +51,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 					}
 					while (wsh_list->wsh_envs[i + k])
 					{
-						free(wsh_list->wsh_envs[i + k]);
+						wsh_free((void*)wsh_list->wsh_envs[i + k]);
 						wsh_list->wsh_envs[i + k] = NULL;
 						i++;
 						k++;
@@ -59,14 +59,11 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 					wsh_list->wsh_envs[i + k] = NULL;
 				}
 			}
-			if (tmp)
-			{
-				free(tmp);
-				tmp = NULL;
-			}
-			j++;
+			if (tmp != NULL)
+				wsh_free((void*)tmp);
+			i++;
 		}
-		i++;
+		j++;
 	}
 	return ;
 }
