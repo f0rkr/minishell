@@ -88,4 +88,5 @@ void			wsh_loop_free(void **data);
 char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);
 char			*wsh_get_envar(char *s, char **env);
+void			sigfun(int sig);
 #endif
