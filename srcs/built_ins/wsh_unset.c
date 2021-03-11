@@ -1,71 +1,47 @@
 #include "minishell.h"
 
-void	ft_tmparr(char tmp[][1024], char **env, int i, char **param)
+int		wsh_removevar(char **wsh_envs, int c_p)
 {
-	int		j;
-	int 	k;
+	while (wsh_envs[c_p] != NULL)
+	{
+		wsh_free((void *)wsh_envs[c_p]);
+		wsh_envs[c_p] = NULL;
+		if (wsh_envs[c_p + 1] != NULL)
+			wsh_envs[c_p] = ft_strdup(wsh_envs[c_p + 1]);
+		c_p++;
+	}
+	return (0);
+}
 
-	k = i;
-	j = 0;
-	while (env[i])
+int		wsh_searchenv(char **wsh_envs, char *var)
+{
+	int		c_i;
+
+	c_i = 0;
+	while (wsh_envs && wsh_envs[c_i] != NULL)
 	{
-		while (param[j])
-		{
-			if (ft_strncmp(env[i], param[j], ft_strlen(param[j])))
-				k++;
-			j++;
-		}
-		i++;
+		
+		if (ft_strncmp(wsh_envs[c_i], var, ft_strlen(var)) == 0)
+			return (c_i);
+		c_i++;
 	}
-	j = 0;
-	i = k;
-	while (env[i])
-	{
-		ft_strlcpy(tmp[j++], env[i], ft_strlen(env[i]) + 1);
-		i++;
-	}
-	tmp[j]['\0'] = 0;
-	return ;
+	return (0);
 }
 
 void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 {
-	int	i;
-	int j;
-	char arr[1024][1024];
-	char *tmp;
-	int k;
+	int		c_i;
+	int		c_j;
+	int		c_p;
 
-	i = 0;
-	while (wsh_list->wsh_envs[i] != NULL)
+	c_i = 0;
+	c_j = 0;
+	c_p = 0;
+	while (wsh_token->wsh_param && wsh_token->wsh_param[c_i] != NULL)
 	{
-		j = 0;
-		while (wsh_token->wsh_param[j] != NULL)
-		{
-			if (wsh_list->wsh_envs[i] && wsh_token->wsh_param[j] && wsh_list->wsh_envs[i][0] == wsh_token->wsh_param[j][0])
-			{
-				tmp = before_eq(wsh_token->wsh_param[j]);
-				if (!(ft_strncmp(wsh_list->wsh_envs[i], tmp, ft_strlen(tmp))))
-				{
-					k = 0;
-					ft_tmparr(arr, wsh_list->wsh_envs, i + 1, wsh_token->wsh_param);
-					while (arr[k + 1][0] != '\0')
-					{
-						if (wsh_list->wsh_envs[i + k])
-						{
-							wsh_free((void*)wsh_list->wsh_envs[i + k]);
-							wsh_list->wsh_envs[i + k] = NULL;
-						}
-						wsh_list->wsh_envs[i + k] = ft_strdup(arr[k]);
-						k++;
-					}
-					wsh_list->wsh_envs[i + k] = NULL;
-				}
-			}
-			j++;
-		}
-		i++;
+		if ((c_p = wsh_searchenv(wsh_list->wsh_envs, wsh_token->wsh_param[c_i])))
+			wsh_removevar(wsh_list->wsh_envs, c_p);
+		c_i++;
 	}
-	wsh_free((void *)tmp);
 	return ;
 }

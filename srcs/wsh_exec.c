@@ -28,6 +28,5 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 			wsh_execve(wsh_list);
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 	}
-	waitpid(0,0,0);
 	return (0);
 }
