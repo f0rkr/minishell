@@ -15,19 +15,11 @@ int		ft_isbuiltin(const char *command)
 
 int		wsh_exec_builtin(t_wsh_list *wsh_list)
 {
-	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "exit", 5))
-		wsh_exit(wsh_list);
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "pwd", 4))
 		wsh_pwd();
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "env", 4))
-		wsh_env(wsh_list->wsh_envs);
-	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "export", 7))
-		wsh_export(wsh_list->ast_parsed, wsh_list);
-	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "unset", 6))
-		wsh_unset(wsh_list->ast_parsed, wsh_list);
+		wsh_env(wsh_list);
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "echo", 5))
 		wsh_echo(wsh_list->ast_parsed);
-	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "cd", 3))
-		wsh_cd(wsh_list->ast_parsed);
 	return (0);
 }

@@ -37,5 +37,5 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	}
 	if (!newline)
 		ft_putchar_fd('\n', 1);
-	return ;
+	exit(0);
 }

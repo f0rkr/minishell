@@ -68,9 +68,9 @@ typedef struct		s_wsh_list
 */
 int				get_next_line(int fd, char **line);
 void			wsh_echo(t_wsh_tokens	*whs_token);
-void			wsh_env(char **env);
+void			wsh_env(t_wsh_list *wsh_list);
 void			wsh_exit(t_wsh_list *wsh_list);
-void			wsh_cd(t_wsh_tokens *wsh_token);
+void			wsh_cd(t_wsh_list *wsh_list);
 void			wsh_pwd(void);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);

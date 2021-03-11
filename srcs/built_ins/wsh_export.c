@@ -71,25 +71,12 @@ t_wsh_list *wsh_list)
 	j = 0;
 	wsh_unset(wsh_token, wsh_list);
 	while (wsh_list->wsh_envs[i++]);
-	i-=2;
-	ft_strlcpy(temp, wsh_list->wsh_envs[i], (ft_strlen(wsh_list->wsh_envs[i]) + 1));
+	i--;
 	while (wsh_token->wsh_param[j] != NULL)
 	{
-		cond = 0;
-		if (!(searcheq(wsh_token->wsh_param[j])))
-			cond = 1;
-		if (cond == 0)
-		{
-			if (wsh_list->wsh_envs[i])
-				wsh_free((void *) wsh_list->wsh_envs[i]);
+		if (searcheq(wsh_token->wsh_param[j]))
 			wsh_list->wsh_envs[i++] = ft_strdup(wsh_token->wsh_param[j]);
-		}
 		j++;
 	}
-	if (wsh_list->wsh_envs[i])
-		wsh_free((void *) wsh_list->wsh_envs[i]);
-	wsh_list->wsh_envs[i++] = ft_strdup(temp);
-	if (temp)
-		wsh_free((void *)temp);
 	return ;
 }

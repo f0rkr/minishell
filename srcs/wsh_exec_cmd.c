@@ -74,9 +74,10 @@ void        wsh_execve(t_wsh_list *wsh_list)
 
     i = 0;
 	arr = NULL;
+	tmp = NULL;
 	if ((char)wsh_list->ast_parsed->wsh_command[0] == '.')
 	{
-		tmp = ft_strjoin(wsh_get_envar("PWD", wsh_list->wsh_envs), "/");
+		tmp = ft_strjoin(getcwd(tmp,4029), "/");
 		path = ft_strjoin(tmp, (wsh_list->ast_parsed->wsh_command + 2));
 		wsh_free((void*)tmp);
 	}
@@ -86,7 +87,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			i++;
 		cmd = ft_split(wsh_list->wsh_envs[i], ':');
 		path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
-		i = 50;
+		i = 0;
 		while (wsh_list->ast_parsed->wsh_command && cmd[i] && path == NULL)
 			path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
 		tmp = ft_strjoin(path, "/");
@@ -94,16 +95,9 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		wsh_free((void*) tmp);
 		wsh_loop_free((void **)cmd);
 	}
+	arr = wsh_set_arr(path, wsh_list);
 	if (path == NULL)
 		path = cmd[0] + 5;
-    arr = wsh_set_arr(path, wsh_list);
-	// if (wsh_list->ast_parsed->std_out == 21)
-	// {
-	// 	if (pipe(fd) == -1)
-	// 		return ;
-	// 	wsh_list->ast_parsed->std_out = fd[1];
-	// 	wsh_list->as
-	// }
 	i = fork();
 	if (i == 0)
 	{
@@ -114,22 +108,24 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		}
 		if (wsh_list->ast_parsed->std_in != 0)
 			dup2(wsh_list->ast_parsed->std_in, 0);
-        execve(arr[0] , arr, wsh_list->wsh_envs);
-		ft_error(path, wsh_list->ast_parsed->wsh_command);
-        exit(1);
+		if (wsh_list->ast_parsed->type == BUILTIN)
+			wsh_exec_builtin(wsh_list);
+		else
+		{
+			execve(arr[0] , arr, wsh_list->wsh_envs);
+			ft_error(path, wsh_list->ast_parsed->wsh_command);
+			exit(1);
+		}
 	}
 	else if (i > 0)
 	{
 		if (wsh_list->ast_parsed->std_out != 1)
-		{
 			close(wsh_list->ast_parsed->std_out);
-		}
 		if (wsh_list->ast_parsed->std_in != 0)
-		{
 			close(wsh_list->ast_parsed->std_in);
-		}
 		waitpid(i, 0, 0);
 	}
-	// wsh_loop_free((void **)arr);
+	if (arr[0] != NULL)
+		wsh_loop_free((void **)arr);
 	return ;
 }
