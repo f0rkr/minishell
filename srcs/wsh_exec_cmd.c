@@ -71,10 +71,17 @@ void        wsh_execve(t_wsh_list *wsh_list)
     char    *path;
     char    *tmp;
     char    **arr;
+	int		pip[2];
 
     i = 0;
 	arr = NULL;
 	tmp = NULL;
+	if (wsh_list->ast_parsed->std_out == 666)
+	{
+		pipe(pip);
+		wsh_list->ast_parsed->std_out = pip[1];
+		wsh_list->ast_parsed->next->std_in = pip[0];
+	}
 	if ((char)wsh_list->ast_parsed->wsh_command[0] == '.')
 	{
 		tmp = ft_strjoin(getcwd(tmp,4029), "/");

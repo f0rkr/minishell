@@ -44,6 +44,29 @@ int		wsh_searchenvx(char **wsh_envs, char *var)
 	return (0);
 }
 
+void	wsh_export_only(t_wsh_list *wsh_list)
+{
+	int c_i;
+	int c_j;
+
+	c_i = 0;
+	c_j = 0;
+	while (wsh_list->wsh_envs[c_i])
+	{
+		c_j = 0;
+		ft_putstr_fd("declare -x ", 1);
+		while (wsh_list->wsh_envs[c_i][c_j] != '\0')
+		{
+			ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
+			if (wsh_list->wsh_envs[c_i][c_j] == '=')
+				ft_putchar_fd(DQUOTE, 1);
+			c_j++;
+		}
+		ft_putendl_fd("\"", 1);
+		c_i++;
+	}
+}
+
 void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 {
 	int		c_i;
@@ -55,6 +78,8 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	c_p = 0;
 	c_j = 0;
 	c_var = NULL;
+	if (!wsh_token->wsh_param)
+		wsh_export_only(wsh_list);
 	while (wsh_list->wsh_envs[c_j] != NULL)
 		c_j++;
 	while (wsh_token->wsh_param && wsh_token->wsh_param[c_i] != NULL)
@@ -74,5 +99,5 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 		c_var = NULL;
 		c_i++;
 	}
-	return ;
+	exit(0) ;
 }

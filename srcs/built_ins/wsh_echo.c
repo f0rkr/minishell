@@ -15,10 +15,11 @@ void	ft_printarg(t_wsh_tokens *wsh_token)
 	}
 }
 
-void	wsh_echo(t_wsh_tokens *wsh_token)
+void	wsh_echo(t_wsh_tokens *wsh_token, char **env)
 {
 	int i;
 	int newline;
+	int j;
 	
 	newline = 0;
 	i = 0;
@@ -30,7 +31,29 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	}
 	while (wsh_token->wsh_param && wsh_token->wsh_param[i])
 	{
-		ft_putstr_fd(wsh_token->wsh_param[i], 1);
+		j = 0;
+		while (wsh_token->wsh_param[i][j])
+		{
+			if (wsh_token->wsh_param[i][j] == '$')
+			{
+				if (wsh_get_envar(wsh_token->wsh_param[i] + (j + 1), env))
+				{
+					ft_putstr_fd(wsh_get_envar(wsh_token->wsh_param[i] + (j + 1), env), 1);
+					while (wsh_token->wsh_param[i][j])
+					{
+						if (wsh_token->wsh_param[i][j] == ' ' || wsh_token->wsh_param[i][j] == '\0')
+							break;
+						j++;
+					}
+					j--;
+				}
+				else
+					ft_putchar_fd('\n', 1);
+			}
+			else
+				ft_putchar_fd(wsh_token->wsh_param[i][j], 1);
+			j++;
+		}
 		if (wsh_token->wsh_param[i + 1])
 			ft_putchar_fd(' ', 1);
 		i++;

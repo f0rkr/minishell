@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/10 19:05:29 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/12 15:20:17 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,14 @@ void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][1024], int *po
 int	g_i;
 int g_j;
 
-int				ft_ispipe(t_wsh_tokens *wsh_token, char token[][1024], int ret)
+int				ft_ispipe(char token[][1024], int ret)
 {
-	int pip[2];
-
 	while (token[g_i][0] != '\0')
 		g_i++;
 	if (g_i == g_j)
 		return (ret);
-	pipe(pip);
-	wsh_token->next->std_in = pip[0];
 	g_j++;
-	return (pip[1]);
+	return (666);
 }
 
 t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
@@ -107,7 +103,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 		{
 			if (!(wsh_token->next = wsh_token_init()))
 				return (NULL);
-			wsh_token->std_out = ft_ispipe(wsh_token, pipe, 1);
+			wsh_token->std_out = ft_ispipe(pipe, 1);
 			wsh_token = wsh_token->next;
 		}
 	}
