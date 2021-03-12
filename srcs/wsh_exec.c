@@ -14,7 +14,7 @@
 
 void    *wsh_exec(t_wsh_list *wsh_list)
 {
-	while (wsh_list->ast_parsed)
+	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
 		if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "exit", 5))
 			wsh_exit(wsh_list);
