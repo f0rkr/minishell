@@ -26,5 +26,8 @@ void	wsh_cd(t_wsh_list *wsh_list)
 	else if (wsh_get_envar("HOME", wsh_list->wsh_envs))
 		chdir(ft_strjoin(wsh_get_envar("HOME", wsh_list->wsh_envs), "/"));
 	free(tmp);
-	return ;
+	if (wsh_list->ast_parsed->std_out == 1)
+		return ;
+	else
+		exit(0);
 }

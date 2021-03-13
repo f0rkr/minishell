@@ -43,5 +43,8 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 			wsh_removevar(wsh_list->wsh_envs, c_p);
 		c_i++;
 	}
-	return ;
+	if (wsh_token->std_out == 1)
+		return ;
+	else
+		exit(0);
 }

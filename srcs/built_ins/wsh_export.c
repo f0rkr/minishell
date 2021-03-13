@@ -99,5 +99,8 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 		c_var = NULL;
 		c_i++;
 	}
-	exit(0) ;
+	if (wsh_token->std_out == 1)
+		return ;
+	else
+		exit(0);
 }

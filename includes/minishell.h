@@ -79,11 +79,11 @@ typedef struct		s_wsh_list
 ** Functions Prototype
 */
 int				get_next_line(int fd, char **line);
-void			wsh_echo(t_wsh_tokens	*whs_token, char **env);
+void			wsh_echo(t_wsh_tokens *whs_token);
 void			wsh_env(t_wsh_list *wsh_list);
 void			wsh_exit(t_wsh_list *wsh_list);
 void			wsh_cd(t_wsh_list *wsh_list);
-void			wsh_pwd(void);
+void			wsh_pwd(t_wsh_tokens *wsh_token);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins( t_wsh_tokens *wsh_token ,t_wsh_list *wsh_list);
@@ -100,5 +100,6 @@ void			wsh_loop_free(void **data);
 char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);
 char			*wsh_get_envar(char *s, char **env);
-void			sigfun(int sig);
+int				wsh_tab_length(char **tab);
+// int				ft_isbuiltin(const char *command);
 #endif
