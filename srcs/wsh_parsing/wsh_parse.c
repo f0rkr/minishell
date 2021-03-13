@@ -75,6 +75,51 @@ int				ft_ispipe(char token[][1024], int ret)
 	return (666);
 }
 
+void			wsh_replacevar(t_wsh_list *wsh_list, char pipe[1024], int c_pos)
+{
+	char	var[1024];
+	char	*c_var;
+	int		c_i;
+
+	c_i = 0;
+	while (pipe[c_pos] != '\0')
+	{
+		if (ft_isalpha(pipe[c_pos]))
+			var[c_i++] = pipe[c_pos];
+		else
+			break;
+		c_pos++;
+	}
+	c_var = ft_strdup(wsh_get_envar((char *)var, wsh_list->wsh_envs));
+	return ;
+}
+
+void			wsh_escape(t_wsh_list *wsh_list, char pipe[1024])
+{
+	int		c_i;
+	int		c_sq;
+	int		c_p;
+
+	c_sq = 0;
+	c_p = 0;
+	c_i = 0;
+	while (pipe[c_i] != '\0')
+	{
+		if (c_p == 0 && c_sq == 0 && pipe[c_i] == SQUOTE)
+			c_sq = 1;
+		else if (c_sq == 1 && pipe[c_i] == SQUOTE)
+			c_sq = 0;
+		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR)
+			wsh_replacevar(pipe, c_i);
+		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
+			c_p = 1;
+		else if (c_p == 1 && pipe[c_i] == ESC)
+			c_p = 0;
+		c_i++;
+	}
+	return ;
+}
+
 t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 {
 	int		counter;
@@ -92,6 +137,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 	while (pipe[counter][0] != '\0')
 	{
 		i = 0;
+		wsh_escape(wsh_list, pipe[counter]);
 		if (wsh_tokenizer(foreach, pipe[counter], 2) == ERROR)
 			return (NULL);
 		wsh_token->wsh_command = ft_strdup(foreach[i++]);
