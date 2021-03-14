@@ -13,16 +13,22 @@ int         wsh_tab_length(char **tab)
 
 char        *wsh_get_envar(char *s, char **env)
 {
-    int i;
+    int     i;
+    char    *var;
 
     i = 0;
+    var = NULL;
+    if (ft_strncmp(s, "-", 1) == 0)
+        return ("himBH");
+    else if (s[0] == '#')
+		return ("0");
     while (env[i])
     {
-        if (ft_strncmp(env[i], s, ft_strlen(s)) == 0)
-            break ;
+        var = ft_substr(env[i], 0, wsh_findeq(env[i]));
+        if (ft_strncmp(var, s, ft_strlen(s)+1) == 0)
+            return (env[i] + (ft_strlen(s) + 1));
+        wsh_free((void *)var);
         i++;
     }
-    if (i == (wsh_tab_length(env) + 1))
-        return (NULL);
-    return (env[i] + (ft_strlen(s) + 1));
+    return ("\0");
 }

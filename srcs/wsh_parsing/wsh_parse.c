@@ -75,52 +75,97 @@ int				ft_ispipe(char token[][1024], int ret)
 	return (666);
 }
 
-void			wsh_replacevar(t_wsh_list *wsh_list, char pipe[1024], int c_pos)
+int				ft_isspecial(char c)
+{
+	if (c == '_' || c == '#' || c == '$' || c == '-')
+		return (1);
+	return (0);
+}
+
+void			wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 {
 	char	var[1024];
 	char	*c_var;
 	int		c_i;
+	int		c_j;
+	int		c_k;
 
+	c_j = c_pos;
 	c_i = 0;
-	while (pipe[c_pos] != '\0')
-	{
-		if (ft_isalpha(pipe[c_pos]))
-			var[c_i++] = pipe[c_pos];
-		else
-			break;
-		c_pos++;
-	}
-	c_var = ft_strdup(wsh_get_envar((char *)var, wsh_list->wsh_envs));
+	c_k = 0;
+	c_pos++;
+	if (ft_isspecial(pipe[c_pos]))
+		var[c_i++] = pipe[c_pos++];
+	else
+		while (pipe[c_pos] != '\0' && (ft_isalnum(pipe[c_pos]) || pipe[c_pos] == '_'))
+			var[c_i++] = pipe[c_pos++];
+	var[c_i] = EOL;
+	c_var = ft_strdup(wsh_get_envar((char *)var, envs));
+	c_i = 0;
+	while (pipe[c_i] != EOL && pipe[c_i] != VAR)
+		var[c_k++] = pipe[c_i++];
+	c_i = 0;
+	while (c_var && c_var[c_i] != EOL)
+		var[c_k++] = c_var[c_i++];
+	while (pipe[c_pos] != EOL)
+		var[c_k++] = pipe[c_pos++];
+	var[c_k] = EOL;
+	ft_strlcpy(pipe, var, ft_strlen(var) + 1);
 	return ;
 }
 
-void			wsh_escape(t_wsh_list *wsh_list, char pipe[1024])
+void			wsh_escape(char **envs, char pipe[1024])
 {
 	int		c_i;
+	int		c_j;
 	int		c_sq;
+	int		c_dq;
 	int		c_p;
+	char	newpipe[1024];
 
 	c_sq = 0;
+	c_dq = 0;
 	c_p = 0;
 	c_i = 0;
+	c_j = 0;
 	while (pipe[c_i] != '\0')
 	{
-		if (c_p == 0 && c_sq == 0 && pipe[c_i] == SQUOTE)
+		if (c_p == 0 && c_dq == 0 && c_sq == 0 && pipe[c_i] == SQUOTE)
+		{	
 			c_sq = 1;
+			c_i++;
+		}
 		else if (c_sq == 1 && pipe[c_i] == SQUOTE)
+		{
 			c_sq = 0;
+			c_i++;
+		}
+		if (c_p == 0 && c_sq == 0 && c_dq == 0 && pipe[c_i] == DQUOTE)
+		{	
+			c_dq = 1;
+			c_i++;
+		}
+		else if (c_dq == 1 && pipe[c_i] == DQUOTE)
+		{
+			c_dq = 0;
+			c_i++;
+		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR)
-			wsh_replacevar(pipe, c_i);
+			wsh_replacevar(envs, pipe, c_i);
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
-		else if (c_p == 1 && pipe[c_i] == ESC)
+		else if (c_p == 1)
 			c_p = 0;
+		if (c_p == 0)
+			newpipe[c_j++] = pipe[c_i];
 		c_i++;
 	}
+	newpipe[c_j] = EOL;
+	ft_strlcpy(pipe, newpipe, ft_strlen(newpipe) + 1);
 	return ;
 }
 
-t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
+t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[][1024])
 {
 	int		counter;
 	int		i;
@@ -137,7 +182,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 	while (pipe[counter][0] != '\0')
 	{
 		i = 0;
-		wsh_escape(wsh_list, pipe[counter]);
+		wsh_escape(envs, pipe[counter]);
 		if (wsh_tokenizer(foreach, pipe[counter], 2) == ERROR)
 			return (NULL);
 		wsh_token->wsh_command = ft_strdup(foreach[i++]);
@@ -156,7 +201,7 @@ t_wsh_tokens	*wsh_fillCommands(t_wsh_tokens *wsh_token, char pipe[][1024])
 	return (wsh_token);
 }
 
-t_wsh_tokens	*wsh_parse(char *cmd)
+t_wsh_tokens	*wsh_parse(char **envs, char *cmd)
 {
 	char			array[1024][1024];
 	char			pipe[1024][1024];
@@ -176,7 +221,7 @@ t_wsh_tokens	*wsh_parse(char *cmd)
 		if (wsh_tokenizer(pipe, array[i], 1) == ERROR)
 			return (NULL);
 		wsh_token->std_in = 0;
-		wsh_token = wsh_fillCommands(wsh_token, pipe);
+		wsh_token = wsh_fillCommands(envs, wsh_token, pipe);
 		if (array[++i][0] != '\0')
 		{
 			if (!(wsh_token->next = wsh_token_init()))

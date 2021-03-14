@@ -88,7 +88,7 @@ void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins( t_wsh_tokens *wsh_token ,t_wsh_list *wsh_list);
 char    		*wsh_read( int *garbage_flag );
-t_wsh_tokens	*wsh_parse( char *cmd );
+t_wsh_tokens	*wsh_parse(char **envs, char *cmd );
 void			*wsh_exec( t_wsh_list *wsh_list );
 int				ft_isbuiltin(const char *command);
 int				wsh_exec_builtin(t_wsh_list *wsh_list);
@@ -101,5 +101,6 @@ char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);
 char			*wsh_get_envar(char *s, char **env);
 int				wsh_tab_length(char **tab);
+int				wsh_findeq(char *var);
 // int				ft_isbuiltin(const char *command);
 #endif
