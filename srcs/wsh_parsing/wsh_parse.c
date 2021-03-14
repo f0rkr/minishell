@@ -151,7 +151,7 @@ void			wsh_escape(char **envs, char pipe[1024])
 			c_i++;
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR)
-			wsh_replacevar(envs, pipe, c_i);
+			wsh_replacevar(envs, pipe, c_i++);
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
 		else if (c_p == 1)
