@@ -36,6 +36,7 @@
 # define CMD		3
 # define LOOP		4
 # define ENDEXEC	5
+# define REDIREC	6
 # define BUFFER_SIZE 	1024
 
 /*
@@ -54,7 +55,12 @@
 /*
 ** WESH SHELL STRUCT
 */
-
+typedef struct s_wsh_redirection
+{
+	char						*filename;
+	int 						type;
+	struct s_wsh_redirection 	*next;
+}				t_wsh_redi;
 typedef struct s_wsh_tokens
 {
 	char			*wsh_command;
@@ -63,6 +69,7 @@ typedef struct s_wsh_tokens
 	int			type;
 	int			std_in;
 	int			std_out;
+	t_wsh_redi 	*wsh_redi;
 	struct 			s_wsh_tokens *next;
 }		t_wsh_tokens;
 
@@ -102,4 +109,5 @@ void		wsh_execve(t_wsh_list *wsh_list);
 char		*wsh_get_envar(char *s, char **env);
 int		wsh_tab_length(char **tab);
 int		wsh_findeq(char *var);
+t_wsh_redi		*wsh_redi_init();
 #endif

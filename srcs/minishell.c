@@ -40,6 +40,18 @@ int				wsh_loop(t_wsh_list *wsh_list)
 /*
 ** WESH SHELL STRUCT INIT
 */
+t_wsh_redi		*wsh_redi_init()
+{
+	t_wsh_redi	*wsh_redi;
+
+	if (!(wsh_redi = (t_wsh_redi *)malloc(sizeof(t_wsh_redi))))
+		return (NULL);
+	wsh_redi->filename = NULL;
+	wsh_redi->type = REDIREC;
+	wsh_redi->next = NULL;
+	return (wsh_redi);
+}
+
 t_wsh_tokens	*wsh_token_init()
 {
 	t_wsh_tokens	*wsh_token;
@@ -53,6 +65,7 @@ t_wsh_tokens	*wsh_token_init()
 	wsh_token->std_in = STDIN;
 	wsh_token->std_out = STDOUT;
 	wsh_token->next = NULL;
+	wsh_token->wsh_redi = NULL;
 	return (wsh_token);
 }
 

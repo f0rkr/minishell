@@ -18,7 +18,7 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 	{
 		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command) && wsh_list->ast_parsed->std_out == 1)
 			wsh_exec_builtin(wsh_list);
-		else
+		else if (wsh_list->ast_parsed->type == CMD)
 			wsh_execve(wsh_list);
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 	}

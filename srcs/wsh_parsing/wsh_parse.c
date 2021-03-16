@@ -174,11 +174,16 @@ t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[]
 {
 	int		counter;
 	int		i;
+	char	redirec[1024][1024];
 	char	foreach[1024][1024];
 	int		j;
+	int		c_w;
+	int		c_k;
 
 	i = 0;
 	j = 0;
+	c_k = 0;
+	c_w = 0;
 	g_i = 0;
 	g_j = 1;
 	while (i < 1024)
@@ -187,15 +192,38 @@ t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[]
 	while (pipe[counter][0] != '\0')
 	{
 		i = 0;
+		c_k = 0;
 		wsh_escape(envs, pipe[counter]);
-		// wsh_quotesremove(pipe[counter]);
-		if (wsh_tokenizer(foreach, pipe[counter], 2) == ERROR)
-			return (NULL);
-		wsh_token->wsh_command = ft_strdup(foreach[i++]);
-		if (ft_isbuiltin(wsh_token->wsh_command))
-			wsh_token->type = BUILTIN;
-		wsh_fillargs(wsh_token, foreach, &i);
-		wsh_fillparams(wsh_token, foreach, &i);
+		if (wsh_tokenizer(redirec, pipe[counter], 3) == ERROR)
+			return (NULL);	
+		if (redirec[0])
+		{
+			if (wsh_tokenizer(foreach, redirec[0], 2) == ERROR)
+				return (NULL);
+			wsh_token->wsh_command = ft_strdup(foreach[i++]);
+			if (ft_isbuiltin(wsh_token->wsh_command))
+				wsh_token->type = BUILTIN;
+			wsh_fillargs(wsh_token, foreach, &i);
+			wsh_fillparams(wsh_token, foreach, &i);
+			c_k++;
+		}
+		while (redirec[c_k][0] != '\0')
+		{
+			i = 0;
+			if (!(wsh_token->wsh_redi = wsh_redi_init()))
+					return (NULL);
+			if (wsh_tokenizer(foreach, redirec[c_k], 2) == ERROR)
+				return (NULL);
+			wsh_token->wsh_redi->filename= ft_strdup(foreach[i++]);
+			wsh_token->type = REDIREC;
+			if (redirec[++c_k][0] != '\0')
+			{
+				if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
+					return (NULL);
+				wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+			}
+			c_k++;
+		}
 		if (pipe[++counter][0] != '\0')
 		{
 			if (!(wsh_token->next = wsh_token_init()))
