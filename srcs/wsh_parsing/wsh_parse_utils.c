@@ -46,6 +46,12 @@ extern int		is_and(const char *str, int p, int q_flag, int pipe)
 		return (1);
 	if (str[p] == SPACE && pipe == 2 && str[p-1] != ESC && !q_flag)
 		return (1);
+	if (str[p] == INRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+		return (1);
+	if (str[p] == OUTRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+		return (1);
+	if (str[p] == OUTRID && str[p + 1] == OUTRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+		return (1);
 	return (0);
 }
 
