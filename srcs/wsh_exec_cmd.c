@@ -43,10 +43,13 @@ char        **wsh_set_arr(char *path, t_wsh_list *wsh_list)
 void		ft_error(char *path, char *command)
 {
 	DIR	*folder;
+	struct stat stats;
 	int	fd;
 
 	fd = open(path, O_WRONLY);
 	folder = opendir(path);
+	if (stat(path, &stats) == 0 && stats.st_mode & S_IXUSR)
+		return ;
 	if (fd == -1)
 		path = command;
 	ft_putstr_fd("wsh: ", 2);
@@ -83,11 +86,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		wsh_list->ast_parsed->next->std_in = pip[0];
 	}
 	if ((char)wsh_list->ast_parsed->wsh_command[0] == '.')
-	{
-		tmp = ft_strjoin(getcwd(tmp,4029), "/");
-		path = ft_strjoin(tmp, (wsh_list->ast_parsed->wsh_command + 2));
-		wsh_free((void*)tmp);
-	}
+		path = wsh_list->ast_parsed->wsh_command;
 	else
 	{
 		while (wsh_list->wsh_envs && wsh_list->wsh_envs[i] && ft_strncmp(wsh_list->wsh_envs[i], "PATH=", 5) != 0)
