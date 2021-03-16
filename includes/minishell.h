@@ -61,24 +61,25 @@ typedef struct s_wsh_redirection
 	int 						type;
 	struct s_wsh_redirection 	*next;
 }				t_wsh_redi;
+
 typedef struct s_wsh_tokens
 {
 	char			*wsh_command;
 	char			**wsh_arg;
 	char			**wsh_param;
-	int			type;
-	int			std_in;
-	int			std_out;
-	t_wsh_redi 	*wsh_redi;
+	int				type;
+	int				std_in;
+	int				std_out;
+	t_wsh_redi		*wsh_redi;
 	struct 			s_wsh_tokens *next;
 }		t_wsh_tokens;
 
 typedef struct s_wsh_list
 {
 	t_wsh_tokens		*ast_parsed;
-	char			*string;
-	int			garbage_flag;
-	char			**wsh_envs;
+	char				*string;
+	int					garbage_flag;
+	char				**wsh_envs;
 }		t_wsh_list;
 
 /*

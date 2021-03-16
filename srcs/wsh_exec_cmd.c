@@ -67,6 +67,24 @@ void		ft_error(char *path, char *command)
 	close(fd);
 }
 
+void		wsh_redi(t_wsh_list *wsh_list)
+{
+	int fd;
+
+	dup2(wsh_list->ast_parsed->std_in, 0);
+	while (wsh_list->ast_parsed->wsh_redi)
+	{
+		// if (>)
+			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
+		// if (>>)
+		// 	fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+		// if (<)
+		// 	fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY, 0644);
+		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
+	}
+	dup2(fd, 1);
+}
+
 void        wsh_execve(t_wsh_list *wsh_list)
 {
     int     i;
@@ -105,14 +123,17 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	if (path == NULL)
 		path = cmd[0] + 5;
 	i = fork();
+	// i = 0;
 	if (i == 0)
 	{
-		if (wsh_list->ast_parsed->std_out != 1)
+		if (wsh_list->ast_parsed->type == REDIREC)
+			wsh_redi(wsh_list);
+		else if (wsh_list->ast_parsed->std_out != 1)
 		{
 			close(wsh_list->ast_parsed->next->std_in);
 			dup2(wsh_list->ast_parsed->std_out, 1);
 		}
-		if (wsh_list->ast_parsed->std_in != 0)
+		else if (wsh_list->ast_parsed->std_in != 0)
 			dup2(wsh_list->ast_parsed->std_in, 0);
 		if (wsh_list->ast_parsed->type == BUILTIN)
 			wsh_exec_builtin(wsh_list);
@@ -131,7 +152,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			close(wsh_list->ast_parsed->std_in);
 		waitpid(i, 0, 0);
 	}
-	if (arr[0] != NULL)
-		wsh_loop_free((void **)arr);
+	
+	// if (arr[0] != NULL)
+	// 	wsh_loop_free((void **)arr);
 	return ;
 }
