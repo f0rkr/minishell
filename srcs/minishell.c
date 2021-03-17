@@ -47,7 +47,7 @@ t_wsh_redi		*wsh_redi_init()
 	if (!(wsh_redi = (t_wsh_redi *)malloc(sizeof(t_wsh_redi))))
 		return (NULL);
 	wsh_redi->filename = NULL;
-	wsh_redi->type = REDIREC;
+	wsh_redi->type = NULL;
 	wsh_redi->next = NULL;
 	return (wsh_redi);
 }

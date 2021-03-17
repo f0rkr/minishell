@@ -74,12 +74,12 @@ void		wsh_redi(t_wsh_list *wsh_list)
 	dup2(wsh_list->ast_parsed->std_in, 0);
 	while (wsh_list->ast_parsed->wsh_redi)
 	{
-		// if (>)
+		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">", 1) == 0)
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
-		// if (>>)
-		// 	fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
-		// if (<)
-		// 	fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY, 0644);
+		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">>", 2) == 0)
+			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, "<", 1) == 0)
+			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY, 0644);
 		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
 	}
 	dup2(fd, 1);
