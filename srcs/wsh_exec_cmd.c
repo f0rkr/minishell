@@ -126,7 +126,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	// i = 0;
 	if (i == 0)
 	{
-		if (wsh_list->ast_parsed->type == REDIREC)
+		if (wsh_list->ast_parsed->wsh_redi)
 			wsh_redi(wsh_list);
 		else if (wsh_list->ast_parsed->std_out != 1)
 		{
