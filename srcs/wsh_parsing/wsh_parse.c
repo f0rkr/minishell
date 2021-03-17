@@ -112,10 +112,10 @@ void			wsh_escape(char **envs, char pipe[1024])
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
+		else if (c_p == 1 && c_sq == 0 && pipe[c_i - 1] == ESC)
+			c_p = 0;
 		if (wsh_quotesremove(pipe[c_i], c_sq, c_dq, c_p))
 			newpipe[c_j++] = pipe[c_i];
-		if (c_p == 1 && c_sq == 0 && pipe[c_i - 1] == ESC)
-			c_p = 0;
 		c_i++;
 	}
 	newpipe[c_j] = EOL;
