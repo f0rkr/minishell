@@ -212,11 +212,13 @@ char			**wsh_get_redirection_type(char *string)
 
 void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], char **list)
 {
-	int		c_i;
+	int			c_i;
+	t_wsh_redi	*wsh_red;
 
 	c_i = 1;
 	if (redi[c_i][0] != EOL && !(wsh_token->wsh_redi = wsh_redi_init()))
 		return ;
+	wsh_red = wsh_token->wsh_redi;
 	while (redi[c_i][0] != EOL)
 	{
 		if (list[c_i - 1])
@@ -230,6 +232,7 @@ void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], char **l
 		}
 		c_i++;
 	}
+	wsh_token->wsh_redi = wsh_red;
 }
 
 t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[][1024])
