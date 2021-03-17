@@ -32,3 +32,20 @@ char        *wsh_get_envar(char *s, char **env)
     }
     return ("\0");
 }
+
+int         wsh_first_char(char *string)
+{
+    int i;
+
+    i = 0;
+    while (string[i] != '\0')
+    {
+        while (string[i] == ' ')
+            i++;
+        if (string[i] == ';')
+            return(1);
+        else
+            break ;
+    }
+    return (0);
+}

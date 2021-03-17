@@ -111,4 +111,5 @@ char		*wsh_get_envar(char *s, char **env);
 int		wsh_tab_length(char **tab);
 int		wsh_findeq(char *var);
 t_wsh_redi		*wsh_redi_init();
+int         wsh_first_char(char *string);
 #endif
