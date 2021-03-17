@@ -28,53 +28,6 @@ int		wsh_tokenizer(char cmd[][1024], char *string, int pipe)
 	return (1);
 }
 
-void			*wsh_fillargs(t_wsh_tokens *wsh_token, char wsh_args[][1024], int *position)
-{
-	int		counter;
-
-	counter = 0;
-	if (wsh_args[*position][0] != '-')
-		return (NULL);
-	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024)))
-		return (NULL);
-	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	wsh_token->wsh_arg[counter] = 0;
-	return (NULL);
-}
-
-void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
-{
-	int		counter;
-
-	counter = 0;
-	if (wsh_params[*position][0] == '\0' || wsh_params[*position][0] == '-')
-		return (NULL);
-	if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
-		return (NULL);
-	while (wsh_params[*position][0] != '\0')
-		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
-	if (wsh_params[*position] && wsh_params[*position][0] != '\0')
-		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
-	wsh_token->wsh_param[counter] = 0;
-	return (NULL);
-}
-
-int	g_i;
-int g_j;
-
-int				ft_ispipe(char token[][1024], int ret)
-{
-	while (token[g_i][0] != '\0')
-		g_i++;
-	if (g_i == g_j)
-		return (ret);
-	g_j++;
-	return (666);
-}
-
 int				ft_isspecial(char *c, int c_pos)
 {
 	if (c[c_pos] == '_' || c[c_pos] == '#' || c[c_pos] == '$' || c[c_pos] == '-')
@@ -170,65 +123,139 @@ void			wsh_escape(char **envs, char pipe[1024])
 	return ;
 }
 
+void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024], int *position)
+{
+	int		counter;
+
+	counter = 0;
+	if (wsh_args[*position][0] != '-')
+		return (NULL);
+	if (!(wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024)))
+		return (NULL);
+	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
+	{	
+		wsh_escape(envs, wsh_args[*position]);
+		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
+	}
+	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != '\0')
+	{
+		wsh_escape(envs, wsh_args[*position]);
+		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
+	}
+	wsh_token->wsh_arg[counter] = 0;
+	return (NULL);
+}
+
+void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
+{
+	int		counter;
+
+	counter = 0;
+	if (wsh_params[*position][0] == '\0' || wsh_params[*position][0] == '-')
+		return (NULL);
+	if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
+		return (NULL);
+	while (wsh_params[*position][0] != '\0')
+	{
+		wsh_escape(envs, wsh_params[*position]);
+		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+	}
+	if (wsh_params[*position] && wsh_params[*position][0] != '\0')
+	{
+		wsh_escape(envs, wsh_params[*position]);
+		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+	}
+	wsh_token->wsh_param[counter] = 0;
+	return (NULL);
+}
+
+void			wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char *string)
+{
+	int		c_i;
+	char	foreach[1024][1024];
+
+	c_i = 0;
+	if (wsh_tokenizer(foreach, string, 2) == ERROR)
+		return ;
+	wsh_token->wsh_command = ft_strdup(foreach[c_i++]);
+	if (ft_isbuiltin(wsh_token->wsh_command))
+		wsh_token->type = BUILTIN;
+	wsh_fillargs(envs, wsh_token, foreach, &c_i);
+	wsh_fillparams(envs, wsh_token, foreach, &c_i);
+}
+
+char			**wsh_get_redirection_type(char *string)
+{
+	char	**c_r;
+	int		c_i;
+	int		c_j;
+
+	c_j = 0;
+	c_i = 0;
+	if (!(c_r = (char **)malloc(sizeof(char *) * ft_strlen(string))))
+		return (NULL);
+	while (string[c_i] != EOL)
+	{
+		if (string[c_i] == INRID)
+			c_r[c_j++] = ft_strdup("<");
+		if (string[c_i] == OUTRID && string[c_i + 1] == OUTRID)
+			c_r[c_j++] = ft_strdup(">>");
+		if (string[c_i] == OUTRID && string[c_i + 1] != OUTRID)
+			c_r[c_j++] = ft_strdup(">");
+		c_i++;
+	}
+	c_r[c_j] = NULL;
+	if (c_r[0])
+		return (c_r);
+	return (NULL);
+}
+
+void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], char **list)
+{
+	int		c_i;
+
+	c_i = 1;
+	if (redi[c_i][0] != EOL && !(wsh_token->wsh_redi = wsh_redi_init()))
+		return ;
+	while (redi[c_i][0] != EOL)
+	{
+		if (list[c_i - 1])
+			wsh_token->wsh_redi->type = list[c_i - 1];
+		wsh_token->wsh_redi->filename = ft_strdup(redi[c_i]);
+		if (redi[c_i + 1][0] != EOL)
+		{
+			if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
+				return ;
+			wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+		}
+		c_i++;
+	}
+}
+
 t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[][1024])
 {
 	int		counter;
-	int		i;
+	int		c_i;
+	int		c_j;
 	char	redirec[1024][1024];
-	char	foreach[1024][1024];
-	int		j;
-	int		c_w;
-	int		c_k;
+	char	**c_r;
 
-	i = 0;
-	j = 0;
-	c_k = 0;
-	c_w = 0;
-	g_i = 0;
-	g_j = 1;
-	while (i < 1024)
-		ft_memset(foreach[i++], '\0', 1024);
+	c_i = 0;
+	c_j = 0;
+	c_r = NULL;
 	counter = 0;
 	while (pipe[counter][0] != '\0')
 	{
-		i = 0;
-		c_k = 0;
-		wsh_escape(envs, pipe[counter]);
 		if (wsh_tokenizer(redirec, pipe[counter], 3) == ERROR)
-			return (NULL);	
-		if (redirec[0])
+			return (NULL);
+		c_r = wsh_get_redirection_type(pipe[counter]);
+		wsh_fill_token(envs, wsh_token, redirec[0]);
+		wsh_fill_redirection(wsh_token, redirec, c_r);
+		if (pipe[++counter][0] != EOL)
 		{
-			if (wsh_tokenizer(foreach, redirec[0], 2) == ERROR)
+			if ((wsh_token->next = wsh_token_init()))
 				return (NULL);
-			wsh_token->wsh_command = ft_strdup(foreach[i++]);
-			if (ft_isbuiltin(wsh_token->wsh_command))
-				wsh_token->type = BUILTIN;
-			wsh_fillargs(wsh_token, foreach, &i);
-			wsh_fillparams(wsh_token, foreach, &i);
-			c_k++;
-		}
-		while (redirec[c_k][0] != '\0')
-		{
-			i = 0;
-			if (!(wsh_token->wsh_redi = wsh_redi_init()))
-					return (NULL);
-			if (wsh_tokenizer(foreach, redirec[c_k], 2) == ERROR)
-				return (NULL);
-			wsh_token->wsh_redi->filename= ft_strdup(foreach[i++]);
-			wsh_token->type = REDIREC;
-			if (redirec[++c_k][0] != '\0')
-			{
-				if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
-					return (NULL);
-				wsh_token->wsh_redi = wsh_token->wsh_redi->next;
-			}
-			c_k++;
-		}
-		if (pipe[++counter][0] != '\0')
-		{
-			if (!(wsh_token->next = wsh_token_init()))
-				return (NULL);
-			wsh_token->std_out = ft_ispipe(pipe, 1);
+			wsh_token->std_out = 666;
 			wsh_token = wsh_token->next;
 		}
 	}

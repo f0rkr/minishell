@@ -58,7 +58,7 @@
 typedef struct s_wsh_redirection
 {
 	char						*filename;
-	int 						type;
+	char 						*type;
 	struct s_wsh_redirection 	*next;
 }				t_wsh_redi;
 
