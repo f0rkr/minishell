@@ -37,8 +37,8 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	}
 	if (!newline)
 		ft_putchar_fd('\n', 1);
-	if (wsh_token->std_out == 1)
-		return ;
+	if (wsh_token->std_out != 1 || wsh_token->wsh_redi)
+		exit(0) ;
 	else
-		exit(0);
+		return ;
 }

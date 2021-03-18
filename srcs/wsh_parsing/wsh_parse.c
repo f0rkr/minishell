@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/12 15:20:17 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/18 11:34:55 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[]
 		wsh_fill_redirection(wsh_token, redirec, c_r);
 		if (pipe[++counter][0] != EOL)
 		{
-			if ((wsh_token->next = wsh_token_init()))
+			if (!(wsh_token->next = wsh_token_init()))
 				return (NULL);
 			wsh_token->std_out = 666;
 			wsh_token = wsh_token->next;
