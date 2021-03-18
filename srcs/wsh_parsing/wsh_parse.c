@@ -157,26 +157,27 @@ void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024]
 	return (NULL);
 }
 
+int		g_count;
+
 void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
 {
-	static int	counter = 0;
 
 	if (wsh_params[*position][0] == '\0' || wsh_params[*position][0] == '-')
 		return (NULL);
-	if (counter == 0)
+	if (g_count == 0)
 		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
 			return (NULL);
 	while (wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
 	{
 		wsh_escape(envs, wsh_params[*position]);
-		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
 	}
 	if (wsh_params[*position] && wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
 	{
 		wsh_escape(envs, wsh_params[*position]);
-		wsh_token->wsh_param[counter++] = ft_strdup(wsh_params[(*position)++]);
+		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
 	}
-	wsh_token->wsh_param[counter] = 0;
+	wsh_token->wsh_param[g_count] = 0;
 	return (NULL);
 }
 
@@ -209,6 +210,7 @@ void			wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
 	int		c_i;
 
 	c_i = 0;
+	g_count = 0;
 	wsh_token->wsh_command = ft_strdup(string[c_i++]);
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
