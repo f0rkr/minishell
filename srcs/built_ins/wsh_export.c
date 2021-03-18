@@ -122,8 +122,8 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 			c_i++;
 		}
 	}
-	if (wsh_token->std_out == 1)
-		return ;
+	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
+		exit(0) ;
 	else
-		exit(0);
+		return ;
 }

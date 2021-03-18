@@ -70,7 +70,9 @@ void		ft_error(char *path, char *command)
 void		wsh_redi(t_wsh_list *wsh_list)
 {
 	int fd;
+	t_wsh_redi *wsh_redi;
 
+	wsh_redi = wsh_list->ast_parsed->wsh_redi;
 	dup2(wsh_list->ast_parsed->std_in, 0);
 	while (wsh_list->ast_parsed->wsh_redi)
 	{
@@ -82,6 +84,7 @@ void		wsh_redi(t_wsh_list *wsh_list)
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY, 0644);
 		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
 	}
+	wsh_list->ast_parsed->wsh_redi = wsh_redi;
 	dup2(fd, 1);
 }
 
@@ -128,12 +131,12 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	{
 		if (wsh_list->ast_parsed->wsh_redi)
 			wsh_redi(wsh_list);
-		else if (wsh_list->ast_parsed->std_out != 1)
+		if (wsh_list->ast_parsed->std_out != 1)
 		{
 			close(wsh_list->ast_parsed->next->std_in);
 			dup2(wsh_list->ast_parsed->std_out, 1);
 		}
-		else if (wsh_list->ast_parsed->std_in != 0)
+		if (wsh_list->ast_parsed->std_in != 0)
 			dup2(wsh_list->ast_parsed->std_in, 0);
 		if (wsh_list->ast_parsed->type == BUILTIN)
 			wsh_exec_builtin(wsh_list);
