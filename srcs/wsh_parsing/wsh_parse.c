@@ -270,10 +270,5 @@ t_wsh_tokens	*wsh_parse(char **envs, char *cmd)
 		}
 	}
 	i = 0;
-	while (wsh_token->wsh_param[i])
-	{
-		printf("%s\n", wsh_token->wsh_param[i]);
-		i++;
-	}
 	return (wsh_token_first);
 }
