@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/18 11:34:55 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/19 12:15:32 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,10 @@ void			wsh_escape(char **envs, char pipe[1024])
 
 int				wsh_is_redirection(char *c_r)
 {
-	if (ft_strncmp(c_r, "", 1) == 0)
-		return (0);
-	if (ft_strncmp(c_r, "<", 1) == 0 || ft_strncmp(c_r, ">", 1) == 0)
+	if (ft_strncmp(c_r, ">>", 2) == 0)
 		return (1);
-	else if (ft_strncmp(c_r, ">>", 2) == 0)
-		return (1);
+	else if (ft_strncmp(c_r, "<", 1) == 0 || ft_strncmp(c_r, ">", 1) == 0)
+		return (1); 
 	return (0);
 }
 
@@ -162,7 +160,7 @@ int		g_count;
 void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
 {
 
-	if (wsh_params[*position][0] == '\0' || wsh_params[*position][0] == '-')
+	if (wsh_params[*position][0] == '\0')
 		return (NULL);
 	if (g_count == 0)
 		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
@@ -200,7 +198,6 @@ void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i
 		}
 		else
 			break;
-		(*c_i)++;
 	}
 	wsh_token->wsh_redi = wsh_red;
 }
@@ -214,7 +211,8 @@ void			wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
 	wsh_token->wsh_command = ft_strdup(string[c_i++]);
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
-	wsh_fillargs(envs, wsh_token, string, &c_i);
+	if (!wsh_is_redirection(wsh_token->wsh_command))
+		wsh_fillargs(envs, wsh_token, string, &c_i);
 	wsh_fillparams(envs, wsh_token, string, &c_i);
 	wsh_fill_redirection(wsh_token, string, &c_i);
 	wsh_fillparams(envs, wsh_token, string, &c_i);

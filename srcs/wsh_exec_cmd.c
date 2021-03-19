@@ -76,16 +76,22 @@ void		wsh_redi(t_wsh_list *wsh_list)
 	dup2(wsh_list->ast_parsed->std_in, 0);
 	while (wsh_list->ast_parsed->wsh_redi)
 	{
-		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">", 1) == 0)
-			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">>", 2) == 0)
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
-		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, "<", 1) == 0)
-			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY, 0644);
+		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">", 2) == 0)
+		{
+			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
+			dup2(fd, 1);
+		}
+		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, "<", 2) == 0)
+		{
+			close(fd);
+			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY);
+			dup2(fd, wsh_list->ast_parsed->std_in);
+		}
 		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
 	}
 	wsh_list->ast_parsed->wsh_redi = wsh_redi;
-	dup2(fd, 1);
 }
 
 void        wsh_execve(t_wsh_list *wsh_list)
@@ -106,8 +112,25 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		wsh_list->ast_parsed->std_out = pip[1];
 		wsh_list->ast_parsed->next->std_in = pip[0];
 	}
-	if ((char)wsh_list->ast_parsed->wsh_command[0] == '.')
+	if (wsh_list->ast_parsed->wsh_command[0] == '.')
 		path = wsh_list->ast_parsed->wsh_command;
+	if (wsh_list->ast_parsed->wsh_command[0] == '<' || wsh_list->ast_parsed->wsh_command[0] == '>')
+	{
+		if (wsh_list->ast_parsed->wsh_command[0] == '>')
+		{
+			if (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[0] != NULL)
+				open(wsh_list->ast_parsed->wsh_param[0], O_CREAT | O_TRUNC | O_RDWR, 0644);
+			if (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[1] != NULL)
+			{
+				ft_putstr_fd("wsh: ", 1);
+				ft_putstr_fd(wsh_list->ast_parsed->wsh_param[1], 1);
+				ft_putendl_fd(": command not found", 1);
+			}
+			if (!wsh_list->ast_parsed->wsh_param)
+				ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
+		}
+		return ;
+	}
 	else
 	{
 		while (wsh_list->wsh_envs && wsh_list->wsh_envs[i] && ft_strncmp(wsh_list->wsh_envs[i], "PATH=", 5) != 0)
