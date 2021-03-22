@@ -74,7 +74,7 @@ int			wsh_quotesremove(char *c, int c_sq , int c_dq, int c_p)
 		return (1);
 	if ((c[1] == SQUOTE && c[0] == ESC) ||(c[1] == DQUOTE && c[0] == ESC))
 		return (1);
-	if (c_p == 0 && c[1] != SQUOTE && c[1] != DQUOTE)
+	if (c_p == 0 && c[1] != SQUOTE && c[1] != DQUOTE && c[1] != VAR)
 		return (1);
 	return (0);
 }
@@ -107,6 +107,7 @@ void			wsh_escape(char **envs, char pipe[1024])
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && pipe[c_i + 1] != '\0')
 		{
 			wsh_replacevar(envs, pipe, c_i);
+			wsh_escape(envs, pipe);
 			c_i = 0;
 			c_j = 0;
 		}
@@ -178,6 +179,7 @@ void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1
 	wsh_token->wsh_param[g_count] = 0;
 	return (NULL);
 }
+
 void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
 {
 	int		c_i;
@@ -194,6 +196,7 @@ void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
 	wsh_token->wsh_redi->filename = ft_strdup(&string[c_i]);
 	return ;
 }
+
 int		wsh_check(char *c_r)
 {
 	if (ft_strncmp(c_r, ">>", 3) == 0)
