@@ -55,23 +55,24 @@
 /*
 ** WESH SHELL STRUCT
 */
+
 typedef struct s_wsh_redirection
 {
 	char						*filename;
-	char 						*type;
-	struct s_wsh_redirection 	*next;
+	char						*type;
+	struct s_wsh_redirection	*next;
 }				t_wsh_redi;
 
 typedef struct s_wsh_tokens
 {
-	char			*wsh_command;
-	char			**wsh_arg;
-	char			**wsh_param;
-	int				type;
-	int				std_in;
-	int				std_out;
-	t_wsh_redi		*wsh_redi;
-	struct 			s_wsh_tokens *next;
+	char					*wsh_command;
+	char					**wsh_arg;
+	char					**wsh_param;
+	int						type;
+	int						std_in;
+	int						std_out;
+	t_wsh_redi				*wsh_redi;
+	struct s_wsh_tokens		*next;
 }		t_wsh_tokens;
 
 typedef struct s_wsh_list
@@ -86,30 +87,30 @@ typedef struct s_wsh_list
 ** Functions Prototype
 */
 
-int		get_next_line(int fd, char **line);
-void		wsh_echo(t_wsh_tokens *whs_token);
-void		wsh_env(t_wsh_list *wsh_list);
-void		wsh_exit(t_wsh_list *wsh_list);
-void		wsh_cd(t_wsh_list *wsh_list);
-void		wsh_pwd(t_wsh_tokens *wsh_token);
-void		wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-void		wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-void		wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-char		*wsh_read(int *garbage_flag);
+int				get_next_line(int fd, char **line);
+void			wsh_echo(t_wsh_tokens *whs_token);
+void			wsh_env(t_wsh_list *wsh_list);
+void			wsh_exit(t_wsh_list *wsh_list);
+void			wsh_cd(t_wsh_list *wsh_list);
+void			wsh_pwd(t_wsh_tokens *wsh_token);
+void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
+void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
+void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
+char			*wsh_read(int *garbage_flag);
 t_wsh_tokens	*wsh_parse(char **envs, char *cmd);
-void		*wsh_exec(t_wsh_list *wsh_list);
-int		ft_isbuiltin(const char *command);
-int		wsh_exec_builtin(t_wsh_list *wsh_list);
-int		wsh_garbageCollector(t_wsh_list *wsh_list);
+void			*wsh_exec(t_wsh_list *wsh_list);
+int				ft_isbuiltin(const char *command);
+int				wsh_exec_builtin(t_wsh_list *wsh_list);
+int				wsh_garbageCollector(t_wsh_list *wsh_list);
 t_wsh_tokens	*wsh_token_init(void);
-int		searcheq(char *str);
-void		wsh_free(void *data);
-void		wsh_loop_free(void **data);
-char		*before_eq(char *str);
-void		wsh_execve(t_wsh_list *wsh_list);
-char		*wsh_get_envar(char *s, char **env);
-int		wsh_tab_length(char **tab);
-int		wsh_findeq(char *var);
-t_wsh_redi		*wsh_redi_init();
-int         wsh_first_char(char *string);
+int				searcheq(char *str);
+void			wsh_free(void *data);
+void			wsh_loop_free(void **data);
+char			*before_eq(char *str);
+void			wsh_execve(t_wsh_list *wsh_list);
+char			*wsh_get_envar(char *s, char **env);
+int				wsh_tab_length(char **tab);
+int				wsh_findeq(char *var);
+t_wsh_redi		*wsh_redi_init(void);
+int				wsh_first_char(char *string);
 #endif

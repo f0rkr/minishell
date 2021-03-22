@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		wsh_removevar(char **wsh_envs, int c_p)
+int	wsh_removevar(char **wsh_envs, int c_p)
 {
 	while (wsh_envs[c_p] != NULL)
 	{
@@ -13,14 +13,13 @@ int		wsh_removevar(char **wsh_envs, int c_p)
 	return (0);
 }
 
-int		wsh_searchenv(char **wsh_envs, char *var)
+int	wsh_searchenv(char **wsh_envs, char *var)
 {
 	int		c_i;
 
 	c_i = 0;
 	while (wsh_envs && wsh_envs[c_i] != NULL)
-	{
-		
+	{	
 		if (ft_strncmp(wsh_envs[c_i], var, ft_strlen(var)) == 0)
 			return (c_i);
 		c_i++;
@@ -39,12 +38,12 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	c_p = 0;
 	while (wsh_token->wsh_param && wsh_token->wsh_param[c_i] != NULL)
 	{
-		if ((c_p = wsh_searchenv(wsh_list->wsh_envs, wsh_token->wsh_param[c_i])))
+		c_p = wsh_searchenv(wsh_list->wsh_envs, wsh_token->wsh_param[c_i]);
+		if (c_p)
 			wsh_removevar(wsh_list->wsh_envs, c_p);
 		c_i++;
 	}
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
-		exit(0) ;
-	else
-		return ;
+		exit(0);
+	return ;
 }

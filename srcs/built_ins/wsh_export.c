@@ -1,15 +1,14 @@
 #include "minishell.h"
 
-int		wsh_removevarandadd(char **wsh_envs, char *var, int c_p)
+int	wsh_removevarandadd(char **wsh_envs, char *var, int c_p)
 {
-
 	wsh_free((void *)wsh_envs[c_p]);
 	wsh_envs[c_p] = NULL;
 	wsh_envs[c_p] = ft_strdup(var);
 	return (0);
 }
 
-int		wsh_findeq(char *var)
+int	wsh_findeq(char *var)
 {
 	int		c_i;
 
@@ -21,7 +20,7 @@ int		wsh_findeq(char *var)
 	return (0);
 }
 
-int		wsh_searchenvx(char **wsh_envs, char *var)
+int	wsh_searchenvx(char **wsh_envs, char *var)
 {
 	int		c_i;
 	int		c_j;
@@ -35,11 +34,10 @@ int		wsh_searchenvx(char **wsh_envs, char *var)
 	{
 		test = wsh_envs[c_i];
 		c_env = ft_substr(wsh_envs[c_i], 0, wsh_findeq(wsh_envs[c_i]));
-		if ((ft_strncmp(c_env, var, ft_strlen(var)+1) == 0) 
-		|| (ft_strncmp(test, var, ft_strlen(var)) == 0))
+		if ((ft_strncmp(c_env, var, ft_strlen(var) + 1) == 0)
+			|| (ft_strncmp(test, var, ft_strlen(var)) == 0))
 			return (c_i);
-		wsh_free((void *)c_env);
-		c_env = NULL;
+		wsh_free((void *) c_env);
 		c_i++;
 	}
 	return (0);
@@ -47,13 +45,11 @@ int		wsh_searchenvx(char **wsh_envs, char *var)
 
 void	wsh_export_only(t_wsh_list *wsh_list)
 {
-	int c_i;
-	int c_j;
-	int c_k;
+	int		c_i;
+	int		c_j;
+	int		c_k;
 
 	c_i = 0;
-	c_j = 0;
-	c_k = 0;
 	while (wsh_list->wsh_envs[c_i])
 	{
 		c_k = 0;
@@ -118,12 +114,10 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 				}
 			}
 			wsh_free((void *)c_var);
-			c_var = NULL;
 			c_i++;
 		}
 	}
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
-		exit(0) ;
-	else
-		return ;
+		exit(0);
+	return ;
 }

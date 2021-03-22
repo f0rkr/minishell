@@ -2,7 +2,7 @@
 
 void	wsh_env(t_wsh_list *wsh_list)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (wsh_list->wsh_envs[i] != 0)
@@ -12,7 +12,6 @@ void	wsh_env(t_wsh_list *wsh_list)
 		i++;
 	}
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
-		exit(0) ;
-	else
-		return ;
+		exit(0);
+	return ;
 }

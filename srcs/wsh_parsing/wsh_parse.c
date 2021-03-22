@@ -68,13 +68,13 @@ void			wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	return ;
 }
 
-int			wsh_quotesremove(char c, int c_sq , int c_dq, int c_p)
+int			wsh_quotesremove(char *c, int c_sq , int c_dq, int c_p)
 {
-	if ((c == SQUOTE && c_dq == 1) ||(c == DQUOTE && c_sq == 1))
+	if ((c[1] == SQUOTE && c_dq == 1) ||(c[1] == DQUOTE && c_sq == 1))
 		return (1);
-	if ((c == SQUOTE && c_p == 1) ||(c == DQUOTE && c_p == 1))
+	if ((c[1] == SQUOTE && c[0] == ESC) ||(c[1] == DQUOTE && c[0] == ESC))
 		return (1);
-	if (c_p == 0 && c != SQUOTE && c != DQUOTE)
+	if (c_p == 0 && c[1] != SQUOTE && c[1] != DQUOTE)
 		return (1);
 	return (0);
 }
@@ -112,9 +112,9 @@ void			wsh_escape(char **envs, char pipe[1024])
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
-		else if (c_p == 1 && c_sq == 0 && pipe[c_i - 1] == ESC)
+		else if (c_p == 1 && c_sq == 0)
 			c_p = 0;
-		if (wsh_quotesremove(pipe[c_i], c_sq, c_dq, c_p))
+		if (wsh_quotesremove(&pipe[c_i - 1], c_sq, c_dq, c_p))
 			newpipe[c_j++] = pipe[c_i];
 		c_i++;
 	}
@@ -178,6 +178,30 @@ void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1
 	wsh_token->wsh_param[g_count] = 0;
 	return (NULL);
 }
+void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
+{
+	int		c_i;
+	char	type[2];
+
+	c_i = 0;
+	while (string[c_i] == OUTRID || string[c_i] == INRID)
+	{
+		type[c_i] = string[c_i];
+		c_i++;
+	}
+	type[c_i] = EOL;
+	wsh_token->wsh_redi->type = ft_strdup(type);
+	wsh_token->wsh_redi->filename = ft_strdup(&string[c_i]);
+	return ;
+}
+int		wsh_check(char *c_r)
+{
+	if (ft_strncmp(c_r, ">>", 3) == 0)
+		return (1);
+	else if (ft_strncmp(c_r, "<", 2) == 0 || ft_strncmp(c_r, ">", 2) == 0)
+		return (1); 
+	return (0);
+}
 
 void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i)
 {
@@ -188,8 +212,13 @@ void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i
 	wsh_red = wsh_token->wsh_redi;
 	while (redi[*c_i][0] != EOL)
 	{
-		wsh_token->wsh_redi->type = ft_strdup(redi[(*c_i)++]);
-		wsh_token->wsh_redi->filename = ft_strdup(redi[(*c_i)++]);
+		if (wsh_check(redi[*c_i]))
+		{
+			wsh_token->wsh_redi->type = ft_strdup(redi[(*c_i)++]);
+			wsh_token->wsh_redi->filename = ft_strdup(redi[(*c_i)++]);
+		}
+		else
+			wsh_stick_redi(wsh_token, redi[(*c_i)++]);
 		if (wsh_is_redirection(redi[*c_i]))
 		{
 			if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
