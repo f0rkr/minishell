@@ -197,6 +197,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			close(wsh_list->ast_parsed->std_out);
 		if (wsh_list->ast_parsed->std_in != 0)
 			close(wsh_list->ast_parsed->std_in);
+		if (wsh_list->ast_parsed->std_out == 1)
+			waitpid(i, 0, 0);
 	}
 	if (arr[0] != NULL)
 		wsh_loop_free((void **)arr);

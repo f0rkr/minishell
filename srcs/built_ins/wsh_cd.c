@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wsh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mashad <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:39:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/19 15:12:32 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/22 13:55:27 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ void	wsh_cd(t_wsh_list *wsh_list)
 	if (wsh_token->wsh_param)
 	{
 		tmp = wsh_token->wsh_param[0];
+		if (!ft_strncmp(wsh_token->wsh_param[0], ".", 2))
+		{
+			if (opendir(wsh_get_envar("PWD", wsh_list->wsh_envs)) == NULL)
+			{
+				ft_putendl_fd(wsh_get_envar("PWD", wsh_list->wsh_envs), 1);
+			}
+		}
 		if (ft_strncmp(wsh_token->wsh_param[0], ".", 2) != 0)
 		{
 			if (!(ft_isin('/', wsh_token->wsh_param[0] + (
