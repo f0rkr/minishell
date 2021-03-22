@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/18 11:37:33 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/19 15:05:30 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 			wsh_execve(wsh_list);
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 	}
+	while(wait(NULL) > 0);
 	return (0);
 }

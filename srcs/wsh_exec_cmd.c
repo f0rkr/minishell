@@ -72,20 +72,30 @@ void		wsh_redi(t_wsh_list *wsh_list)
 	int fd;
 	t_wsh_redi *wsh_redi;
 
+	fd = 0;
 	wsh_redi = wsh_list->ast_parsed->wsh_redi;
 	dup2(wsh_list->ast_parsed->std_in, 0);
 	while (wsh_list->ast_parsed->wsh_redi)
 	{
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">>", 2) == 0)
+		{
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+			dup2(fd, 1);
+		}
+			
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">", 2) == 0)
 		{
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 			dup2(fd, 1);
 		}
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, "<", 2) == 0)
 		{
-			close(fd);
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY);
 			dup2(fd, wsh_list->ast_parsed->std_in);
 		}
@@ -114,7 +124,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	}
 	if (wsh_list->ast_parsed->wsh_command[0] == '.')
 		path = wsh_list->ast_parsed->wsh_command;
-	if (wsh_list->ast_parsed->wsh_command[0] == '<' || wsh_list->ast_parsed->wsh_command[0] == '>')
+	else if (wsh_list->ast_parsed->wsh_command[0] == '<' || wsh_list->ast_parsed->wsh_command[0] == '>')
 	{
 		if (wsh_list->ast_parsed->wsh_command[0] == '>')
 		{
@@ -127,6 +137,17 @@ void        wsh_execve(t_wsh_list *wsh_list)
 				ft_putendl_fd(": command not found", 1);
 			}
 			if (!wsh_list->ast_parsed->wsh_param)
+				ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
+		}
+		else
+		{
+			if (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[0] != NULL)
+			{
+				ft_putstr_fd("wsh: ", 1);
+				ft_putstr_fd(wsh_list->ast_parsed->wsh_param[0], 1);
+				ft_putendl_fd(": No such file or directory", 1);
+			}
+			else
 				ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
 		}
 		return ;
@@ -176,10 +197,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			close(wsh_list->ast_parsed->std_out);
 		if (wsh_list->ast_parsed->std_in != 0)
 			close(wsh_list->ast_parsed->std_in);
-		waitpid(i, 0, 0);
 	}
-	
-	// if (arr[0] != NULL)
-	// 	wsh_loop_free((void **)arr);
+	if (arr[0] != NULL)
+		wsh_loop_free((void **)arr);
 	return ;
 }
