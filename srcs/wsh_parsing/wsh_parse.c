@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/19 12:15:32 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/22 19:30:58 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		wsh_tokenizer(char cmd[][1024], char *string, int pipe)
 
 int				ft_isspecial(char *c, int c_pos)
 {
-	if (c[c_pos] == '_' || c[c_pos] == '#' || c[c_pos] == '$' || c[c_pos] == '-')
+	if (c[c_pos] == '_' || c[c_pos] == '?' || c[c_pos] == '#' || c[c_pos] == '$' || c[c_pos] == '-')
 		return (1);
 	return (0);
 }
@@ -46,7 +46,7 @@ void			wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	c_j = c_pos++;
 	c_i = 0;
 	c_k = 0;
-	if (pipe[c_pos] == '\0' || !ft_isalnum(pipe[c_pos]))
+	if (pipe[c_pos] == '\0')
 		return ;
 	if (ft_isspecial(pipe, c_pos))
 		var[c_i++] = pipe[c_pos++];
@@ -104,15 +104,12 @@ void			wsh_escape(char **envs, char pipe[1024])
 			c_dq = 1;
 		else if (c_dq == 1 && pipe[c_i] == DQUOTE)
 			c_dq = 0;
-		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && pipe[c_i + 1] != '\0')
+		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && pipe[c_i + 1] != '\0' && (ft_isalnum(pipe[c_i + 1]) || ft_isspecial(pipe, c_i + 1)))
 		{
 			wsh_replacevar(envs, pipe, c_i);
-			if (pipe[c_i] != VAR)
-			{
-				wsh_escape(envs, pipe);
-				c_i = 0;
-				c_j = 0;
-			}
+			wsh_escape(envs, pipe);
+			c_i = 0;
+			c_j = 0;
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
@@ -161,28 +158,18 @@ void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024]
 	return (NULL);
 }
 
-int		g_count;
-
-void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
+int			wsh_aid(char *string)
 {
+	int		c_i;
 
-	if (wsh_params[*position][0] == '\0')
-		return (NULL);
-	if (g_count == 0)
-		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
-			return (NULL);
-	while (wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
+	c_i = 0;
+	while (string[c_i] != EOL)
 	{
-		wsh_escape(envs, wsh_params[*position]);
-		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
+		if (wsh_is_redirection(&string[c_i]))
+			break;
+		c_i++;
 	}
-	if (wsh_params[*position] && wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
-	{
-		wsh_escape(envs, wsh_params[*position]);
-		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
-	}
-	wsh_token->wsh_param[g_count] = 0;
-	return (NULL);
+	return (c_i);
 }
 
 void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
@@ -201,6 +188,42 @@ void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
 	wsh_token->wsh_redi->filename = ft_strdup(&string[c_i]);
 	return ;
 }
+int g_count;
+
+void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
+{
+	int c_i;
+	
+	if (wsh_params[*position][0] == '\0')
+		return (NULL);
+	if (g_count == 0)
+		if (!(wsh_token->wsh_param = (char **)malloc(sizeof(char *) * 1024)))
+			return (NULL);
+	while (wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
+	{
+		c_i = wsh_aid(wsh_params[(*position)]);
+		wsh_escape(envs, wsh_params[*position]);
+		if (c_i != 0)
+		{
+			if (!(wsh_token->wsh_redi = wsh_redi_init()))
+				return (NULL);
+			wsh_token->wsh_param[g_count++] = ft_substr(wsh_params[*position], 0, c_i);
+			wsh_stick_redi(wsh_token, &wsh_params[*(position)][c_i]);
+		}
+		else
+			wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[*position]);
+		(*position)++;
+	}
+	if (wsh_params[*position] && wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
+	{
+		wsh_escape(envs, wsh_params[*position]);
+		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
+	}
+	wsh_token->wsh_param[g_count] = 0;
+	return (NULL);
+}
+
+
 
 int		wsh_check(char *c_r)
 {
