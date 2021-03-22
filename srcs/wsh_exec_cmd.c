@@ -72,20 +72,30 @@ void		wsh_redi(t_wsh_list *wsh_list)
 	int fd;
 	t_wsh_redi *wsh_redi;
 
+	fd = 0;
 	wsh_redi = wsh_list->ast_parsed->wsh_redi;
 	dup2(wsh_list->ast_parsed->std_in, 0);
 	while (wsh_list->ast_parsed->wsh_redi)
 	{
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">>", 2) == 0)
+		{
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+			dup2(fd, 1);
+		}
+			
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, ">", 2) == 0)
 		{
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 			dup2(fd, 1);
 		}
 		if (ft_strncmp(wsh_list->ast_parsed->wsh_redi->type, "<", 2) == 0)
 		{
-			close(fd);
+			if (fd)
+				close(fd);
 			fd = open(wsh_list->ast_parsed->wsh_redi->filename, O_RDONLY);
 			dup2(fd, wsh_list->ast_parsed->std_in);
 		}
@@ -187,10 +197,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			close(wsh_list->ast_parsed->std_out);
 		if (wsh_list->ast_parsed->std_in != 0)
 			close(wsh_list->ast_parsed->std_in);
-	//	waitpid(i, 0, 0);
 	}
-	
-	// if (arr[0] != NULL)
-	// 	wsh_loop_free((void **)arr);
+	if (arr[0] != NULL)
+		wsh_loop_free((void **)arr);
 	return ;
 }
