@@ -16,7 +16,7 @@ int		ft_isbuiltin(const char *command)
 int		wsh_exec_builtin(t_wsh_list *wsh_list)
 {
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "pwd", 4))
-		wsh_pwd(wsh_list->ast_parsed);
+		wsh_pwd(wsh_list);
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "env", 4))
 		wsh_env(wsh_list);
 	if (!ft_strncmp(wsh_list->ast_parsed->wsh_command, "echo", 5))
