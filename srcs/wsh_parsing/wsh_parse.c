@@ -46,7 +46,7 @@ void			wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	c_j = c_pos++;
 	c_i = 0;
 	c_k = 0;
-	if (pipe[c_pos] == '\0')
+	if (pipe[c_pos] == '\0' || !ft_isalnum(pipe[c_pos]))
 		return ;
 	if (ft_isspecial(pipe, c_pos))
 		var[c_i++] = pipe[c_pos++];
@@ -74,7 +74,7 @@ int			wsh_quotesremove(char *c, int c_sq , int c_dq, int c_p)
 		return (1);
 	if ((c[1] == SQUOTE && c[0] == ESC) ||(c[1] == DQUOTE && c[0] == ESC))
 		return (1);
-	if (c_p == 0 && c[1] != SQUOTE && c[1] != DQUOTE && c[1] != VAR)
+	if (c_p == 0 && c[1] != SQUOTE && c[1] != DQUOTE)
 		return (1);
 	return (0);
 }
@@ -107,9 +107,12 @@ void			wsh_escape(char **envs, char pipe[1024])
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && pipe[c_i + 1] != '\0')
 		{
 			wsh_replacevar(envs, pipe, c_i);
-			wsh_escape(envs, pipe);
-			c_i = 0;
-			c_j = 0;
+			if (pipe[c_i] != VAR)
+			{
+				wsh_escape(envs, pipe);
+				c_i = 0;
+				c_j = 0;
+			}
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
@@ -117,6 +120,8 @@ void			wsh_escape(char **envs, char pipe[1024])
 			c_p = 0;
 		if (wsh_quotesremove(&pipe[c_i - 1], c_sq, c_dq, c_p))
 			newpipe[c_j++] = pipe[c_i];
+		if (pipe[c_i] == EOL)
+			break;
 		c_i++;
 	}
 	newpipe[c_j] = EOL;

@@ -31,7 +31,7 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	while (wsh_token->wsh_param && wsh_token->wsh_param[i])
 	{
 		ft_putstr_fd(wsh_token->wsh_param[i], 1);
-		if (wsh_token->wsh_param[i + 1])
+		if (wsh_token->wsh_param[i + 1] && wsh_token->wsh_param[i][0] != EOL)
 			ft_putchar_fd(' ', 1);
 		i++;
 	}
