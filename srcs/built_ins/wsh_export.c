@@ -92,6 +92,31 @@ int		wsh_export_valid(char *param)
 	return (0);
 }
 
+void	wsh_remove_spaces(char *param)
+{
+	int		c_i;
+	int		c_j;
+	char	*tmp;
+
+	c_i = 0;
+	c_j = 0;
+	tmp = (char *)malloc(sizeof(char) * ft_strlen(param));
+	if (!tmp)
+		return ;
+	while (param[c_i] != EOL)
+	{
+		if (param[c_i] == ' ')
+		{
+			tmp[c_j++] = param[c_i++];
+			while (param[c_i] == ' ' && param[c_i] != EOL)
+				c_i++;
+		}
+		tmp[c_j++] = param[c_i++];
+	}
+	ft_strlcpy(param, tmp, ft_strlen(tmp) + 1);
+	wsh_free((void *)tmp);
+	return ;
+}
 void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 {
 	int		c_i;
@@ -117,6 +142,7 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 			c_j++;
 		while (wsh_token->wsh_param && wsh_token->wsh_param[c_i] != NULL)
 		{
+			wsh_remove_spaces(wsh_token->wsh_param[c_i]);
 			if (wsh_export_valid(wsh_token->wsh_param[c_i]))
 			{
 				ft_putstr_fd("wsh : export: `", 1);
