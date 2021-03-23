@@ -107,12 +107,7 @@ void			wsh_escape(char **envs, char pipe[1024])
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && pipe[c_i + 1] != '\0')
 		{
 			wsh_replacevar(envs, pipe, c_i);
-			if (pipe[c_i] != VAR)
-			{
-				wsh_escape(envs, pipe);
-				c_i = 0;
-				c_j = 0;
-			}
+			wsh_escape(envs, pipe);
 		}
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
@@ -163,7 +158,7 @@ void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024]
 
 int		g_count;
 
-void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
+void			*wsh_fillparams(t_wsh_tokens *wsh_token, char wsh_params[][1024], int *position)
 {
 
 	if (wsh_params[*position][0] == '\0')
@@ -173,12 +168,12 @@ void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1
 			return (NULL);
 	while (wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
 	{
-		wsh_escape(envs, wsh_params[*position]);
+		// wsh_escape(envs, wsh_params[*position]);
 		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
 	}
 	if (wsh_params[*position] && wsh_params[*position][0] != '\0' && !wsh_is_redirection(wsh_params[*position]))
 	{
-		wsh_escape(envs, wsh_params[*position]);
+		// wsh_escape(envs, wsh_params[*position]);
 		wsh_token->wsh_param[g_count++] = ft_strdup(wsh_params[(*position)++]);
 	}
 	wsh_token->wsh_param[g_count] = 0;
@@ -188,17 +183,31 @@ void			*wsh_fillparams(char **envs, t_wsh_tokens *wsh_token, char wsh_params[][1
 void			wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
 {
 	int		c_i;
+	int		c_j;
 	char	type[2];
+	char	filename[1024];
 
 	c_i = 0;
-	while (string[c_i] == OUTRID || string[c_i] == INRID)
+	c_j = 0;
+	while (string[c_i] != EOL)
 	{
-		type[c_i] = string[c_i];
-		c_i++;
+		c_j = 0;
+		while ((string[c_i] == OUTRID || string[c_i] == INRID) && string[c_i] != EOL)
+			type[c_j++] = string[c_i++];
+		type[c_i] = EOL;
+		c_j = 0;
+		while ((string[c_i] != OUTRID && string[c_i] != INRID) && string[c_i] != EOL)
+			filename[c_j++] = string[c_i++];
+		filename[c_j] = EOL;
+		wsh_token->wsh_redi->type = ft_strdup(type);
+		wsh_token->wsh_redi->filename = ft_strdup(filename);
+		if ((string[c_i] == OUTRID || string[c_i] == INRID) && string[c_i] != EOL)
+		{
+			if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
+				return ;
+			wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+		}
 	}
-	type[c_i] = EOL;
-	wsh_token->wsh_redi->type = ft_strdup(type);
-	wsh_token->wsh_redi->filename = ft_strdup(&string[c_i]);
 	return ;
 }
 
@@ -227,7 +236,7 @@ void			wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i
 		}
 		else
 			wsh_stick_redi(wsh_token, redi[(*c_i)++]);
-		if (wsh_is_redirection(redi[*c_i]))
+		if (wsh_is_redirection(redi[*c_i]) || wsh_check(redi[*c_i]))
 		{
 			if (!(wsh_token->wsh_redi->next = wsh_redi_init()))
 				return ;
@@ -245,14 +254,16 @@ void			wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
 
 	c_i = 0;
 	g_count = 0;
+	if (wsh_is_redirection((string[c_i])))
+		wsh_fill_redirection(wsh_token, string, &c_i);
 	wsh_token->wsh_command = ft_strdup(string[c_i++]);
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
 	if (!wsh_is_redirection(wsh_token->wsh_command))
 		wsh_fillargs(envs, wsh_token, string, &c_i);
-	wsh_fillparams(envs, wsh_token, string, &c_i);
+	wsh_fillparams(wsh_token, string, &c_i);
 	wsh_fill_redirection(wsh_token, string, &c_i);
-	wsh_fillparams(envs, wsh_token, string, &c_i);
+	wsh_fillparams(wsh_token, string, &c_i);
 	return ;
 }
 

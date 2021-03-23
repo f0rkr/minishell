@@ -14,10 +14,19 @@
 
 void    *wsh_exec(t_wsh_list *wsh_list)
 {
+	int		c_i;
+
+	c_i = 0;
 	if (wsh_first_char(wsh_list->string))
 		ft_putendl_fd("wsh: syntax error near unexpected token `;'", 1);
 	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
+		c_i = 0;
+		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[c_i])
+		{
+			wsh_escape(wsh_list->wsh_envs, wsh_list->ast_parsed->wsh_param[c_i]);
+			c_i++;
+		}
 		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command) && wsh_list->ast_parsed->std_out == 1 
 		&& !wsh_list->ast_parsed->wsh_redi)
 			wsh_exec_builtin(wsh_list);

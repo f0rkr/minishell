@@ -113,4 +113,5 @@ int				wsh_tab_length(char **tab);
 int				wsh_findeq(char *var);
 t_wsh_redi		*wsh_redi_init(void);
 int				wsh_first_char(char *string);
+void			wsh_escape(char **envs, char pipe[1024]);
 #endif
