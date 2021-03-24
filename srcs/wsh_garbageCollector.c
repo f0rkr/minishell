@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:50:06 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/11 15:57:47 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/24 15:36:23 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	wsh_free(void *data)
 
 void	wsh_loop_free(void **data)
 {
-	int counter;
+	int	counter;
 
 	counter = 0;
 	if (data)
@@ -32,14 +32,15 @@ void	wsh_loop_free(void **data)
 		while (data[counter])
 		{
 			wsh_free((void *) data[counter++]);
-			data[counter-1] = NULL;
+			data[counter - 1] = NULL;
 		}
 		free(data);
 		data = NULL;
 	}
 	return ;
 }
-int     wsh_garbageCollector(t_wsh_list *wsh_list)
+
+int	wsh_garbageCollector(t_wsh_list *wsh_list)
 {
 	int				counter;
 	t_wsh_tokens	*wsh_tmp;
@@ -56,12 +57,12 @@ int     wsh_garbageCollector(t_wsh_list *wsh_list)
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 		wsh_free((void *) wsh_tmp);
 	}
-    if (wsh_list->garbage_flag != LOOP)
+	if (wsh_list->garbage_flag != LOOP)
 		wsh_loop_free((void **)wsh_list->wsh_envs);
 	if (wsh_list->garbage_flag == ERROR)
-    {
-        wsh_list->garbage_flag = INIT;
-        return (ERROR);
-    }
-    return (EXIT);
+	{
+		wsh_list->garbage_flag = INIT;
+		return (ERROR);
+	}
+	return (EXIT);
 }

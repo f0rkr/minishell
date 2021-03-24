@@ -6,13 +6,13 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 10:47:15 by mashad            #+#    #+#             */
-/*   Updated: 2021/01/06 09:13:12 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/24 15:41:30 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		ft_strdel(char **as, char **str, int frenum, int ret)
+int	ft_strdel(char **as, char **str, int frenum, int ret)
 {
 	if (!(as == NULL))
 	{
@@ -30,14 +30,15 @@ int		ft_strdel(char **as, char **str, int frenum, int ret)
 	return (ret);
 }
 
-int		get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char		*s[256];
 	char			*buf;
 	int				ret;
 	char			*tmp;
 
-	if (!(buf = malloc(sizeof(char) * BUFFER_SIZE + 1)))
+	buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buf)
 		return (-1);
 	if (fd < 0 || !line || BUFFER_SIZE < 1 || read(fd, buf, 0) < 0)
 		return (-1);

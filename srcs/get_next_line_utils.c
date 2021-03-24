@@ -6,7 +6,7 @@
 /*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 15:40:46 by sdunckel          #+#    #+#             */
-/*   Updated: 2021/01/05 16:12:42 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/24 15:45:16 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ size_t	ft_strlen_gnl(char *s, int gnl)
 	return (i);
 }
 
-int		ft_char(char c, char *str)
+int	ft_char(char c, char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -50,8 +50,9 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (!(str = malloc(sizeof(char) *
-		(ft_strlen_gnl(s1, 0) + ft_strlen_gnl(s2, 0) + 1))))
+	str = (char *)malloc(sizeof(char)
+			* (ft_strlen_gnl(s1, 0) + ft_strlen_gnl(s2, 0) + 1));
+	if (!str)
 		return (NULL);
 	while (s1[i])
 	{
@@ -78,7 +79,8 @@ char	*ft_substr_gnl(char *s, unsigned int start, size_t len)
 		return (NULL);
 	if (start > ft_strlen_gnl(s, 0))
 		return (NULL);
-	if (!(str = malloc(sizeof(char) * len + 1)))
+	str = (char *)malloc(sizeof(char) * len + 1);
+	if (!str)
 		return (NULL);
 	while (s[start] && len)
 	{
@@ -98,7 +100,8 @@ void	*ft_calloc(size_t count, size_t size)
 	char	*s;
 
 	i = 0;
-	if (!(mem = malloc(count * size)))
+	mem = (char *)malloc(count * size);
+	if (!mem)
 		return (NULL);
 	s = mem;
 	while (i < count * size)

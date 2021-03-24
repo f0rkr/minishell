@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include "parsing.h"
 # include <sys/stat.h>
 # include <dirent.h>
 # include <sys/wait.h>

@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/09 10:54:17 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/24 15:24:59 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** WESH SHELL MAIN LOOP
 */
 
-int				wsh_loop(t_wsh_list *wsh_list)
+int	wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
 
@@ -40,11 +40,13 @@ int				wsh_loop(t_wsh_list *wsh_list)
 /*
 ** WESH SHELL STRUCT INIT
 */
-t_wsh_redi		*wsh_redi_init()
+
+t_wsh_redi	*wsh_redi_init(void)
 {
 	t_wsh_redi	*wsh_redi;
 
-	if (!(wsh_redi = (t_wsh_redi *)malloc(sizeof(t_wsh_redi))))
+	wsh_redi = (t_wsh_redi *)malloc(sizeof(t_wsh_redi));
+	if (!wsh_redi)
 		return (NULL);
 	wsh_redi->filename = NULL;
 	wsh_redi->type = NULL;
@@ -52,11 +54,12 @@ t_wsh_redi		*wsh_redi_init()
 	return (wsh_redi);
 }
 
-t_wsh_tokens	*wsh_token_init()
+t_wsh_tokens	*wsh_token_init(void)
 {
 	t_wsh_tokens	*wsh_token;
 
-	if (!(wsh_token = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens))))
+	wsh_token = (t_wsh_tokens *)malloc(sizeof(t_wsh_tokens));
+	if (!(wsh_token))
 		return (NULL);
 	wsh_token->type = CMD;
 	wsh_token->wsh_command = NULL;
@@ -69,7 +72,7 @@ t_wsh_tokens	*wsh_token_init()
 	return (wsh_token);
 }
 
-t_wsh_list		*wsh_init(char *env[])
+t_wsh_list	*wsh_init(char *env[])
 {
 	t_wsh_list	*wsh_list;
 	int			i;
@@ -88,12 +91,13 @@ t_wsh_list		*wsh_init(char *env[])
 	return (wsh_list);
 }
 
-int				main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	t_wsh_list *wsh_list;
+	t_wsh_list	*wsh_list;
 
 	(void)argv;
-	if (!(wsh_list = wsh_init(env)))
+	wsh_list = wsh_init(env);
+	if (!wsh_list)
 	{
 		wsh_garbageCollector(wsh_list);
 		return (ERROR);

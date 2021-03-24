@@ -6,68 +6,44 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 11:36:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/16 17:44:26 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/24 17:25:35 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parsing.h"
 
-extern int		wsh_readSquotes(char *str, const char *string, int *counter)
+extern int	is_and(const char *str, int p, int q_flag, int pipe)
 {
-	int i;
-
-	i = 0;
-	(*counter)++;
-	while (string[*counter] != SQUOTE && string[*counter] != EOL)
-		str[i++] = string[(*counter)++];
-	str[i] = EOL;
-	++(*counter);
-	return (1);
-}
-
-extern int		wsh_readDquotes(char *str, const char *string, int *counter)
-{
-	int i;
-
-	i = 0;
-	(*counter)++;
-	while (string[*counter] != DQUOTE && string[*counter] != EOL)
-		str[i++] = string[(*counter)++];
-	str[i] = EOL;
-	++(*counter);
-	return (1);
-}
-
-extern int		is_and(const char *str, int p, int q_flag, int pipe)
-{
-	if (str[p] == AND && str[p-1] != ESC && !q_flag)
+	if (str[p] == AND && str[p - 1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == PIPE && pipe == 1 && str[p-1] != ESC && !q_flag)
+	if (str[p] == PIPE && pipe == 1 && str[p - 1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == SPACE && pipe == 2 && str[p-1] != ESC && !q_flag)
+	if (str[p] == SPACE && pipe == 2 && str[p - 1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == INRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+	if (str[p] == INRID && pipe == 3 && str[p - 1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == OUTRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+	if (str[p] == OUTRID && pipe == 3 && str[p - 1] != ESC && !q_flag)
 		return (1);
-	if (str[p] == OUTRID && str[p + 1] == OUTRID && pipe == 3 && str[p-1] != ESC && !q_flag)
+	if (str[p] == OUTRID && str[p + 1] == OUTRID
+		&& pipe == 3 && str[p - 1] != ESC && !q_flag)
 		return (1);
 	return (0);
 }
 
-extern int		wsh_scan_commands(char *str, const char *string, int pipe)
+extern int	wsh_scan_commands(char *str, const char *string, int pipe)
 {
-	static int 			counter = INIT;
-	int					scount;
-	int					quote_flag;
-	
+	static int	counter = INIT;
+	int			scount;
+	int			quote_flag;
+
 	scount = INIT;
 	quote_flag = 0;
 	while (string[counter] == ' ')
 		counter++;
 	while (!is_and(string, counter, quote_flag, pipe) && string[counter] != EOL)
 	{
-		if (ft_isin(string[counter], "\'\"") && string[counter-1] != ESC && quote_flag == 0)
+		if (ft_isin(string[counter], "\'\"")
+			&& string[counter - 1] != ESC && quote_flag == 0)
 			quote_flag = 1;
 		else if (ft_isin(string[counter], "\'\"") && quote_flag == 1)
 			quote_flag = 0;
@@ -79,5 +55,22 @@ extern int		wsh_scan_commands(char *str, const char *string, int pipe)
 		counter = 0;
 		return (0);
 	}
+	return (1);
+}
+
+int	wsh_tokenizer(char cmd[][1024], char *string, int pipe)
+{
+	char	*token;
+	int		i;
+
+	i = 0;
+	token = (char *)malloc(sizeof(char) * 1024);
+	if (!token)
+		return (ERROR);
+	while (wsh_scan_commands(token, (const char *) string, pipe))
+		ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token) + 1);
+	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token) + 1);
+	cmd[i][0] = '\0';
+	wsh_free((void *) token);
 	return (1);
 }
