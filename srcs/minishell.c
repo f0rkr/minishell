@@ -16,12 +16,21 @@
 ** WESH SHELL MAIN LOOP
 */
 
+void	handle_sigin(int sig)
+{
+	// pid_t pidt;
+
+	(void)sig;
+	return ;
+}
+
 int	wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
 
 	while (1)
 	{
+		signal(SIGINT, handle_sigin);
 		wsh_list->garbage_flag = LOOP;
 		wsh_list->string = wsh_read(&wsh_list->garbage_flag);
 		if (wsh_list->garbage_flag != ERROR)

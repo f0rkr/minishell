@@ -33,7 +33,7 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 	i = 0;
 	if (wsh_list->ast_parsed->wsh_redi)
 	{
-		if (wsh_list->ast_parsed->wsh_redi->filename[i] == '\0')
+		if (wsh_list->ast_parsed->wsh_redi->filename[i] == EOL)
 		{
 			ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
 			return (0);

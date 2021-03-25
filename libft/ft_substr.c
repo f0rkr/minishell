@@ -32,6 +32,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 		start++;
 	}
-	p[i] = '\0';
+	p[i] = EOL;
 	return (char *)(p);
 }

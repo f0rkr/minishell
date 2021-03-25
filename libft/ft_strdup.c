@@ -23,11 +23,11 @@ char	*ft_strdup(const char *s1)
 	s = (char *)malloc(sizeof(char) * size);
 	if (s == NULL)
 		return (NULL);
-	while (s1[i] != '\0')
+	while (s1[i] != EOL)
 	{
 		s[i] = s1[i];
 		i++;
 	}
-	s[i] = '\0';
+	s[i] = EOL;
 	return (s);
 }

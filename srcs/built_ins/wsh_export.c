@@ -55,7 +55,7 @@ void	wsh_export_only(t_wsh_list *wsh_list)
 		c_k = 0;
 		c_j = 0;
 		ft_putstr_fd("declare -x ", 1);
-		while (wsh_list->wsh_envs[c_i][c_j] != '\0')
+		while (wsh_list->wsh_envs[c_i][c_j] != EOL)
 		{
 			ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
 			if (wsh_list->wsh_envs[c_i][c_j] == '=')

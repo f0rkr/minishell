@@ -22,14 +22,14 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	hay = (char *)haystack;
 	need = (char *)needle;
 	i = 0;
-	if (*needle == '\0')
+	if (*needle == EOL)
 		return (hay);
-	while (hay[i] != '\0' && i < len)
+	while (hay[i] != EOL && i < len)
 	{
 		j = 0;
 		if (hay[i] == need[j])
 		{
-			while (need[j] != '\0' && hay[i + j] == need[j] && i + j < len)
+			while (need[j] != EOL && hay[i + j] == need[j] && i + j < len)
 				j++;
 			if (j == ft_strlen(needle))
 				return (&hay[i]);

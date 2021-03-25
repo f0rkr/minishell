@@ -50,6 +50,6 @@ char			*ft_itoa(int n)
 		nb /= 10;
 	}
 	tab[i] = (nb % 10 + 48);
-	tab[size] = '\0';
+	tab[size] = EOL;
 	return (tab);
 }

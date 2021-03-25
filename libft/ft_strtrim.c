@@ -50,6 +50,6 @@ char		*ft_strtrim(char const *s, char const *set)
 	i = -1;
 	while (++i < (fin - debut))
 		p[i] = s[debut + i];
-	p[i] = '\0';
+	p[i] = EOL;
 	return (p);
 }

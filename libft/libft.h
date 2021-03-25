@@ -17,6 +17,8 @@
 # include <string.h>
 # include <stdlib.h>
 
+# define EOL '\0'
+
 typedef struct		s_list
 {
 	void			*content;

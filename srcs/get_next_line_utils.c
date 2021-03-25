@@ -65,7 +65,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 		j++;
 	}
 	free(s1);
-	str[i + j] = '\0';
+	str[i + j] = EOL;
 	return (str);
 }
 
@@ -89,7 +89,7 @@ char	*ft_substr_gnl(char *s, unsigned int start, size_t len)
 		start++;
 		len--;
 	}
-	str[i] = '\0';
+	str[i] = EOL;
 	return (str);
 }
 

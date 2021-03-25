@@ -23,7 +23,7 @@ void	ft_bzero(void *s, size_t n)
 		return ;
 	while (i < n)
 	{
-		str[i] = '\0';
+		str[i] = EOL;
 		i++;
 	}
 }

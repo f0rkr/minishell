@@ -25,17 +25,17 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	p = malloc(sizeof(char *) * (l1 + ft_strlen(s2)));
 	if (p == 0)
 		return (NULL);
-	while (s1[i] != '\0')
+	while (s1[i] != EOL)
 	{
 		p[i] = s1[i];
 		i++;
 	}
 	i = 0;
-	while (s2[i] != '\0')
+	while (s2[i] != EOL)
 	{
 		p[i + l1] = s2[i];
 		i++;
 	}
-	p[i + l1] = '\0';
+	p[i + l1] = EOL;
 	return (p);
 }

@@ -17,6 +17,8 @@
 # include <unistd.h>
 
 # define BUFFER_SIZE 1024
+# define EOL '\0'
+
 size_t	ft_strlen_gnl(char *s, int gnl);
 int		ft_char(char c, char *str);
 char	*ft_strjoin_gnl(char *s1, char *s2);

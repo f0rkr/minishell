@@ -40,7 +40,7 @@ int         wsh_first_char(char *string)
     int i;
 
     i = 0;
-    while (string[i] != '\0')
+    while (string[i] != EOL)
     {
         while (string[i] == ' ')
             i++;

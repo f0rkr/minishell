@@ -46,7 +46,7 @@ int	get_next_line(int fd, char **line)
 		return (-1);
 	while ((ft_char('\n', s[fd])) < 0 && (ret = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
-		buf[ret] = '\0';
+		buf[ret] = EOL;
 		s[fd] = ft_strjoin_gnl(s[fd], buf);
 	}
 	*line = ft_substr_gnl(s[fd], 0, ft_strlen_gnl(s[fd], 1));

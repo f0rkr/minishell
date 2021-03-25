@@ -28,6 +28,6 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 		new[i] = f(i, s[i]);
 		i++;
 	}
-	new[i] = '\0';
+	new[i] = EOL;
 	return (new);
 }

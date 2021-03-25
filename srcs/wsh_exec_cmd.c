@@ -104,6 +104,14 @@ void		wsh_redi(t_wsh_list *wsh_list)
 	wsh_list->ast_parsed->wsh_redi = wsh_redi;
 }
 
+void	handle_sigint(int sig)
+{
+	// pid_t pidt;
+
+	(void)sig;
+	return (1);
+}
+
 void        wsh_execve(t_wsh_list *wsh_list)
 {
     int     i;
@@ -193,12 +201,14 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	}
 	else if (i > 0)
 	{
+		if (signal(SIGINT, handle_sigint))
+		{
+			kill(i, SIGINT);
+		}
 		if (wsh_list->ast_parsed->std_out != 1)
 			close(wsh_list->ast_parsed->std_out);
 		if (wsh_list->ast_parsed->std_in != 0)
 			close(wsh_list->ast_parsed->std_in);
-		if (wsh_list->ast_parsed->std_out == 1)
-			waitpid(i, 0, 0);
 	}
 	if (arr[0] != NULL)
 		wsh_loop_free((void **)arr);

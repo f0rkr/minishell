@@ -20,7 +20,7 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size)
 
 	len = ft_strlen(src);
 	i = 0;
-	while (*dst != '\0' && i < size)
+	while (*dst != EOL && i < size)
 	{
 		dst++;
 		i++;
@@ -28,12 +28,12 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size)
 	v = size - i;
 	if (v == 0)
 		return (i + ft_strlen(src));
-	while (*src != '\0' && v != 1)
+	while (*src != EOL && v != 1)
 	{
 		*dst++ = *src;
 		v--;
 		src++;
 	}
-	*dst = '\0';
+	*dst = EOL;
 	return (i + len);
 }

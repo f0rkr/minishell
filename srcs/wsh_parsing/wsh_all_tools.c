@@ -12,7 +12,7 @@ extern int	wsh_check(char *c_r)
 extern int	ft_isspecial(char *c, int c_pos)
 {
 	if (c[c_pos] == '_' || c[c_pos] == '#'
-		|| c[c_pos] == '$' || c[c_pos] == '-')
+		|| c[c_pos] == '$' || c[c_pos] == '-' || c[c_pos] == DQUOTE || c[c_pos] == SQUOTE)
 		return (1);
 	return (0);
 }
