@@ -112,10 +112,7 @@ void		wsh_redi(t_wsh_list *wsh_list)
 
 void	handle_sigint(int sig)
 {
-	// pid_t pidt;
-
-	(void)sig;
-	return (1);
+	
 }
 
 void        wsh_execve(t_wsh_list *wsh_list)
