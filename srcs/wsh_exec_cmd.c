@@ -40,16 +40,17 @@ char        **wsh_set_arr(char *path, t_wsh_list *wsh_list)
 	return (arr);
 }
 
-void		ft_error(char *path, char *command)
+int		ft_error(char *path, char *command)
 {
 	DIR	*folder;
 	struct stat stats;
 	int	fd;
+	int ret;
 
 	fd = open(path, O_WRONLY);
 	folder = opendir(path);
 	if (stat(path, &stats) == 0 && stats.st_mode & S_IXUSR)
-		return ;
+		return (0);
 	if (fd == -1)
 		path = command;
 	ft_putstr_fd("wsh: ", 2);
@@ -62,9 +63,14 @@ void		ft_error(char *path, char *command)
 		ft_putendl_fd(": is a directory", 2);
 	else if (fd != -1 && folder == NULL)
 		ft_putendl_fd(": Permission denied", 2);
+	if (ft_strchr(path, '/') == NULL || (fd == -1 && folder == NULL))
+		ret = 127;
+	else
+		ret = 126;
 	if (folder)
 		closedir(folder);
 	close(fd);
+	return (ret);
 }
 
 void		wsh_redi(t_wsh_list *wsh_list)
@@ -112,10 +118,12 @@ void        wsh_execve(t_wsh_list *wsh_list)
     char    *tmp;
     char    **arr;
 	int		pip[2];
+	int 	ret;
 
     i = 0;
 	arr = NULL;
 	tmp = NULL;
+	ret = 0;
 	if (wsh_list->ast_parsed->std_out == 666)
 	{
 		pipe(pip);
@@ -187,8 +195,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 		else
 		{
 			execve(arr[0] , arr, wsh_list->wsh_envs);
-			ft_error(path, wsh_list->ast_parsed->wsh_command);
-			exit(1);
+			ret = ft_error(path, wsh_list->ast_parsed->wsh_command);
+			exit(ret);
 		}
 	}
 	else if (i > 0)
@@ -197,10 +205,8 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			close(wsh_list->ast_parsed->std_out);
 		if (wsh_list->ast_parsed->std_in != 0)
 			close(wsh_list->ast_parsed->std_in);
-		if (wsh_list->ast_parsed->std_out == 1)
-			waitpid(i, 0, 0);
 	}
-	if (arr[0] != NULL)
-		wsh_loop_free((void **)arr);
+	// if (arr[0] != NULL)
+	// 	wsh_loop_free((void **)arr);
 	return ;
 }

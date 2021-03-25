@@ -11,7 +11,7 @@ void	wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	c_j = c_pos++;
 	c_i = 0;
 	c_k = 0;
-	if (pipe[c_pos] == '\0' || !ft_isalnum(pipe[c_pos]))
+	if (pipe[c_pos] == '\0' || (!ft_isspecial(pipe, c_pos) && !ft_isalnum(pipe[c_pos])))
 		return ;
 	if (ft_isspecial(pipe, c_pos))
 		var[c_i++] = pipe[c_pos++];

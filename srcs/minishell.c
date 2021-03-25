@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/24 15:24:59 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/24 19:17:47 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ t_wsh_tokens	*wsh_token_init(void)
 	wsh_token->std_out = STDOUT;
 	wsh_token->next = NULL;
 	wsh_token->wsh_redi = NULL;
+	wsh_token->wsh_ret = 0;
 	return (wsh_token);
 }
 
@@ -88,6 +89,7 @@ t_wsh_list	*wsh_init(char *env[])
 		wsh_list->wsh_envs[i] = ft_strdup(env[i]);
 		i++;
 	}
+	wsh_list->wsh_envs[i] = ft_strdup("?=0");
 	return (wsh_list);
 }
 

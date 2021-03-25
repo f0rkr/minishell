@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:39:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/24 15:51:36 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/25 17:05:21 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,12 @@ void	wsh_cd(t_wsh_list *wsh_list)
 			}
 		}
 		if (chdir(wsh_token->wsh_param[0]) != 0)
+		{
 			if (opendir(wsh_token->wsh_param[0]) == NULL)
 				wsh_cd_error(&tmp);
+			wsh_list->ast_parsed->wsh_ret = 1;
+			wsh_set_ret(wsh_list);
+		}	
 	}
 	else if (wsh_get_envar("HOME", wsh_list->wsh_envs))
 		chdir(ft_strjoin(wsh_get_envar("HOME", wsh_list->wsh_envs), "/"));

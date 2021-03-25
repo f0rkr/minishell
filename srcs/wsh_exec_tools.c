@@ -18,8 +18,6 @@ char        *wsh_get_envar(char *s, char **env)
 
     i = 0;
     var = NULL;
-    if (s[0] == '?')
-        return ("255");
     if (ft_strncmp(s, "-", 1) == 0)
         return ("himBH");
     else if (s[0] == '#')
