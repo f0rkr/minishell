@@ -79,6 +79,7 @@ typedef struct s_wsh_tokens
 	char					**wsh_param;
 	int						type;
 	int						std_in;
+	int						wsh_ret;
 	int						std_out;
 	t_wsh_redi				*wsh_redi;
 	struct s_wsh_tokens		*next;
@@ -125,4 +126,5 @@ int				wsh_removevarandadd(char **wsh_envs, char *var, int c_p);
 t_wsh_redi		*wsh_redi_init(void);
 int				wsh_first_char(char *string);
 void			wsh_escape(char **envs, char pipe[1024]);
+void			wsh_set_ret(t_wsh_list *wsh_list);
 #endif
