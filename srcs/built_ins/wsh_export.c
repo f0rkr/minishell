@@ -54,20 +54,23 @@ void	wsh_export_only(t_wsh_list *wsh_list)
 	{
 		c_k = 0;
 		c_j = 0;
-		ft_putstr_fd("declare -x ", 1);
-		while (wsh_list->wsh_envs[c_i][c_j] != EOL)
+		if (wsh_list->wsh_envs[c_i][0] != '?' && wsh_list->wsh_envs[c_i][1] != '=')
 		{
-			ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
-			if (wsh_list->wsh_envs[c_i][c_j] == '=')
+			ft_putstr_fd("declare -x ", 1);
+			while (wsh_list->wsh_envs[c_i][c_j] != EOL)
 			{
-				c_k = 1;
-				ft_putchar_fd(DQUOTE, 1);
+				ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
+				if (wsh_list->wsh_envs[c_i][c_j] == '=')
+				{
+					c_k = 1;
+					ft_putchar_fd(DQUOTE, 1);
+				}
+				c_j++;
 			}
-			c_j++;
+			if (c_k == 1)
+				ft_putchar_fd('\"', 1);
+			ft_putchar_fd('\n', 1);
 		}
-		if (c_k == 1)
-			ft_putchar_fd('\"', 1);
-		ft_putchar_fd('\n', 1);
 		c_i++;
 	}
 }

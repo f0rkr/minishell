@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/25 17:24:37 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/25 18:04:58 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	wsh_set_ret(t_wsh_list *wsh_list)
 
 	c_var = ft_strdup("?");
 	c_p = wsh_searchenvx(wsh_list->wsh_envs, c_var);
-	if (c_p)
+	if (wsh_list->ast_parsed && c_p)
 		wsh_removevarandadd(wsh_list->wsh_envs, ft_strjoin("?=", ft_itoa(wsh_list->ast_parsed->wsh_ret)), c_p);
 }
 

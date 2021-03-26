@@ -7,7 +7,7 @@ void	wsh_env(t_wsh_list *wsh_list)
 	i = 0;
 	while (wsh_list->wsh_envs[i] != 0)
 	{
-		if (wsh_findeq(wsh_list->wsh_envs[i]))
+		if (wsh_findeq(wsh_list->wsh_envs[i]) && (wsh_list->wsh_envs[i][0] != '?' && wsh_list->wsh_envs[i][1] != '='))
 			ft_putendl_fd(wsh_list->wsh_envs[i], 1);
 		i++;
 	}
