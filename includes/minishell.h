@@ -109,7 +109,7 @@ void			wsh_pwd(t_wsh_list *wsh_list);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-char			*wsh_read(int *garbage_flag);
+char			*wsh_read(t_wsh_list *wsh_list, int *garbage_flag, char **tmp);
 t_wsh_tokens	*wsh_parse(char **envs, char *cmd);
 void			*wsh_exec(t_wsh_list *wsh_list);
 int				ft_isbuiltin(const char *command);

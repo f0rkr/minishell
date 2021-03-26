@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 14:51:14 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:31:03 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void	handle_sigin(int sig)
 {
 	char	buff[4029];
-
+	(void)sig;
 	if (sig == SIGINT)
 	{
 		if (g_pid == 0)
@@ -34,6 +34,7 @@ void	handle_sigin(int sig)
 		{
 			g_pid = 0;
 			write(1, "\n", 1);
+			g_status = 130;
 		}
 	}
 	return ;
@@ -41,19 +42,26 @@ void	handle_sigin(int sig)
 
 void	handle_quit(int sig)
 {
-		if (g_pid != 0)
-		{
-			ft_putstr_fd("Quit: 3\n", 1);
+	(void)sig;
+	if (g_pid != 0)
+	{
+		ft_putstr_fd("Quit: 3\n", 1);
+		g_status = 131;
+	}
+	g_pid = 0;
+	return ;
 }
 
 int	wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
+	char			*line_tmp;
 
+	line_tmp = ft_strdup("");
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
-		wsh_list->string = wsh_read(&wsh_list->garbage_flag);
+		wsh_list->string = wsh_read(wsh_list, &wsh_list->garbage_flag, &line_tmp);
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->wsh_envs, wsh_list->string);
 		wsh_tmp = wsh_list->ast_parsed;
@@ -63,6 +71,7 @@ int	wsh_loop(t_wsh_list *wsh_list)
 		if (wsh_garbageCollector(wsh_list) == ERROR)
 			return (ERROR);
 	}
+	wsh_free((void *)line_tmp);
 	wsh_list->garbage_flag = ENDEXEC;
 	return (EXIT);
 }

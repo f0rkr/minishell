@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:39:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/25 17:05:21 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:23:23 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,28 @@ void	wsh_change_pwd(char **envs, char *str)
 	wsh_free((void *)tmp);
 }
 
+void	wsh_cd_dot(t_wsh_list *wsh_list, int *i)
+{
+	if (!ft_strncmp(wsh_list->ast_parsed->wsh_param[0], ".", 2))
+	{
+		if (opendir(ft_strjoin(wsh_get_envar("PWD", wsh_list->wsh_envs), "/")) == NULL)
+		{
+			ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access parent", 1);
+			ft_putendl_fd(" directories: No such file or directory", 1);
+			wsh_change_pwd(wsh_list->wsh_envs, ".");
+			*i = 1;
+		}
+	}
+	else if (ft_strncmp(wsh_list->ast_parsed->wsh_param[0], ".", 2) != 0)
+	{
+		if (!(ft_isin('/', wsh_list->ast_parsed->wsh_param[0] + (
+						ft_strlen(wsh_list->ast_parsed->wsh_param[0]) - 1))))
+		{
+			wsh_list->ast_parsed->wsh_param[0] = ft_strjoin(wsh_list->ast_parsed->wsh_param[0], "/");
+		}
+	}
+}
+
 void	wsh_cd(t_wsh_list *wsh_list)
 {
 	char			*tmp;
@@ -51,23 +73,7 @@ void	wsh_cd(t_wsh_list *wsh_list)
 	if (wsh_token->wsh_param)
 	{
 		tmp = wsh_token->wsh_param[0];
-		if (!ft_strncmp(wsh_token->wsh_param[0], ".", 2))
-		{
-			if (opendir(ft_strjoin(wsh_get_envar("PWD", wsh_list->wsh_envs), "/")) == NULL)
-			{
-				ft_putendl_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory", 1);
-				wsh_change_pwd(wsh_list->wsh_envs, ".");
-				i = 1;
-			}
-		}
-		else if (ft_strncmp(wsh_token->wsh_param[0], ".", 2) != 0)
-		{
-			if (!(ft_isin('/', wsh_token->wsh_param[0] + (
-							ft_strlen(wsh_token->wsh_param[0]) - 1))))
-			{
-				wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
-			}
-		}
+		wsh_cd_dot(wsh_list, &i);
 		if (chdir(wsh_token->wsh_param[0]) != 0)
 		{
 			if (opendir(wsh_token->wsh_param[0]) == NULL)

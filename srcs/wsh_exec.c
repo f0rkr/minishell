@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 14:50:05 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:29:53 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,11 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 		else
 			break;
 	}
-	(void)statval;
-	while(wait(&g_status) > 0)
+	while(wait(&statval) > 0)
 	{
-		if(WIFEXITED(g_status))
+		if(WIFEXITED(statval))
 		{
-	 		g_status = WEXITSTATUS(g_status);
+	 		g_status = WEXITSTATUS(statval);
 		}
 	}
 	wsh_set_ret(wsh_list);
