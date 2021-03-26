@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/24 19:17:47 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:51:14 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ void	handle_sigin(int sig)
 
 void	handle_quit(int sig)
 {
-	if (sig == SIGQUIT)
-	{
 		if (g_pid != 0)
+		{
 			ft_putstr_fd("Quit: 3\n", 1);
-	}
 }
 
 int	wsh_loop(t_wsh_list *wsh_list)
