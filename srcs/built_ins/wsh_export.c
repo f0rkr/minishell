@@ -135,7 +135,7 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 		ft_putstr_fd("wsh : export: `", 1);
 		ft_putstr_fd(wsh_token->wsh_param[0], 1);
 		ft_putendl_fd("': not a valid identifier", 1);
-		wsh_list->ast_parsed->wsh_ret = 1;
+		g_status = 1;
 		wsh_set_ret(wsh_list);
 	}
 	else
@@ -150,7 +150,7 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 				ft_putstr_fd("wsh : export: `", 1);
 				ft_putstr_fd(wsh_token->wsh_param[c_i], 1);
 				ft_putendl_fd("': not a valid identifier", 1);
-				wsh_list->ast_parsed->wsh_ret = 1;
+				g_status = 1;
 				wsh_set_ret(wsh_list);
 			}
 			else if (wsh_findeq(wsh_token->wsh_param[c_i]))

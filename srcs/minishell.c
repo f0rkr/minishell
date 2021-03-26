@@ -18,10 +18,34 @@
 
 void	handle_sigin(int sig)
 {
-	// pid_t pidt;
+	char	buff[4029];
 
-	(void)sig;
+	if (sig == SIGINT)
+	{
+		if (g_pid == 0)
+		{
+			getcwd(buff, 4029);
+			ft_putstr_fd("\n\x1B[36mwsh\x1B[0m\x1B[34m :: \x1B[0m", 0);
+			ft_putstr_fd("\x1B[32m", 0);
+			ft_putstr_fd(buff, 0);
+			ft_putstr_fd("\x1B[0m\x1B[31m » \x1B[0m", 0);
+		}
+		else if (g_pid > 0)
+		{
+			g_pid = 0;
+			write(1, "\n", 1);
+		}
+	}
 	return ;
+}
+
+void	handle_quit(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		if (g_pid != 0)
+			ft_putstr_fd("Quit: 3\n", 1);
+	}
 }
 
 int	wsh_loop(t_wsh_list *wsh_list)
@@ -30,7 +54,6 @@ int	wsh_loop(t_wsh_list *wsh_list)
 
 	while (1)
 	{
-		signal(SIGINT, handle_sigin);
 		wsh_list->garbage_flag = LOOP;
 		wsh_list->string = wsh_read(&wsh_list->garbage_flag);
 		if (wsh_list->garbage_flag != ERROR)
@@ -78,9 +101,11 @@ t_wsh_tokens	*wsh_token_init(void)
 	wsh_token->std_out = STDOUT;
 	wsh_token->next = NULL;
 	wsh_token->wsh_redi = NULL;
-	wsh_token->wsh_ret = 0;
+	g_status = 0;
 	return (wsh_token);
 }
+
+
 
 t_wsh_list	*wsh_init(char *env[])
 {
@@ -107,6 +132,8 @@ int	main(int argc, char **argv, char **env)
 	t_wsh_list	*wsh_list;
 
 	(void)argv;
+	signal(SIGINT, handle_sigin);
+	signal(SIGQUIT, handle_quit);
 	wsh_list = wsh_init(env);
 	if (!wsh_list)
 	{

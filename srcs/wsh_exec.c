@@ -19,8 +19,8 @@ void	wsh_set_ret(t_wsh_list *wsh_list)
 
 	c_var = ft_strdup("?");
 	c_p = wsh_searchenvx(wsh_list->wsh_envs, c_var);
-	if (c_p)
-		wsh_removevarandadd(wsh_list->wsh_envs, ft_strjoin("?=", ft_itoa(wsh_list->ast_parsed->wsh_ret)), c_p);
+	if (wsh_list->ast_parsed && c_p)
+		wsh_removevarandadd(wsh_list->wsh_envs, ft_strjoin("?=", ft_itoa(g_status)), c_p);
 }
 
 void    *wsh_exec(t_wsh_list *wsh_list)
@@ -41,7 +41,7 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 				i++;
 		}
 		ft_putendl_fd("'", 1);
-		wsh_list->ast_parsed->wsh_ret = 258;
+		g_status = 258;
 		wsh_set_ret(wsh_list);
 		return (0);
 	}
@@ -51,7 +51,7 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 		if (wsh_list->ast_parsed->wsh_redi->filename[i] == EOL)
 		{
 			ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
-			wsh_list->ast_parsed->wsh_ret = 258;
+			g_status = 258;
 			wsh_set_ret(wsh_list);
 			return (0);
 		}
@@ -67,15 +67,15 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 						break;
 			}
 			ft_putendl_fd("'", 1);
-			wsh_list->ast_parsed->wsh_ret = 258;
+			g_status = 258;
 			wsh_set_ret(wsh_list);
 			return (0);
 		}
 	}
 	i = 0;
+	wsh_token = wsh_list->ast_parsed;
 	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
-		wsh_token = wsh_list->ast_parsed;
 		i = 0;
 		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
 		{
@@ -88,13 +88,18 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 		else if (wsh_list->ast_parsed->type == CMD || wsh_list->ast_parsed->wsh_redi
 		|| wsh_list->ast_parsed->std_out != 1)
 			wsh_execve(wsh_list);
-		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
+		if (wsh_list->ast_parsed->next)
+			wsh_list->ast_parsed = wsh_list->ast_parsed->next;
+		else
+			break;
 	}
-	wsh_list->ast_parsed = wsh_token;
-	while(wait(&statval) > 0)
+	(void)statval;
+	while(wait(&g_status) > 0)
 	{
-		if(WIFEXITED(statval))
-	 		wsh_list->ast_parsed->wsh_ret = WEXITSTATUS(statval);
+		if(WIFEXITED(g_status))
+		{
+	 		g_status = WEXITSTATUS(g_status);
+		}
 	}
 	wsh_set_ret(wsh_list);
 	return (0);
