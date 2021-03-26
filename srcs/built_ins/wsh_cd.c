@@ -72,7 +72,7 @@ void	wsh_cd(t_wsh_list *wsh_list)
 		{
 			if (opendir(wsh_token->wsh_param[0]) == NULL)
 				wsh_cd_error(&tmp);
-			wsh_list->ast_parsed->wsh_ret = 1;
+			g_status = 1;
 			wsh_set_ret(wsh_list);
 		}	
 	}

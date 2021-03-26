@@ -112,7 +112,7 @@ void		wsh_redi(t_wsh_list *wsh_list)
 
 void        wsh_execve(t_wsh_list *wsh_list)
 {
-    int     i;
+	int i;
     char    **cmd;
     char    *path;
     char    *tmp;
@@ -177,9 +177,9 @@ void        wsh_execve(t_wsh_list *wsh_list)
 	arr = wsh_set_arr(path, wsh_list);
 	if (path == NULL)
 		path = cmd[0] + 5;
-	i = fork();
+	g_pid = fork();
 	// i = 0;
-	if (i == 0)
+	if (g_pid == 0)
 	{
 		if (wsh_list->ast_parsed->wsh_redi)
 			wsh_redi(wsh_list);
@@ -199,7 +199,7 @@ void        wsh_execve(t_wsh_list *wsh_list)
 			exit(ret);
 		}
 	}
-	else if (i > 0)
+	else if (g_pid > 0)
 	{
 		if (wsh_list->ast_parsed->std_out != 1)
 			close(wsh_list->ast_parsed->std_out);

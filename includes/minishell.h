@@ -65,6 +65,9 @@
 ** WESH SHELL STRUCT
 */
 
+int						g_status;
+int						g_pid;
+
 typedef struct s_wsh_redirection
 {
 	char						*filename;
@@ -79,7 +82,6 @@ typedef struct s_wsh_tokens
 	char					**wsh_param;
 	int						type;
 	int						std_in;
-	int						wsh_ret;
 	int						std_out;
 	t_wsh_redi				*wsh_redi;
 	struct s_wsh_tokens		*next;
