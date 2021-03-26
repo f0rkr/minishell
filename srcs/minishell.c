@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 15:31:03 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 18:43:09 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,31 @@
 void	handle_sigin(int sig)
 {
 	char	buff[4029];
+	
 	(void)sig;
-	if (sig == SIGINT)
+	if (g_pid == 0)
 	{
-		if (g_pid == 0)
-		{
-			getcwd(buff, 4029);
-			ft_putstr_fd("\n\x1B[36mwsh\x1B[0m\x1B[34m :: \x1B[0m", 0);
-			ft_putstr_fd("\x1B[32m", 0);
-			ft_putstr_fd(buff, 0);
-			ft_putstr_fd("\x1B[0m\x1B[31m » \x1B[0m", 0);
-		}
-		else if (g_pid > 0)
-		{
-			g_pid = 0;
-			write(1, "\n", 1);
-			g_status = 130;
-		}
+		getcwd(buff, 4029);
+		ft_putstr_fd("\n\x1B[36mwsh\x1B[0m\x1B[34m :: \x1B[0m", 0);
+		ft_putstr_fd("\x1B[32m", 0);
+		ft_putstr_fd(buff, 0);
+		ft_putstr_fd("\x1B[0m\x1B[31m » \x1B[0m", 0);
+		g_pid = 0;
+		// if (g_string)
+		// {
+		// 	wsh_free((void*)g_string);
+		// 	g_string = NULL;
+		// }
+	}
+	else if (g_pid != 0)
+	{
+		write(1, "\n", 1);
+		g_status = 130;
+		// if (g_string)
+		// {
+		// 	wsh_free((void*)g_string);
+		// 	g_string = NULL;
+		// }
 	}
 	return ;
 }
@@ -48,7 +56,6 @@ void	handle_quit(int sig)
 		ft_putstr_fd("Quit: 3\n", 1);
 		g_status = 131;
 	}
-	g_pid = 0;
 	return ;
 }
 
@@ -61,7 +68,8 @@ int	wsh_loop(t_wsh_list *wsh_list)
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
-		wsh_list->string = wsh_read(wsh_list, &wsh_list->garbage_flag, &line_tmp);
+		g_string = wsh_read(wsh_list, &wsh_list->garbage_flag, &line_tmp);
+		wsh_list->string = g_string;
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->wsh_envs, wsh_list->string);
 		wsh_tmp = wsh_list->ast_parsed;

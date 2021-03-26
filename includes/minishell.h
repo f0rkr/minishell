@@ -67,6 +67,7 @@
 
 int						g_status;
 int						g_pid;
+char					*g_string;
 
 typedef struct s_wsh_redirection
 {

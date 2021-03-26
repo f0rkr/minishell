@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 15:29:53 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/26 18:04:10 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,16 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 		else if (wsh_list->ast_parsed->type == CMD || wsh_list->ast_parsed->wsh_redi
 		|| wsh_list->ast_parsed->std_out != 1)
 			wsh_execve(wsh_list);
+		// if (wsh_list->ast_parsed->std_out == 1)
+		// {
+		// 		while(wait(&statval) > 0)
+		// 		{
+		// 			if(WIFEXITED(statval))
+		// 			{
+		// 				g_status = WEXITSTATUS(statval);
+		// 			}
+		// 		}
+		// }
 		if (wsh_list->ast_parsed->next)
 			wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 		else
@@ -97,7 +107,7 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 	{
 		if(WIFEXITED(statval))
 		{
-	 		g_status = WEXITSTATUS(statval);
+			g_status = WEXITSTATUS(statval);
 		}
 	}
 	wsh_set_ret(wsh_list);

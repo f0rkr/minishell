@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:50:06 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/24 15:36:23 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/26 18:38:54 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	wsh_garbageCollector(t_wsh_list *wsh_list)
 	t_wsh_tokens	*wsh_tmp;
 
 	counter = 0;
-	wsh_free((void *) wsh_list->string);
+	if (wsh_list->string)
+		wsh_free((void *) wsh_list->string);
 	while (wsh_list->ast_parsed)
 	{
 		if (wsh_list->ast_parsed->wsh_command)

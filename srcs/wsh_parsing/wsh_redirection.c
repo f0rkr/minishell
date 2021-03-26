@@ -76,35 +76,6 @@ void	wsh_escape(char **envs, char pipe[1024])
 	return ((void) ft_strlcpy(pipe, newpipe, ft_strlen(newpipe) + 1));
 }
 
-void	wsh_stick_redi(t_wsh_tokens *wsh_token, char *string)
-{
-	int		c_i;
-	int		c_j;
-	char	type[2];
-	char	filename[1024];
-
-	c_i = 0;
-	while (string[c_i] != EOL)
-	{
-		c_j = 0;
-		while ((string[c_i] == OUTRID || string[c_i] == INRID) && string[c_i] != EOL)
-			type[c_j++] = string[c_i++];
-		type[c_i] = EOL;
-		c_j = 0;
-		while ((string[c_i] != OUTRID && string[c_i] != INRID) && string[c_i] != EOL)
-			filename[c_j++] = string[c_i++];
-		filename[c_j] = EOL;
-		wsh_token->wsh_redi->type = ft_strdup(type);
-		wsh_token->wsh_redi->filename = ft_strdup(filename);
-		if ((string[c_i] == OUTRID || string[c_i] == INRID) && string[c_i] != EOL)
-		{
-			wsh_token->wsh_redi->next = wsh_redi_init();
-			wsh_token->wsh_redi = wsh_token->wsh_redi->next;
-		}
-	}
-	return ;
-}
-
 void	wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i)
 {
 	t_wsh_redi	*wsh_red;
