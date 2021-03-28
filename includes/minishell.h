@@ -130,4 +130,7 @@ t_wsh_redi		*wsh_redi_init(void);
 int				wsh_first_char(char *string);
 void			wsh_escape(char **envs, char pipe[1024]);
 void			wsh_set_ret(t_wsh_list *wsh_list);
+void			wsh_export_error(char *param, t_wsh_list *wsh_list);
+void			wsh_init_var(int *i, int *j);
+int    expo(char *param, char **envs, char **c_var, int *c_j);
 #endif

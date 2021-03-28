@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:39:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 17:10:12 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/28 12:13:08 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
 		wsh_free((void*)tmp);
 	}
 	else
-		if (!(ft_isin('/', wsh_token->wsh_param[0] + (ft_strlen(wsh_token->wsh_param[0]) - 1))))
+		if (!(ft_isin('/', wsh_token->wsh_param[0] + (
+						ft_strlen(wsh_token->wsh_param[0]) - 1))))
 			wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
 	return ;
 }

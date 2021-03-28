@@ -1,24 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wsh_export.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/28 12:39:19 by oel-ouar          #+#    #+#             */
+/*   Updated: 2021/03/28 17:05:53 by oel-ouar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	wsh_removevarandadd(char **wsh_envs, char *var, int c_p)
-{
-	wsh_free((void *)wsh_envs[c_p]);
-	wsh_envs[c_p] = NULL;
-	wsh_envs[c_p] = ft_strdup(var);
-	return (0);
-}
-
-int	wsh_findeq(char *var)
-{
-	int		c_i;
-
-	c_i = 0;
-	while (var && var[c_i] != EOL && var[c_i] != '=')
-		c_i++;
-	if (var[c_i] == '=')
-		return (c_i);
-	return (0);
-}
 
 int	wsh_searchenvx(char **wsh_envs, char *var)
 {
@@ -49,36 +41,33 @@ void	wsh_export_only(t_wsh_list *wsh_list)
 	int		c_j;
 	int		c_k;
 
-	c_i = 0;
-	while (wsh_list->wsh_envs[c_i])
+	c_i = -1;
+	while (wsh_list->wsh_envs[++c_i])
 	{
-		c_k = 0;
-		c_j = 0;
-		if (wsh_list->wsh_envs[c_i][0] != '?' && wsh_list->wsh_envs[c_i][1] != '=')
+		wsh_init_var(&c_j, &c_k);
+		if (wsh_list->wsh_envs[c_i][0] != '?' || wsh_list->wsh_envs[c_i][1] != '=')
 		{
 			ft_putstr_fd("declare -x ", 1);
 			while (wsh_list->wsh_envs[c_i][c_j] != EOL)
 			{
 				ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
-				if (wsh_list->wsh_envs[c_i][c_j] == '=')
+				if (wsh_list->wsh_envs[c_i][c_j++] == '=')
 				{
 					c_k = 1;
 					ft_putchar_fd(DQUOTE, 1);
 				}
-				c_j++;
 			}
 			if (c_k == 1)
 				ft_putchar_fd('\"', 1);
 			ft_putchar_fd('\n', 1);
 		}
-		c_i++;
 	}
 }
 
-int		wsh_export_valid(char *param)
+void	wsh_export_valid(char *param, t_wsh_list *wsh_list)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (wsh_findeq(param))
@@ -89,10 +78,9 @@ int		wsh_export_valid(char *param)
 	{
 		if (!ft_isalpha(param[i]) && !ft_isdigit(param[i]))
 			if (ft_isalpha(param[i + 1]))
-				return (1);
-		i++;	
+				wsh_export_error(param, wsh_list);
+		i++;
 	}
-	return (0);
 }
 
 void	wsh_remove_spaces(char *param)
@@ -120,66 +108,29 @@ void	wsh_remove_spaces(char *param)
 	wsh_free((void *)tmp);
 	return ;
 }
+
 void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 {
 	int		c_i;
 	int		c_j;
-	int		c_p;
 	char	*c_var;
 
-	c_i = 0;
-	c_p = 0;
+	c_i = -1;
 	c_j = 0;
 	c_var = NULL;
 	if (!wsh_token->wsh_param)
 		wsh_export_only(wsh_list);
 	else if (!ft_isalpha(wsh_token->wsh_param[0][0]))
-	{
-		ft_putstr_fd("wsh : export: `", 1);
-		ft_putstr_fd(wsh_token->wsh_param[0], 1);
-		ft_putendl_fd("': not a valid identifier", 1);
-		g_status = 1;
-		wsh_set_ret(wsh_list);
-	}
+		wsh_export_error(wsh_token->wsh_param[0], wsh_list);
 	else
 	{
-		while (wsh_list->wsh_envs[c_j] != NULL)
-			c_j++;
-		while (wsh_token->wsh_param && wsh_token->wsh_param[c_i] != NULL)
+		c_j = wsh_tab_length(wsh_list->wsh_envs);
+		while (wsh_token->wsh_param && wsh_token->wsh_param[++c_i] != NULL)
 		{
 			wsh_remove_spaces(wsh_token->wsh_param[c_i]);
-			if (wsh_export_valid(wsh_token->wsh_param[c_i]))
-			{
-				ft_putstr_fd("wsh : export: `", 1);
-				ft_putstr_fd(wsh_token->wsh_param[c_i], 1);
-				ft_putendl_fd("': not a valid identifier", 1);
-				g_status = 1;
-				wsh_set_ret(wsh_list);
-			}
-			else if (wsh_findeq(wsh_token->wsh_param[c_i]))
-			{
-				c_var = ft_substr(wsh_token->wsh_param[c_i], 0, wsh_findeq(wsh_token->wsh_param[c_i]));
-				if (((c_p = wsh_searchenvx(wsh_list->wsh_envs, c_var)) && wsh_token->wsh_param[c_i]))
-					wsh_removevarandadd(wsh_list->wsh_envs, wsh_token->wsh_param[c_i], c_p);
-				else
-				{
-					wsh_list->wsh_envs[c_j++] = ft_strdup(wsh_token->wsh_param[c_i]);
-					wsh_list->wsh_envs[c_j] = NULL;
-				}
-			}
-			else
-			{
-				c_var = ft_strdup(wsh_token->wsh_param[c_i]);
-				if ((c_p = wsh_searchenvx(wsh_list->wsh_envs, c_var)) && wsh_token->wsh_param[c_i])
-					break ;
-				else
-				{
-					wsh_list->wsh_envs[c_j++] = ft_strdup(wsh_token->wsh_param[c_i]);
-					wsh_list->wsh_envs[c_j] = NULL;
-				}
-			}
-			wsh_free((void *)c_var);
-			c_i++;
+			wsh_export_valid(wsh_token->wsh_param[c_i], wsh_list);
+			if (expo(wsh_token->wsh_param[c_i], wsh_list->wsh_envs, &c_var, &c_j))
+				break ;
 		}
 	}
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)

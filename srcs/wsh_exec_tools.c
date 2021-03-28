@@ -7,7 +7,8 @@ int         wsh_tab_length(char **tab)
     i = 0;
     if (tab == NULL)
         return (0);
-    while (tab[i++]);
+    while (tab[i])
+        i++;
     return (i);
 }
 

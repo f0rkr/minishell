@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:49:50 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 18:43:09 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/28 17:06:52 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	handle_sigin(int sig)
 		ft_putstr_fd("\x1B[32m", 0);
 		ft_putstr_fd(buff, 0);
 		ft_putstr_fd("\x1B[0m\x1B[31m » \x1B[0m", 0);
-		g_pid = 0;
 		// if (g_string)
 		// {
 		// 	wsh_free((void*)g_string);
@@ -138,7 +137,8 @@ t_wsh_list	*wsh_init(char *env[])
 		wsh_list->wsh_envs[i] = ft_strdup(env[i]);
 		i++;
 	}
-	wsh_list->wsh_envs[i] = ft_strdup("?=0");
+	wsh_list->wsh_envs[i++] = ft_strdup("?=0");
+	wsh_list->wsh_envs[i] = NULL;
 	return (wsh_list);
 }
 
@@ -147,6 +147,7 @@ int	main(int argc, char **argv, char **env)
 	t_wsh_list	*wsh_list;
 
 	(void)argv;
+	g_pid = 0;
 	signal(SIGINT, handle_sigin);
 	signal(SIGQUIT, handle_quit);
 	wsh_list = wsh_init(env);
