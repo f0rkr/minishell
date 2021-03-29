@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:39:56 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/28 12:13:08 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/29 12:20:05 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	wsh_cd(t_wsh_list *wsh_list)
 		{
 			wsh_cd_error(&tmp);
 			g_status = 1;
-			wsh_set_ret(wsh_list);
 		}
 	}
 	else if (wsh_get_envar("HOME", wsh_list->wsh_envs))

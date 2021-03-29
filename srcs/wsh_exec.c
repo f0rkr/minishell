@@ -6,28 +6,15 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/28 11:49:26 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/29 12:21:11 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	wsh_set_ret(t_wsh_list *wsh_list)
+int	wsh_token_error(t_wsh_list *wsh_list)
 {
-	int		c_p;
-	char 	*c_var;
-
-	c_var = ft_strdup("?");
-	c_p = wsh_searchenvx(wsh_list->wsh_envs, c_var);
-	if (wsh_list->ast_parsed && c_p)
-		wsh_removevarandadd(wsh_list->wsh_envs, ft_strjoin("?=", ft_itoa(g_status)), c_p);
-}
-
-void    *wsh_exec(t_wsh_list *wsh_list)
-{
-	int		i;
-	int		statval;
-	t_wsh_tokens *wsh_token;
+	int	i;
 
 	i = 0;
 	if (wsh_first_char(wsh_list->string))
@@ -35,45 +22,46 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 		ft_putstr_fd("wsh: syntax error near unexpected token `", 1);
 		while (wsh_list->string[i] == ';' || wsh_list->string[i] == '|')
 		{
-				ft_putchar_fd(wsh_list->string[i], 1);
-				if (wsh_list->string[i] != wsh_list->string[i + 1])
-					break;
-				i++;
+			ft_putchar_fd(wsh_list->string[i], 1);
+			if (wsh_list->string[i] != wsh_list->string[i + 1])
+				break ;
+			i++;
 		}
 		ft_putendl_fd("'", 1);
 		g_status = 258;
-		wsh_set_ret(wsh_list);
 		return (0);
 	}
-	i = 0;
-	if (wsh_list->ast_parsed->wsh_redi)
+	return (1);
+}
+
+int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
+{
+	if (wsh_redi->filename[i] == EOL)
 	{
-		if (wsh_list->ast_parsed->wsh_redi->filename[i] == EOL)
-		{
-			ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
-			g_status = 258;
-			wsh_set_ret(wsh_list);
-			return (0);
-		}
-		else if (wsh_list->ast_parsed->wsh_redi->filename[i] == ';' || wsh_list->ast_parsed->wsh_redi->filename[i] == '|' 
-		|| wsh_list->ast_parsed->wsh_redi->filename[i] == '>' || wsh_list->ast_parsed->wsh_redi->filename[i] == '<')
-		{
-			ft_putstr_fd("wsh: syntax error near unexpected token `", 1);
-			while (wsh_list->ast_parsed->wsh_redi->filename[i] == ';' || wsh_list->ast_parsed->wsh_redi->filename[i] == '|' 
-			|| wsh_list->ast_parsed->wsh_redi->filename[i] == '>' || wsh_list->ast_parsed->wsh_redi->filename[i] == '<')
-			{
-					ft_putchar_fd(wsh_list->ast_parsed->wsh_redi->filename[i++], 1);
-					if (wsh_list->ast_parsed->wsh_redi->filename[i] != wsh_list->ast_parsed->wsh_redi->filename[i + 1])
-						break;
-			}
-			ft_putendl_fd("'", 1);
-			g_status = 258;
-			wsh_set_ret(wsh_list);
-			return (0);
-		}
+		ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
+		g_status = 258;
+		return (0);
 	}
-	i = 0;
-	wsh_token = wsh_list->ast_parsed;
+	else if (wsh_redi->filename[i] == ';' || wsh_redi->filename[i] == '|'
+		|| wsh_redi->filename[i] == '>' || wsh_redi->filename[i] == '<')
+	{
+		ft_putstr_fd("wsh: syntax error near unexpected token `", 1);
+		while (wsh_redi->filename[i] == ';' || wsh_redi->filename[i] == '|'
+			|| wsh_redi->filename[i] == '>' || wsh_redi->filename[i] == '<')
+		{
+			ft_putchar_fd(wsh_redi->filename[i++], 1);
+			if (wsh_redi->filename[i - 1] != wsh_redi->filename[i])
+				break ;
+		}
+		ft_putendl_fd("'", 1);
+		g_status = 258;
+		return (0);
+	}
+	return (1);
+}
+
+void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
+{
 	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
 		i = 0;
@@ -82,35 +70,39 @@ void    *wsh_exec(t_wsh_list *wsh_list)
 			wsh_escape(wsh_list->wsh_envs, wsh_list->ast_parsed->wsh_param[i]);
 			i++;
 		}
-		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command) && wsh_list->ast_parsed->std_in == 0 
-		&& !wsh_list->ast_parsed->wsh_redi)
+		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command)
+			&& wsh_list->ast_parsed->std_out == 1 && !wsh_list->ast_parsed->wsh_redi)
 			wsh_exec_builtin(wsh_list);
 		else if (wsh_list->ast_parsed->type == CMD || wsh_list->ast_parsed->wsh_redi
-		|| wsh_list->ast_parsed->std_out != 1)
+			|| wsh_list->ast_parsed->std_out != 1)
 			wsh_execve(wsh_list);
 		if (wsh_list->ast_parsed->std_out == 1)
-		{
-				while(wait(&statval) > 0)
-				{
-					if(WIFEXITED(statval))
-					{
-						g_status = WEXITSTATUS(statval);
-					}
-				}
-		}
+			while (wait(&statval) > 0)
+				if (WIFEXITED(statval))
+					g_status = WEXITSTATUS(statval);
 		g_pid = 0;
 		if (wsh_list->ast_parsed->next)
 			wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 		else
-			break;
+			break ;
 	}
-	while(wait(&statval) > 0)
-	{
-		if(WIFEXITED(statval))
-		{
+}
+
+void	wsh_exec(t_wsh_list *wsh_list)
+{
+	int				i;
+	int				statval;
+
+	i = 0;
+	statval = 0;
+	if (!wsh_token_error(wsh_list))
+		return ;
+	if (wsh_list->ast_parsed->wsh_redi
+		&& !wsh_redi_error(wsh_list->ast_parsed->wsh_redi, i))
+		return ;
+	wsh_exec_loop(wsh_list, statval, i);
+	while (wait(&statval) > 0)
+		if (WIFEXITED(statval))
 			g_status = WEXITSTATUS(statval);
-		}
-	}
-	wsh_set_ret(wsh_list);
-	return (0);
+	return ;
 }

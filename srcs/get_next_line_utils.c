@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mashad <mashad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 15:40:46 by sdunckel          #+#    #+#             */
-/*   Updated: 2021/03/24 15:45:16 by mashad           ###   ########.fr       */
+/*   Updated: 2021/03/29 10:46:01 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen_gnl(char *s, int gnl)
+size_t	ft_strlen_g(char *s, int gnl)
 {
 	size_t		i;
 
@@ -51,7 +51,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	str = (char *)malloc(sizeof(char)
-			* (ft_strlen_gnl(s1, 0) + ft_strlen_gnl(s2, 0) + 1));
+			* (ft_strlen_g(s1, 0) + ft_strlen_g(s2, 0) + 1));
 	if (!str)
 		return (NULL);
 	while (s1[i])
@@ -69,7 +69,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	return (str);
 }
 
-char	*ft_substr_gnl(char *s, unsigned int start, size_t len)
+char	*ft_substr_g(char *s, unsigned int start, size_t len)
 {
 	char	*str;
 	int		i;
@@ -77,7 +77,7 @@ char	*ft_substr_gnl(char *s, unsigned int start, size_t len)
 	i = 0;
 	if (!s)
 		return (NULL);
-	if (start > ft_strlen_gnl(s, 0))
+	if (start > ft_strlen_g(s, 0))
 		return (NULL);
 	str = (char *)malloc(sizeof(char) * len + 1);
 	if (!str)

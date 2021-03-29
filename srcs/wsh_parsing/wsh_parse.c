@@ -6,39 +6,15 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/26 17:46:02 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/29 09:53:40 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-void	*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024], int *position)
-{
-	int		counter;
-
-	counter = 0;
-	if (!wsh_token->wsh_arg)
-		return (NULL);
-	wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024);
-	if (wsh_args[*position][0] != '-')
-		return (NULL);
-	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
-	{	
-		wsh_escape(envs, wsh_args[*position]);
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	}
-	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
-	{
-		wsh_escape(envs, wsh_args[*position]);
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	}
-	wsh_token->wsh_arg[counter] = 0;
-	return (NULL);
-}
-
 int		g_count;
 
-int		wsh_fillparams(t_wsh_tokens *wsh_token, char *wsh_params)
+int	wsh_fillparams(t_wsh_tokens *wsh_token, char *wsh_params)
 {
 	if (g_count == 0)
 	{
@@ -52,13 +28,13 @@ int		wsh_fillparams(t_wsh_tokens *wsh_token, char *wsh_params)
 	return (EXIT);
 }
 
-void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
+void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token
+	, char string[][1024])
 {
 	int			c_i;
 	int			c_j;
 	t_wsh_redi	*wsh_redi;
 
-	
 	c_i = 0;
 	c_j = 0;
 	g_count = 0;
@@ -74,6 +50,7 @@ void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
 		}
 		wsh_fill_redirection(wsh_token, string, &c_i);
 	}
+	wsh_escape(envs, string[c_i]);
 	wsh_token->wsh_command = ft_strdup(string[c_i++]);
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
@@ -102,12 +79,11 @@ void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token, char string[][1024])
 			wsh_fillparams(wsh_token, string[c_i]);
 		c_i++;
 	}
-
 	wsh_token->wsh_redi = wsh_redi;
 	return ;
 }
 
-void		wsh_command_normalize(char *string)
+void	wsh_command_normalize(char *string)
 {
 	char	new_str[1024];
 	int		c_i;
@@ -137,7 +113,8 @@ void		wsh_command_normalize(char *string)
 	return ;
 }
 
-t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token, char pipe[][1024])
+t_wsh_tokens	*wsh_fillCommands(char **envs, t_wsh_tokens *wsh_token
+	, char pipe[][1024])
 {
 	int		counter;
 	char	foreach[1024][1024];

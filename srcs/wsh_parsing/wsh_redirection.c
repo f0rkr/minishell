@@ -11,7 +11,8 @@ void	wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	c_j = c_pos++;
 	c_i = 0;
 	c_k = 0;
-	if (pipe[c_pos] == EOL || (!ft_isspecial(pipe, c_pos) && !ft_isalnum(pipe[c_pos])))
+	if (pipe[c_pos] == EOL
+		|| (!ft_isspecial(pipe, c_pos) && !ft_isalnum(pipe[c_pos])))
 		return ;
 	if (ft_isspecial(pipe, c_pos))
 		var[c_i++] = pipe[c_pos++];
@@ -76,7 +77,8 @@ void	wsh_escape(char **envs, char pipe[1024])
 	return ((void) ft_strlcpy(pipe, newpipe, ft_strlen(newpipe) + 1));
 }
 
-void	wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i)
+void	wsh_fill_redirection(t_wsh_tokens *wsh_token
+	, char redi[][1024], int *c_i)
 {
 	t_wsh_redi	*wsh_red;
 

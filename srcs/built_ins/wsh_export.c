@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/28 12:39:19 by oel-ouar          #+#    #+#             */
-/*   Updated: 2021/03/28 17:05:53 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/03/29 12:24:51 by oel-ouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,26 +45,23 @@ void	wsh_export_only(t_wsh_list *wsh_list)
 	while (wsh_list->wsh_envs[++c_i])
 	{
 		wsh_init_var(&c_j, &c_k);
-		if (wsh_list->wsh_envs[c_i][0] != '?' || wsh_list->wsh_envs[c_i][1] != '=')
+		ft_putstr_fd("declare -x ", 1);
+		while (wsh_list->wsh_envs[c_i][c_j] != EOL)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			while (wsh_list->wsh_envs[c_i][c_j] != EOL)
+			ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
+			if (wsh_list->wsh_envs[c_i][c_j++] == '=')
 			{
-				ft_putchar_fd(wsh_list->wsh_envs[c_i][c_j], 1);
-				if (wsh_list->wsh_envs[c_i][c_j++] == '=')
-				{
-					c_k = 1;
-					ft_putchar_fd(DQUOTE, 1);
-				}
+				c_k = 1;
+				ft_putchar_fd(DQUOTE, 1);
 			}
-			if (c_k == 1)
-				ft_putchar_fd('\"', 1);
-			ft_putchar_fd('\n', 1);
 		}
+		if (c_k == 1)
+			ft_putchar_fd('\"', 1);
+		ft_putchar_fd('\n', 1);
 	}
 }
 
-void	wsh_export_valid(char *param, t_wsh_list *wsh_list)
+void	wsh_export_valid(char *param)
 {
 	int	i;
 	int	j;
@@ -78,7 +75,7 @@ void	wsh_export_valid(char *param, t_wsh_list *wsh_list)
 	{
 		if (!ft_isalpha(param[i]) && !ft_isdigit(param[i]))
 			if (ft_isalpha(param[i + 1]))
-				wsh_export_error(param, wsh_list);
+				wsh_export_error(param);
 		i++;
 	}
 }
@@ -121,14 +118,14 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	if (!wsh_token->wsh_param)
 		wsh_export_only(wsh_list);
 	else if (!ft_isalpha(wsh_token->wsh_param[0][0]))
-		wsh_export_error(wsh_token->wsh_param[0], wsh_list);
+		wsh_export_error(wsh_token->wsh_param[0]);
 	else
 	{
 		c_j = wsh_tab_length(wsh_list->wsh_envs);
 		while (wsh_token->wsh_param && wsh_token->wsh_param[++c_i] != NULL)
 		{
 			wsh_remove_spaces(wsh_token->wsh_param[c_i]);
-			wsh_export_valid(wsh_token->wsh_param[c_i], wsh_list);
+			wsh_export_valid(wsh_token->wsh_param[c_i]);
 			if (expo(wsh_token->wsh_param[c_i], wsh_list->wsh_envs, &c_var, &c_j))
 				break ;
 		}
