@@ -134,18 +134,20 @@ void			wsh_init_var(int *i, int *j);
 int				expo(char *param, char **envs, char **c_var, int *c_j);
 void			handle_sigin(int sig);
 void			handle_quit(int sig);
-void	*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token, char wsh_args[][1024], int *position);
-int	wsh_expo(char *param, char **envs, char **c_var, int *c_j);
-void    wsh_red_help(t_wsh_list *wsh_list, int fd);
-int wsh_red_helper(t_wsh_list *wsh_list, int fd);
-void	wsh_error_norm(int fd, char *path, char *command, DIR *folder);
-void	wsh_child_exec(t_wsh_list *wsh_list, int i, char **arr, char *path);
-int	wsh_redi(t_wsh_list *wsh_list);
-int	ft_error(char *path, char *command);
-void	wsh_path(t_wsh_list *wsh_list, char **path);
-char	*check_bin(char *cmd, char *command);
-void    wsh_pipe(t_wsh_list *wsh_list, char **path);
-void    wsh_redi_in(t_wsh_list *wsh_list);
-void    wsh_redi_out(t_wsh_list *wsh_list);
-void	wsh_exec_parent(t_wsh_list *wsh_list);
+void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token,
+					char wsh_args[][1024], int *position);
+int				wsh_expo(char *param, char **envs, char **c_var, int *c_j);
+void			wsh_red_help(t_wsh_list *wsh_list, int fd);
+int				wsh_red_helper(t_wsh_list *wsh_list, int fd);
+void			wsh_error_norm(int fd, char *path, char *command, DIR *folder);
+void			wsh_child_exec(t_wsh_list *wsh_list,
+					int i, char **arr, char *path);
+int				wsh_redi(t_wsh_list *wsh_list);
+int				ft_error(char *path, char *command);
+void			wsh_path(t_wsh_list *wsh_list, char **path);
+char			*check_bin(char *cmd, char *command);
+void			wsh_pipe(t_wsh_list *wsh_list, char **path);
+void			wsh_redi_in(t_wsh_list *wsh_list);
+void			wsh_redi_out(t_wsh_list *wsh_list);
+void			wsh_exec_parent(t_wsh_list *wsh_list);
 #endif

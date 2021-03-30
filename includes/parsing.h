@@ -25,5 +25,6 @@ extern int	wsh_quotesremove(char *c, int c_sq, int c_dq, int c_p);
 void		wsh_replacevar(char **envs, char pipe[1024], int c_pos);
 void		wsh_escape(char **envs, char pipe[1024]);
 void		wsh_stick_redi(t_wsh_tokens *wsh_token, char *string);
-void		wsh_fill_redirection(t_wsh_tokens *wsh_token, char redi[][1024], int *c_i);
+void		wsh_fill_redirection(t_wsh_tokens *wsh_token,
+				char redi[][1024], int *c_i);
 #endif

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isin(char c, char *str)
+int	ft_isin(char c, char *str)
 {
 	while (*str)
 	{

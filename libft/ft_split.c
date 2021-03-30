@@ -12,10 +12,10 @@
 
 #include "libft.h"
 
-static int		tab_aloc(char *str, char m)
+static int	tab_aloc(char *str, char m)
 {
-	int i;
-	int c;
+	int	i;
+	int	c;
 
 	i = 0;
 	c = 0;
@@ -37,9 +37,9 @@ static int		tab_aloc(char *str, char m)
 	return (c);
 }
 
-static int		string(char *str, int *k, char m)
+static int	string(char *str, int *k, char m)
 {
-	int c;
+	int	c;
 
 	c = 0;
 	while (str[*k] != EOL)
@@ -60,10 +60,10 @@ static int		string(char *str, int *k, char m)
 	return (0);
 }
 
-static char		**ft_append(char **tab, char *str, int i, char m)
+static char	**ft_append(char **tab, char *str, int i, char m)
 {
-	int j;
-	int r;
+	int	j;
+	int	r;
 
 	j = 0;
 	while (str[i] != EOL)
@@ -88,7 +88,7 @@ static char		**ft_append(char **tab, char *str, int i, char m)
 	return (tab);
 }
 
-static void		ft_fre(char **tab, int r)
+static void	ft_fre(char **tab, int r)
 {
 	while (r)
 	{
@@ -98,7 +98,7 @@ static void		ft_fre(char **tab, int r)
 	free(tab);
 }
 
-char			**ft_split(char const *str, char c)
+char	**ft_split(char const *str, char c)
 {
 	char	**tab;
 	int		i;
@@ -112,11 +112,11 @@ char			**ft_split(char const *str, char c)
 	k = &p;
 	if (!str)
 		return (0);
-	if (!(tab = malloc(sizeof(char*) * (tab_aloc((char *)str, c) + 1))))
-		return (0);
+	tab = malloc(sizeof(char*) * (tab_aloc((char *)str, c) + 1));
 	while (r < tab_aloc((char *)str, c))
 	{
-		if (!(tab[r] = malloc(sizeof(char) * (string((char *)str, k, c) + 1))))
+		tab[r] = malloc(sizeof(char) * (string((char *)str, k, c) + 1));
+		if (!tab[r])
 		{
 			ft_fre(tab, r);
 			return (0);

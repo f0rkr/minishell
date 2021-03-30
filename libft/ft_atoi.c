@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_check(unsigned long pt, int s)
+int	ft_check(unsigned long pt, int s)
 {
 	if (pt > 9223372036854775807 && s == -1)
 		return (0);
@@ -19,7 +19,7 @@ int		ft_check(unsigned long pt, int s)
 	return (pt * s);
 }
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	unsigned long long int	j;
 	unsigned long long int	t_p;

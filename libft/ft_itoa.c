@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static	int		taille(unsigned int nb)
+static	int	taille(unsigned int nb)
 {
 	unsigned int	size;
 
@@ -22,10 +22,10 @@ static	int		taille(unsigned int nb)
 		nb /= 10;
 		++size;
 	}
-	return (int)(size + 1);
+	return ((int)(size + 1));
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char			*tab;
 	unsigned int	nb;

@@ -22,8 +22,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	if (ft_strlen(s) < start)
 		len = 0;
-	if (!(p = malloc(len + 1)))
-		return (NULL);
+	p = malloc(len + 1);
 	if (p == NULL)
 		return (0);
 	while (s[start] && len--)
@@ -33,5 +32,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		start++;
 	}
 	p[i] = EOL;
-	return (char *)(p);
+	return ((char *)(p));
 }

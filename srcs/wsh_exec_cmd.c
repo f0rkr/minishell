@@ -107,7 +107,7 @@ void	wsh_execve(t_wsh_list *wsh_list)
 		wsh_child_exec(wsh_list, i, arr, path);
 	else if (g_pid > 0)
 		wsh_exec_parent(wsh_list);
-	// if (arr[0] != NULL)
+	// if (arr[0] != NULL && arr != NULL)
 	// 	wsh_loop_free((void **)arr);
 	return ;
 }
