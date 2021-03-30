@@ -62,6 +62,8 @@ void	wsh_escape(char **envs, char pipe[1024])
 		{
 			wsh_replacevar(envs, pipe, c_i);
 			wsh_escape(envs, pipe);
+			c_i = 0;
+			c_j = 0;
 		}
 		if (c_p == 0 && c_sq == 0 && c_dq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
