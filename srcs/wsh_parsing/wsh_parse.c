@@ -34,6 +34,7 @@ void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token
 	int			c_i;
 	int			c_j;
 	t_wsh_redi	*wsh_redi;
+	char		pipe[1024][1024];
 
 	c_i = 0;
 	c_j = 0;
@@ -52,6 +53,12 @@ void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token
 	}
 	wsh_escape(envs, string[c_i]);
 	wsh_token->wsh_command = ft_strdup(string[c_i++]);
+	if (ft_isin(SPACE, wsh_token->wsh_command))
+	{
+		if (wsh_tokenizer(pipe, wsh_token->wsh_command, 2) == ERROR)
+			return ;
+		wsh_fill_token(envs, wsh_token, pipe);
+	}
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
 	if (!wsh_is_redirection(string[c_i]))

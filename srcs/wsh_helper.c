@@ -39,10 +39,10 @@ void	*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token
 	int		counter;
 
 	counter = 0;
-	if (!wsh_token->wsh_arg)
+	if (wsh_args[*position][0] != '-')
 		return (NULL);
 	wsh_token->wsh_arg = (char **)malloc(sizeof(char *) * 1024);
-	if (wsh_args[*position][0] != '-')
+	if (!wsh_token->wsh_arg)
 		return (NULL);
 	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
 	{	

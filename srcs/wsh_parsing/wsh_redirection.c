@@ -62,10 +62,12 @@ void	wsh_escape(char **envs, char pipe[1024])
 		{
 			wsh_replacevar(envs, pipe, c_i);
 			wsh_escape(envs, pipe);
+			c_i = 0;
+			c_j = 0;
 		}
-		if (c_p == 0 && c_sq == 0 && pipe[c_i] == ESC)
+		if (c_p == 0 && c_sq == 0 && c_dq == 0 && pipe[c_i] == ESC)
 			c_p = 1;
-		else if (c_p == 1 && c_sq == 0)
+		else if (c_p == 1 && c_sq == 0 && c_dq == 0)
 			c_p = 0;
 		if (wsh_quotesremove(&pipe[c_i - 1], c_sq, c_dq, c_p))
 			newpipe[c_j++] = pipe[c_i];
@@ -87,8 +89,11 @@ void	wsh_fill_redirection(t_wsh_tokens *wsh_token
 	{
 		wsh_token->wsh_redi->type = ft_strdup(redi[(*c_i)++]);
 		wsh_token->wsh_redi->filename = ft_strdup(redi[(*c_i)]);
-		wsh_token->wsh_redi->next = wsh_redi_init();
-		wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+		if (wsh_is_redirection(redi[*c_i + 1]))
+		{
+			wsh_token->wsh_redi->next = wsh_redi_init();
+			wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+		}
 		(*c_i)++;
 	}
 	wsh_token->wsh_redi = wsh_red;
