@@ -1,6 +1,5 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 # include "../libft/libft.h"
 # include <sys/stat.h>
 # include <dirent.h>
@@ -110,7 +109,7 @@ void			wsh_pwd(t_wsh_list *wsh_list);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-char			*wsh_read(t_wsh_list *wsh_list, int *garbage_flag, char **tmp);
+char			*wsh_read(int *garbage_flag);
 t_wsh_tokens	*wsh_parse(char **envs, char *cmd);
 void			wsh_exec(t_wsh_list *wsh_list);
 int				ft_isbuiltin(const char *command);
@@ -118,12 +117,12 @@ int				wsh_exec_builtin(t_wsh_list *wsh_list);
 int				wsh_garbageCollector(t_wsh_list *wsh_list);
 t_wsh_tokens	*wsh_token_init(void);
 int				searcheq(char *str);
-void			wsh_free(void *data);
-void			wsh_loop_free(void **data);
+void			wsh_free(char *data);
+void			wsh_loop_free(char **data);
 char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);
 char			*wsh_get_envar(char *s, char **env);
-int				wsh_tab_length(char **tab);
+int				wsh_tab_length(char **tabb);
 int				wsh_findeq(char *var);
 int				wsh_removevarandadd(char **wsh_envs, char *var, int c_p);
 t_wsh_redi		*wsh_redi_init(void);

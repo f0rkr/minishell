@@ -4,7 +4,7 @@ int	wsh_removevar(char **wsh_envs, int c_p)
 {
 	while (wsh_envs[c_p] != NULL)
 	{
-		wsh_free((void *)wsh_envs[c_p]);
+		wsh_free(wsh_envs[c_p]);
 		wsh_envs[c_p] = NULL;
 		if (wsh_envs[c_p + 1] != NULL)
 			wsh_envs[c_p] = ft_strdup(wsh_envs[c_p + 1]);

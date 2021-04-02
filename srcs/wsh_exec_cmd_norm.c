@@ -104,5 +104,5 @@ void	wsh_path(t_wsh_list *wsh_list, char **path)
 	if (*path == NULL)
 		*path = cmd[0] + 5;
 	wsh_free((void*) tmp);
-	wsh_loop_free((void **)cmd);
+	wsh_loop_free(cmd);
 }

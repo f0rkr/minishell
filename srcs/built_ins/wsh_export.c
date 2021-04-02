@@ -28,8 +28,11 @@ int	wsh_searchenvx(char **wsh_envs, char *var)
 		c_env = ft_substr(wsh_envs[c_i], 0, wsh_findeq(wsh_envs[c_i]));
 		if ((ft_strncmp(c_env, var, ft_strlen(var) + 1) == 0)
 			|| (ft_strncmp(test, var, ft_strlen(var)) == 0))
+		{
+			wsh_free(c_env);
 			return (c_i);
-		wsh_free((void *) c_env);
+		}
+		wsh_free(c_env);
 		c_i++;
 	}
 	return (0);
@@ -88,7 +91,7 @@ void	wsh_remove_spaces(char *param)
 
 	c_i = 0;
 	c_j = 0;
-	tmp = (char *)malloc(sizeof(char) * ft_strlen(param));
+	tmp = (char *)malloc(sizeof(char) * (ft_strlen(param) + 1));
 	if (!tmp)
 		return ;
 	while (param[c_i] != EOL)
@@ -101,8 +104,9 @@ void	wsh_remove_spaces(char *param)
 		}
 		tmp[c_j++] = param[c_i++];
 	}
+	tmp[c_j] = '\0';
 	ft_strlcpy(param, tmp, ft_strlen(tmp) + 1);
-	wsh_free((void *)tmp);
+	wsh_free(tmp);
 	return ;
 }
 

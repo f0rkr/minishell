@@ -35,7 +35,7 @@ int	wsh_findeq(char *var)
 
 int	wsh_removevarandadd(char **wsh_envs, char *var, int c_p)
 {
-	wsh_free((void *)wsh_envs[c_p]);
+	wsh_free(wsh_envs[c_p]);
 	wsh_envs[c_p] = NULL;
 	wsh_envs[c_p] = ft_strdup(var);
 	return (0);

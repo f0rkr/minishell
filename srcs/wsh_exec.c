@@ -65,6 +65,8 @@ void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
 	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
 		i = 0;
+		if (wsh_list->ast_parsed->wsh_command[0] == EOL)
+			break ;	
 		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
 		{
 			wsh_escape(wsh_list->wsh_envs, wsh_list->ast_parsed->wsh_param[i]);

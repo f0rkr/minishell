@@ -38,7 +38,7 @@ char	**wsh_set_arr(char *path, t_wsh_list *wsh_list)
 	i = 0;
 	while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
 		arr[j++] = ft_strdup(wsh_list->ast_parsed->wsh_param[i++]);
-	arr[j] = NULL;
+	arr[j] = 0;
 	return (arr);
 }
 
@@ -107,7 +107,7 @@ void	wsh_execve(t_wsh_list *wsh_list)
 		wsh_child_exec(wsh_list, i, arr, path);
 	else if (g_pid > 0)
 		wsh_exec_parent(wsh_list);
-	// if (arr[0] != NULL && arr != NULL)
-	// 	wsh_loop_free((void **)arr);
+	// if (arr[0] != NULL && arr != NULL && arr[0][0] != '\0')
+		wsh_loop_free(arr);
 	return ;
 }

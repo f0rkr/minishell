@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int	wsh_tab_length(char **tab)
+int	wsh_tab_length(char **tabb)
 {
 	int	i;
 
 	i = 0;
-	if (tab == NULL)
+	if (tabb == NULL)
 		return (0);
-	while (tab[i])
+	while (tabb[i])
 		i++;
 	return (i);
 }
@@ -29,8 +29,11 @@ char	*wsh_get_envar(char *s, char **env)
 	{
 		var = ft_substr(env[i], 0, wsh_findeq(env[i]));
 		if (ft_strncmp(var, s, ft_strlen(s) + 1) == 0)
+		{
+			wsh_free(var);
 			return (env[i] + (ft_strlen(s) + 1));
-		wsh_free((void *)var);
+		}
+		wsh_free(var);
 		i++;
 	}
 	return ("\0");

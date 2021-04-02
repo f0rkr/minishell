@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-void	wsh_free(void *data)
+void	wsh_free(char *data)
 {
-	if (data)
+	if (data && data[0] != '\0')
 	{
 		free(data);
 		data = NULL;
@@ -22,16 +22,16 @@ void	wsh_free(void *data)
 	return ;
 }
 
-void	wsh_loop_free(void **data)
+void	wsh_loop_free(char **data)
 {
 	int	counter;
 
 	counter = 0;
-	if (data)
+	if (data != NULL)
 	{
-		while (data[counter])
+		while (data[counter] && data[counter][0] != '\0')
 		{
-			wsh_free((void *) data[counter++]);
+			wsh_free(data[counter++]);
 			data[counter - 1] = NULL;
 		}
 		free(data);
@@ -47,19 +47,25 @@ int	wsh_garbageCollector(t_wsh_list *wsh_list)
 
 	counter = 0;
 	if (wsh_list->string)
-		wsh_free((void *) wsh_list->string);
+		wsh_free(wsh_list->string);
 	while (wsh_list->ast_parsed)
 	{
+		while (wsh_list->ast_parsed->wsh_redi)
+		{
+			wsh_free(wsh_list->ast_parsed->wsh_redi->filename);
+			wsh_free(wsh_list->ast_parsed->wsh_redi->type);
+			wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
+		}
 		if (wsh_list->ast_parsed->wsh_command)
-			wsh_free((void *) wsh_list->ast_parsed->wsh_command);
-		wsh_loop_free((void **)wsh_list->ast_parsed->wsh_arg);
-		wsh_loop_free((void **)wsh_list->ast_parsed->wsh_param);
+			wsh_free( wsh_list->ast_parsed->wsh_command);
+		wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
+		wsh_loop_free(wsh_list->ast_parsed->wsh_param);
 		wsh_tmp = wsh_list->ast_parsed;
 		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
-		wsh_free((void *) wsh_tmp);
+		wsh_free((char *)wsh_tmp);
 	}
 	if (wsh_list->garbage_flag != LOOP)
-		wsh_loop_free((void **)wsh_list->wsh_envs);
+		wsh_loop_free(wsh_list->wsh_envs);
 	if (wsh_list->garbage_flag == ERROR)
 	{
 		wsh_list->garbage_flag = INIT;

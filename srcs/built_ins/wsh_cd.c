@@ -18,7 +18,7 @@ void	wsh_cd_error(char **tmp)
 	ft_putstr_fd(*tmp, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(strerror(errno), 2);
-	wsh_free((void *) *tmp);
+	wsh_free(*tmp);
 }
 
 void	wsh_change_pwd(char **envs, char *str)
@@ -33,10 +33,16 @@ void	wsh_change_pwd(char **envs, char *str)
 	c_p = wsh_searchenvx(envs, "PWD");
 	c_pos = wsh_findeq(envs[c_p]);
 	if (str == NULL)
-		wsh_removevarandadd(envs, ft_strjoin("PWD=", buff), c_p);
+	{
+		tmp = ft_strjoin("PWD=", buff);
+		wsh_removevarandadd(envs, tmp, c_p);
+	}
 	else
-		wsh_removevarandadd(envs, ft_strjoin(envs[c_p], "/."), c_p);
-	wsh_free((void *)tmp);
+	{
+		tmp =  ft_strjoin(envs[c_p], "/.");
+		wsh_removevarandadd(envs, tmp, c_p);
+	}
+	wsh_free(tmp);
 }
 
 void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
@@ -60,7 +66,10 @@ void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
 	else
 		if (!(ft_isin('/', wsh_token->wsh_param[0] + (
 						ft_strlen(wsh_token->wsh_param[0]) - 1))))
+		{
+			wsh_free((void*)wsh_token->wsh_param[0]);
 			wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
+		}
 	return ;
 }
 
