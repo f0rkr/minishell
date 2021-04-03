@@ -66,7 +66,6 @@
 
 int						g_status;
 int						g_pid;
-char					*g_string;
 
 typedef struct s_wsh_redirection
 {
@@ -92,6 +91,9 @@ typedef struct s_wsh_list
 	t_wsh_tokens		*ast_parsed;
 	char				*string;
 	int					garbage_flag;
+	char				**wsh_history;
+	int					history_counter;
+	int					history_len;
 	char				**wsh_envs;
 }		t_wsh_list;
 
@@ -109,7 +111,7 @@ void			wsh_pwd(t_wsh_list *wsh_list);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
-char			*wsh_read(int *garbage_flag);
+char			*wsh_read(t_wsh_list *wsh_list, int *garbage_flag);
 t_wsh_tokens	*wsh_parse(char **envs, char *cmd);
 void			wsh_exec(t_wsh_list *wsh_list);
 int				ft_isbuiltin(const char *command);

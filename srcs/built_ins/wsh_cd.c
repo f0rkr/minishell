@@ -39,10 +39,18 @@ void	wsh_change_pwd(char **envs, char *str)
 	}
 	else
 	{
-		tmp =  ft_strjoin(envs[c_p], "/.");
+		tmp = ft_strjoin(envs[c_p], "/.");
 		wsh_removevarandadd(envs, tmp, c_p);
 	}
 	wsh_free(tmp);
+}
+
+void	wsh_cd_dot_error(char **envs)
+{
+	ft_putstr_fd("cd: error retrieving current directory: ", 1);
+	ft_putstr_fd("getcwd: cannot access parent ", 1);
+	ft_putendl_fd("directories: No such file or directory", 1);
+	wsh_change_pwd(envs, ".");
 }
 
 void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
@@ -55,21 +63,20 @@ void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
 		tmp = ft_strjoin(wsh_get_envar("PWD", wsh_list->wsh_envs), "/");
 		if (opendir(tmp) == NULL)
 		{
-			ft_putstr_fd("cd: error retrieving current directory: ", 1);
-			ft_putstr_fd("getcwd: cannot access parent ", 1);
-			ft_putendl_fd("directories: No such file or directory", 1);
-			wsh_change_pwd(wsh_list->wsh_envs, ".");
+			wsh_cd_dot_error(wsh_list->wsh_envs);
 			*i = 1;
 		}
 		wsh_free((void*)tmp);
 	}
 	else
+	{
 		if (!(ft_isin('/', wsh_token->wsh_param[0] + (
 						ft_strlen(wsh_token->wsh_param[0]) - 1))))
 		{
 			wsh_free((void*)wsh_token->wsh_param[0]);
 			wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
 		}
+	}
 	return ;
 }
 

@@ -25,8 +25,7 @@ int	wsh_loop(t_wsh_list *wsh_list)
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
-		g_string = wsh_read(&wsh_list->garbage_flag);
-		wsh_list->string = g_string;
+		wsh_list->string = wsh_read(wsh_list, &wsh_list->garbage_flag);
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list->wsh_envs, wsh_list->string);
 		wsh_tmp = wsh_list->ast_parsed;
@@ -92,6 +91,9 @@ t_wsh_list	*wsh_init(char *env[])
 		wsh_list->wsh_envs[i] = ft_strdup(env[i]);
 		i++;
 	}
+	wsh_list->history_counter = -1;
+	wsh_list->history_len = 0;
+	wsh_list->wsh_history = (char **)malloc(sizeof(char *) * 4029);
 	wsh_list->wsh_envs[i] = 0;
 	g_status = 0;
 	return (wsh_list);

@@ -33,7 +33,8 @@ void	wsh_replacevar(char **envs, char pipe[1024], int c_pos)
 	var[c_k] = EOL;
 	return ((void) ft_strlcpy(pipe, var, ft_strlen(var) + 1));
 }
-int		ft_issi(char c)
+
+int	ft_issi(char c)
 {
 	if (c == VAR || c == DQUOTE)
 		return (1);
@@ -64,14 +65,16 @@ void	wsh_escape(char **envs, char pipe[1024])
 			c_dq = 1;
 		else if (c_dq == 1 && pipe[c_i] == DQUOTE)
 			c_dq = 0;
-		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR && ((!ft_isin(pipe[c_i + 1], "$\"\0")) && ft_isalpha(pipe[c_i + 1])))
+		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR
+			&& ((!ft_isin(pipe[c_i + 1], "$\"\0")) && ft_isalpha(pipe[c_i + 1])))
 		{
 			wsh_replacevar(envs, pipe, c_i);
 			wsh_escape(envs, pipe);
 			c_i = 0;
 			c_j = 0;
 		}
-		if (pipe[c_i] == ESC && c_p == 0 && c_sq == 0 && (c_dq == 0 || (c_dq == 1 && ft_issi(pipe[c_i + 1]))))
+		if (pipe[c_i] == ESC && c_p == 0 && c_sq == 0 && (c_dq == 0
+			|| (c_dq == 1 && ft_issi(pipe[c_i + 1]))))
 			c_p = 1;
 		else if (c_p == 1 && c_sq == 0)
 			c_p = 0;
@@ -104,6 +107,3 @@ void	wsh_fill_redirection(t_wsh_tokens *wsh_token
 	}
 	wsh_token->wsh_redi = wsh_red;
 }
-
-
-

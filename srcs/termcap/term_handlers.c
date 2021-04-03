@@ -71,8 +71,8 @@ void	copy_to_right(t_term *term)
 
 	c_i = term->left->top;
 	while (c_i >= 0)
-		term->right->c_char[term->right->top++] = term->left->c_char[c_i--];
-	term->right->c_char[++term->right->top] = EOL;
+		push(&(term->right), term->left->c_char[c_i--]);
+	term->right->top++;
 }
 
 char	*get_str(t_term_stack *stack)
@@ -82,7 +82,7 @@ char	*get_str(t_term_stack *stack)
 	
 	if (!stack)
 		return (NULL);
-	str = (char *)malloc(sizeof(char) * stack->top + 1);
+	str = (char *)malloc(sizeof(char) * 1024);
 	if (!str)
 		return (NULL);
 	c_i = stack->top;

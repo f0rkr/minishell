@@ -74,6 +74,11 @@ void	wsh_fill_token(char **envs, t_wsh_tokens *wsh_token
 					return ;
 				wsh_redi = wsh_token->wsh_redi;
 			}
+			if (!wsh_token->wsh_redi)
+			{
+				wsh_token->wsh_redi->next = wsh_redi_init();
+				wsh_token->wsh_redi = wsh_token->wsh_redi->next;
+			}
 			wsh_token->wsh_redi->type = ft_strdup(string[c_i++]);
 			wsh_token->wsh_redi->filename = ft_strdup(string[c_i]);
 			if (wsh_is_redirection((string[c_i + 1])))

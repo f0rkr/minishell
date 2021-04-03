@@ -57,7 +57,7 @@ int	wsh_garbageCollector(t_wsh_list *wsh_list)
 			wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
 		}
 		if (wsh_list->ast_parsed->wsh_command)
-			wsh_free( wsh_list->ast_parsed->wsh_command);
+			wsh_free(wsh_list->ast_parsed->wsh_command);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_param);
 		wsh_tmp = wsh_list->ast_parsed;

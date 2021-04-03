@@ -4,8 +4,8 @@ LIBFT_DIR = libft
 LIBFT_NAME = libft.a
 MAKE = make
 NAME = minishell
-flags = -Wall -Wextra -Werror 
-SRCS = srcs/minishell.c srcs/wsh_builtin.c srcs/get_next_line.c srcs/wsh_parsing/wsh_all_tools.c srcs/wsh_parsing/wsh_redirection.c srcs/get_next_line_utils.c srcs/wsh_exec.c srcs/wsh_garbageCollector.c srcs/wsh_parsing/wsh_parse.c srcs/wsh_parsing/wsh_parse_utils.c srcs/wsh_read.c srcs/built_ins/wsh_cd.c srcs/built_ins/wsh_echo.c srcs/built_ins/wsh_env.c srcs/built_ins/wsh_exit.c srcs/built_ins/wsh_export.c srcs/built_ins/wsh_pwd.c srcs/built_ins/wsh_unset.c srcs/wsh_exec_cmd.c srcs/wsh_exec_tools.c srcs/termcap/term_handlers.c srcs/termcap/term_inits.c srcs/termcap/termcap_tools.c srcs/built_ins/wsh_export_tools.c srcs/wsh_helper.c srcs/wsh_exec_cmd_norm.c srcs/wsh_exec_cmd_helper.c
+flags = -Wall -Wextra -Werror
+SRCS = srcs/minishell.c srcs/wsh_builtin.c srcs/wsh_parsing/wsh_all_tools.c srcs/wsh_parsing/wsh_redirection.c  srcs/wsh_exec.c srcs/wsh_garbageCollector.c srcs/wsh_parsing/wsh_parse.c srcs/wsh_parsing/wsh_parse_utils.c srcs/wsh_read.c srcs/built_ins/wsh_cd.c srcs/built_ins/wsh_echo.c srcs/built_ins/wsh_env.c srcs/built_ins/wsh_exit.c srcs/built_ins/wsh_export.c srcs/built_ins/wsh_pwd.c srcs/built_ins/wsh_unset.c srcs/wsh_exec_cmd.c srcs/wsh_exec_tools.c srcs/termcap/term_handlers.c srcs/termcap/term_inits.c srcs/termcap/termcap_tools.c srcs/built_ins/wsh_export_tools.c srcs/wsh_helper.c srcs/wsh_exec_cmd_norm.c srcs/wsh_exec_cmd_helper.c
 BSRCS = includes/
 all : $(NAME)
 $(NAME):

@@ -91,15 +91,16 @@ void	wsh_execve(t_wsh_list *wsh_list)
 
 	i = 1;
 	arr = NULL;
+	path = NULL;
 	wsh_pipe(wsh_list, &path);
-	if (wsh_list->ast_parsed->wsh_command[0] == '<'
-		|| wsh_list->ast_parsed->wsh_command[0] == '>')
-	{
-		wsh_redi_out(wsh_list);
-		wsh_redi_in(wsh_list);
-		return ;
-	}
-	else
+	// if (wsh_list->ast_parsed->wsh_command[0] == '<'
+	// 	|| wsh_list->ast_parsed->wsh_command[0] == '>')
+	// {
+	// 	wsh_redi_out(wsh_list);
+	// 	wsh_redi_in(wsh_list);
+	// 	return ;
+	// }
+	if (path == NULL)
 		wsh_path(wsh_list, &path);
 	arr = wsh_set_arr(path, wsh_list);
 	g_pid = fork();
@@ -107,7 +108,6 @@ void	wsh_execve(t_wsh_list *wsh_list)
 		wsh_child_exec(wsh_list, i, arr, path);
 	else if (g_pid > 0)
 		wsh_exec_parent(wsh_list);
-	// if (arr[0] != NULL && arr != NULL && arr[0][0] != '\0')
-		wsh_loop_free(arr);
+	wsh_loop_free(arr);
 	return ;
 }
