@@ -118,6 +118,6 @@ void	wsh_path(t_wsh_list *wsh_list, char **path)
 	}
 	else if (*path == NULL && !cmd)
 		*path = ft_strdup("error");
-	wsh_free((void*) tmp);
+	free(tmp);
 	wsh_loop_free(cmd);
 }

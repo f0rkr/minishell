@@ -23,13 +23,16 @@ void	print_history_minus(t_wsh_list *wsh_list, t_term *term)
 	return ;
 }
 
-void	ctrl_d_handler(t_term *term)
+void	ctrl_d_handler(t_wsh_list *wsh_list, t_term *term)
 {
 	if (term->right->top == -1 && term->left->top == -1)
 	{	
 		ft_putstr_fd("exit\n", STDOUT);
-		exit(1);
+		wsh_garbageCollector(wsh_list);
+		exit(0);
 	}
+	if (g_pid == 0)
+		g_status = 0;
 	return ;
 }
 
@@ -68,7 +71,7 @@ char	*handle_key(t_wsh_list *wsh_list, t_term *term, int key)
 	else if (key == ENTER)
 		string = save_and_end_line(term);
 	else if (key == CTRL_D)
-		ctrl_d_handler(term);
+		ctrl_d_handler(wsh_list, term);
 	return (string);
 }
 
@@ -101,6 +104,23 @@ int	wsh_read_char(void)
 ** READIN LINE USING TERMCAP IS SHITTY BUT AMAZING
 */
 
+void	wsh_term_free(t_term *term)
+{
+	if (!term)
+		return ;
+	if (term->right)
+	{
+		free(term->right);
+		term->right = NULL;
+	}
+	if (term->left)
+	{
+		free(term->left);
+		term->left = NULL;
+	}
+	return ;
+}
+
 char	*wsh_read(t_wsh_list *wsh_list, int *garbage_flag)
 {
 	t_term	*term;
@@ -125,5 +145,6 @@ char	*wsh_read(t_wsh_list *wsh_list, int *garbage_flag)
 		string = handle_key(wsh_list, term, key);
 	}
 	save_history(wsh_list, string);
+	wsh_term_free(term);
 	return (string);
 }

@@ -19,9 +19,8 @@
 int	wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
-	char			*line_tmp;
 
-	line_tmp = ft_strdup("");
+
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;
@@ -35,7 +34,6 @@ int	wsh_loop(t_wsh_list *wsh_list)
 		if (wsh_garbageCollector(wsh_list) == ERROR)
 			return (ERROR);
 	}
-	wsh_free(line_tmp);
 	wsh_list->garbage_flag = ENDEXEC;
 	return (EXIT);
 }

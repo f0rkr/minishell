@@ -21,9 +21,9 @@ char	*wsh_get_envar(char *s, char **env)
 	i = 0;
 	var = NULL;
 	if (ft_strncmp(s, "-", 1) == 0)
-		return ("himBH");
+		return (ft_strdup("himBH"));
 	else if (ft_strncmp(s, "#", 1) == 0)
-		return ("0");
+		return (ft_strdup("0"));
 	else if (ft_strncmp(s, "?", 1) == 0)
 		return (ft_itoa(g_status));
 	else if (ft_strncmp(s, "PWD", 4) == 0)
@@ -37,13 +37,14 @@ char	*wsh_get_envar(char *s, char **env)
 		var = ft_substr(env[i], 0, wsh_findeq(env[i]));
 		if (ft_strncmp(var, s, ft_strlen(s) + 1) == 0)
 		{
-			wsh_free(var);
-			return (env[i] + (ft_strlen(s) + 1));
+			free(var);
+			return (ft_strdup(env[i] + (ft_strlen(s) + 1)));
 		}
-		wsh_free(var);
+		free(var);
+		var = NULL;
 		i++;
 	}
-	return ("\0");
+	return (ft_strdup("\0"));
 }
 
 int	wsh_first_char(char *string)

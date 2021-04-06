@@ -71,6 +71,7 @@ int	wsh_tokenizer(char cmd[][1024], char *string, int pipe)
 		ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token) + 1);
 	ft_strlcpy((char *)cmd[i++], (const char *)token, ft_strlen(token) + 1);
 	cmd[i][0] = EOL;
-	wsh_free(token);
+	free(token);
+	token = NULL;
 	return (1);
 }

@@ -55,7 +55,7 @@ int	ft_isubuiltin(const char *command)
 	i = 0;
 	while (ft_strncmp(str, builin[i], ft_strlen(builin[i])) != 0)
 		i++;
-	wsh_free(str);
+	free(str);
 	str = NULL;
 	if (i == 7)
 		return (0);
@@ -67,20 +67,27 @@ void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 {
 	int			c_i;
 	char		pipe[1024][1024];
+	char		*tmp;
 
 	c_i = 0;
+	tmp = NULL;
 	wsh_fill_redirection(wsh_token, string);
 	wsh_token->wsh_command = wsh_escape(wsh_list, string[c_i++]);
 	if (ft_isin(SPACE, wsh_token->wsh_command))
 	{
 		if (wsh_tokenizer(pipe, wsh_token->wsh_command, 2) == ERROR)
 			return ;
+		wsh_free(&wsh_token->wsh_command);
 		wsh_fill_token(wsh_list, wsh_token, pipe);
 	}
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
 	if (wsh_token->type != BUILTIN && !ft_isubuiltin(wsh_token->wsh_command))
+	{
+		tmp = wsh_token->wsh_command;
 		wsh_token->wsh_command = ft_lowerit(wsh_token->wsh_command);
+		free(tmp);
+	}
 	wsh_fillargs(wsh_list, wsh_token, string, &c_i);
 	wsh_fillparams(wsh_token, string, &c_i);
 }

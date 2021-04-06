@@ -56,7 +56,7 @@ char	*get_str(t_term_stack *stack)
 
 	if (!stack)
 		return (NULL);
-	str = (char *)malloc(sizeof(char) * 1024);
+	str = (char *)malloc(sizeof(char) * 4024);
 	if (!str)
 		return (NULL);
 	c_i = stack->top;

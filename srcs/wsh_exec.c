@@ -62,6 +62,9 @@ int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
 
 void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
 {
+	char *tmp;
+
+	tmp = NULL;
 	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
 	{
 		i = 0;
@@ -69,7 +72,9 @@ void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
 			break ;
 		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
 		{
+			tmp = wsh_list->ast_parsed->wsh_param[i];
 			wsh_list->ast_parsed->wsh_param[i] = wsh_escape(wsh_list, wsh_list->ast_parsed->wsh_param[i]);
+			free(tmp);
 			i++;
 		}
 		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command)

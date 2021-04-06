@@ -11,15 +11,15 @@ void	wsh_replacevar(char **envs, char newstring[1024], char string[1024], int *c
 	var = (char *)malloc(sizeof(char) * 4029);
 	if (string[*c_pos] == EOL)
 		return ;
-	while (string[*c_pos] != EOL && ft_isalpha(string[*c_pos]))
+	while (string[*c_pos] != EOL && (ft_isspecial(string[*c_pos]) || ft_isalpha(string[*c_pos])))
 		var[c_i++] = string[(*c_pos)++];
 	var[c_i] = EOL;
-	c_var = ft_strdup(wsh_get_envar((char *)var, envs));
+	c_var = wsh_get_envar((char *)var, envs);
 	c_i = 0;
 	ft_strlcpy(&newstring[*c_j], c_var, ft_strlen(c_var) + 1);
 	*c_j = *c_j + ft_strlen(c_var) + 1;
-	// wsh_free(c_var);
-	// c_var =  NULL;
+	wsh_free(&var);
+	wsh_free(&c_var);
 	return ;
 }
 
@@ -83,8 +83,7 @@ void	wsh_read_squote(t_wsh_list *wsh_list, char newstring[1024], char string[102
 			line = ft_strjoin("\n", line);
 			line = ft_strjoin(string, line);
 			ft_strlcpy(string, line, ft_strlen(line) + 1);
-			wsh_free(line);
-			line = NULL;
+			free(line);
 		}
 		wsh_list->garbage_flag = c_i;
 	}
@@ -112,8 +111,7 @@ void	wsh_read_dquote(t_wsh_list *wsh_list, char newstring[1024], char string[102
 			line = ft_strjoin("\n", line);
 			line = ft_strjoin(string, line);
 			ft_strlcpy(string, line, ft_strlen(line) + 1);
-			wsh_free(line);
-			line = NULL;
+			free(line);
 		}
 		wsh_list->garbage_flag = c_i;
 	}

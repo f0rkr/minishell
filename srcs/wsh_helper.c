@@ -73,6 +73,6 @@ int	expo(char *param, char **envs, char **c_var, int *c_j)
 	if (wsh_expo(param, envs, c_var, c_j))
 		return (1);
 	if (*c_var != NULL && *c_var[0] != '\0')
-		wsh_free(*c_var);
+		free((*c_var));
 	return (0);
 }

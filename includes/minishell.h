@@ -119,7 +119,7 @@ int				wsh_exec_builtin(t_wsh_list *wsh_list);
 int				wsh_garbageCollector(t_wsh_list *wsh_list);
 t_wsh_tokens	*wsh_token_init(void);
 int				searcheq(char *str);
-void			wsh_free(char *data);
+void			wsh_free(char **data);
 void			wsh_loop_free(char **data);
 char			*before_eq(char *str);
 void			wsh_execve(t_wsh_list *wsh_list);

@@ -29,10 +29,10 @@ int	wsh_searchenvx(char **wsh_envs, char *var)
 		if ((ft_strncmp(c_env, var, ft_strlen(var) + 1) == 0)
 			|| (ft_strncmp(test, var, ft_strlen(var)) == 0))
 		{
-			wsh_free(c_env);
+			free(c_env);
 			return (c_i);
 		}
-		wsh_free(c_env);
+		free(c_env);
 		c_i++;
 	}
 	return (0);
@@ -108,7 +108,7 @@ void	wsh_remove_spaces(char *param)
 	}
 	tmp[c_j] = '\0';
 	ft_strlcpy(param, tmp, ft_strlen(tmp) + 1);
-	wsh_free(tmp);
+	free(tmp);
 	return ;
 }
 
