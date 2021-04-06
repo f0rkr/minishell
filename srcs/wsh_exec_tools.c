@@ -16,6 +16,7 @@ char	*wsh_get_envar(char *s, char **env)
 {
 	int		i;
 	char	*var;
+	char	*buff;
 
 	i = 0;
 	var = NULL;
@@ -25,6 +26,12 @@ char	*wsh_get_envar(char *s, char **env)
 		return ("0");
 	else if (ft_strncmp(s, "?", 1) == 0)
 		return (ft_itoa(g_status));
+	else if (ft_strncmp(s, "PWD", 4) == 0)
+	{
+		buff = (char *)malloc(sizeof(char) * 4029);
+		getcwd(buff, 4029);
+		return (buff);
+	}
 	while (env[i])
 	{
 		var = ft_substr(env[i], 0, wsh_findeq(env[i]));

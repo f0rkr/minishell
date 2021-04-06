@@ -2,12 +2,13 @@
 
 void	wsh_replacevar(char **envs, char newstring[1024], char string[1024], int *c_pos, int *c_j)
 {
-	char	var[1024];
+	char	*var;
 	char	*c_var;
 	int		c_i;
 
 	(*c_pos)++;
 	c_i = 0;
+	var = (char *)malloc(sizeof(char) * 4029);
 	if (string[*c_pos] == EOL)
 		return ;
 	while (string[*c_pos] != EOL && ft_isalpha(string[*c_pos]))
@@ -15,10 +16,10 @@ void	wsh_replacevar(char **envs, char newstring[1024], char string[1024], int *c
 	var[c_i] = EOL;
 	c_var = ft_strdup(wsh_get_envar((char *)var, envs));
 	c_i = 0;
-	while (c_var[c_i] != EOL)
-		newstring[(*c_j)++] = c_var[c_i++];
-	wsh_free(c_var);
-	c_var =  NULL;
+	ft_strlcpy(&newstring[*c_j], c_var, ft_strlen(c_var) + 1);
+	*c_j = *c_j + ft_strlen(c_var) + 1;
+	// wsh_free(c_var);
+	// c_var =  NULL;
 	return ;
 }
 
@@ -143,17 +144,17 @@ void	wsh_process_quotes(t_wsh_list *wsh_list, char newstring[1024], char string[
 	return ;
 }
 
-void	wsh_escape(t_wsh_list *wsh_list, char pipe[1024])
+char	*wsh_escape(t_wsh_list *wsh_list, char *pipe)
 {
 	int		c_i;
 	int		c_j;
 	int		c_escape;
-	char	newpipe[1024];
+	char	*newpipe;
 
 	c_i = 0;
 	c_j = 0;
 	c_escape = 0;
-	ft_bzero(newpipe, sizeof(newpipe));
+	newpipe = (char *)malloc(sizeof(char) * 4029);
 	while (pipe[c_i] != EOL)
 	{
 		if (ft_isin(pipe[c_i], "\'\"") && !is_escape(pipe, c_i))
@@ -172,7 +173,7 @@ void	wsh_escape(t_wsh_list *wsh_list, char pipe[1024])
 		c_i++;
 	}
 	newpipe[c_j] = EOL;
-	return ((void) ft_strlcpy(pipe, newpipe, ft_strlen(newpipe) + 1));
+	return (newpipe);
 }
 
 void	wsh_remove_pointer(char string[][1024], char *str)

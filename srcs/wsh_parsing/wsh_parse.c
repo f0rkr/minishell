@@ -28,17 +28,38 @@ int	wsh_fillparams(t_wsh_tokens *wsh_token, char string[][1024], int *pos)
 	return (EXIT);
 }
 
-void	ft_lowerit(char string[][1024], int c_i)
+char	*ft_lowerit(char *string)
 {
+	char *str;
 	int c_j;
 
 	c_j = 0;
-	while (string[c_i][c_j] != EOL)
+	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);
+	while (string[c_j] != EOL)
 	{
-		string[c_i][c_j] = ft_tolower(string[c_i][c_j]);
+		str[c_j] = ft_tolower(string[c_j]);
 		c_j++;
 	}
-	return ;
+	str[c_j] = EOL;
+	return (str);
+}
+
+int	ft_isubuiltin(const char *command)
+{
+	static char		builin[7][10] = {"echo", "cd", "pwd",
+		"exit", "export", "unset", "env"};
+	int				i;
+	char			*str;
+
+	str = ft_lowerit((char *)command);
+	i = 0;
+	while (ft_strncmp(str, builin[i], ft_strlen(builin[i])) != 0)
+		i++;
+	wsh_free(str);
+	str = NULL;
+	if (i == 7)
+		return (0);
+	return (1);
 }
 
 void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
@@ -49,8 +70,7 @@ void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 
 	c_i = 0;
 	wsh_fill_redirection(wsh_token, string);
-	wsh_escape(wsh_list, string[c_i]);
-	wsh_token->wsh_command = ft_strdup(string[c_i++]);
+	wsh_token->wsh_command = wsh_escape(wsh_list, string[c_i++]);
 	if (ft_isin(SPACE, wsh_token->wsh_command))
 	{
 		if (wsh_tokenizer(pipe, wsh_token->wsh_command, 2) == ERROR)
@@ -59,6 +79,8 @@ void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 	}
 	if (ft_isbuiltin(wsh_token->wsh_command))
 		wsh_token->type = BUILTIN;
+	if (wsh_token->type != BUILTIN && !ft_isubuiltin(wsh_token->wsh_command))
+		wsh_token->wsh_command = ft_lowerit(wsh_token->wsh_command);
 	wsh_fillargs(wsh_list, wsh_token, string, &c_i);
 	wsh_fillparams(wsh_token, string, &c_i);
 }

@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+char	*ft_lower(char *string)
+{
+	char *str;
+	int c_j;
+
+	c_j = 0;
+	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);
+	while (string[c_j] != EOL)
+	{
+		str[c_j] = ft_tolower(string[c_j]);
+		c_j++;
+	}
+	str[c_j] = EOL;
+	return (str);
+}
+
 int	ft_isbuiltin(const char *command)
 {
 	static char		builin[7][10] = {"echo", "cd", "pwd",

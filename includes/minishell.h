@@ -129,7 +129,7 @@ int				wsh_findeq(char *var);
 int				wsh_removevarandadd(char **wsh_envs, char *var, int c_p);
 t_wsh_redi		*wsh_redi_init(void);
 int				wsh_first_char(char *string);
-void			wsh_escape(t_wsh_list *wsh_list, char pipe[1024]);
+char			*wsh_escape(t_wsh_list *wsh_list, char pipe[1024]);
 void			wsh_export_error(char *param);
 void			wsh_init_var(int *i, int *j);
 int				expo(char *param, char **envs, char **c_var, int *c_j);

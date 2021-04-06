@@ -42,29 +42,30 @@ void	wsh_loop_free(char **data)
 
 int	wsh_garbageCollector(t_wsh_list *wsh_list)
 {
-	t_wsh_tokens	*wsh_tmp;
+	// t_wsh_tokens	*wsh_tmp;
 
-	wsh_free(wsh_list->string);
-	while (wsh_list->ast_parsed)
-	{
-		while (wsh_list->ast_parsed->wsh_redi)
-		{
-			wsh_free(wsh_list->ast_parsed->wsh_redi->filename);
-			wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
-		}
-		wsh_free(wsh_list->ast_parsed->wsh_command);
-		wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
-		wsh_loop_free(wsh_list->ast_parsed->wsh_param);
-		wsh_tmp = wsh_list->ast_parsed;
-		wsh_list->ast_parsed = wsh_list->ast_parsed->next;
-		wsh_free((char *)wsh_tmp);
-	}
-	if (wsh_list->garbage_flag != LOOP)
-		wsh_loop_free(wsh_list->wsh_envs);
-	if (wsh_list->garbage_flag == ERROR)
-	{
-		wsh_list->garbage_flag = INIT;
-		return (ERROR);
-	}
+	(void)wsh_list;
+	// wsh_free(wsh_list->string);
+	// while (wsh_list->ast_parsed)
+	// {
+	// 	while (wsh_list->ast_parsed->wsh_redi)
+	// 	{
+	// 		wsh_free(wsh_list->ast_parsed->wsh_redi->filename);
+	// 		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
+	// 	}
+	// 	wsh_free(wsh_list->ast_parsed->wsh_command);
+	// 	wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
+	// 	wsh_loop_free(wsh_list->ast_parsed->wsh_param);
+	// 	wsh_tmp = wsh_list->ast_parsed;
+	// 	wsh_list->ast_parsed = wsh_list->ast_parsed->next;
+	// 	wsh_free((char *)wsh_tmp);
+	// }
+	// if (wsh_list->garbage_flag != LOOP)
+	// 	wsh_loop_free(wsh_list->wsh_envs);
+	// if (wsh_list->garbage_flag == ERROR)
+	// {
+	// 	wsh_list->garbage_flag = INIT;
+	// 	return (ERROR);
+	// }
 	return (EXIT);
 }

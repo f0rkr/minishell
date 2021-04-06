@@ -46,15 +46,9 @@ void	*wsh_fillargs(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 	if (!wsh_token->wsh_arg)
 		return (NULL);
 	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
-	{	
-		wsh_escape(wsh_list, wsh_args[*position]);
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	}
+		wsh_token->wsh_arg[counter++] = wsh_escape(wsh_list, wsh_args[(*position)++]);
 	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
-	{
-		wsh_escape(wsh_list, wsh_args[*position]);
-		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
-	}
+		wsh_token->wsh_arg[counter++] = wsh_escape(wsh_list, wsh_args[(*position)++]);
 	wsh_token->wsh_arg[counter] = 0;
 	return (NULL);
 }
