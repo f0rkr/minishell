@@ -54,7 +54,7 @@ int	ft_error(char *path, char *command)
 	if (stat(path, &stats) == 0 && stats.st_mode & S_IXUSR)
 		return (0);
 	wsh_error_norm(fd, path, command, folder);
-	if (ft_strchr(path, '/') == NULL || (fd == -1 && folder == NULL))
+	if ((path && ft_strchr(path, '/') == NULL) || (fd == -1 && folder == NULL))
 		ret = 127;
 	else
 		ret = 126;
@@ -93,14 +93,14 @@ void	wsh_execve(t_wsh_list *wsh_list)
 	arr = NULL;
 	path = NULL;
 	wsh_pipe(wsh_list, &path);
-	// if (wsh_list->ast_parsed->wsh_command[0] == '<'
-	// 	|| wsh_list->ast_parsed->wsh_command[0] == '>')
-	// {
-	// 	wsh_redi_out(wsh_list);
-	// 	wsh_redi_in(wsh_list);
-	// 	return ;
-	// }
-	if (path == NULL)
+	if (wsh_list->ast_parsed->wsh_command[0] == '<'
+		|| wsh_list->ast_parsed->wsh_command[0] == '>')
+	{
+		wsh_redi_out(wsh_list);
+		wsh_redi_in(wsh_list);
+		return ;
+	}
+	else if (path == NULL)
 		wsh_path(wsh_list, &path);
 	arr = wsh_set_arr(path, wsh_list);
 	g_pid = fork();

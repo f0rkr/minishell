@@ -41,17 +41,27 @@ int	wsh_red_helper(t_wsh_list *wsh_list, int fd)
 
 void	wsh_error_norm(int fd, char *path, char *command, DIR *folder)
 {
-	if (fd == -1)
-		path = command;
+	int i;
+
+	i = 0;
 	ft_putstr_fd("wsh: ", 2);
-	ft_putstr_fd(path, 2);
-	if ((ft_strchr(path, '/')) == NULL)
-		ft_putendl_fd(": command not found", 2);
-	else if (fd == -1 && folder == NULL)
+	if (path && !(ft_strncmp(path, "error", 6)))
+	{
+		ft_putstr_fd(command, 2);
 		ft_putendl_fd(": No such file or directory", 2);
-	else if (fd == -1 && folder != NULL)
+		i = 1;
+	}
+	else if (fd == -1)
+		path = command;
+	if (i == 0)
+		ft_putstr_fd(path, 2);
+	if ((ft_strchr(path, '/')) == NULL && i == 0)
+		ft_putendl_fd(": command not found", 2);
+	else if (fd == -1 && folder == NULL && i == 0)
+		ft_putendl_fd(": No such file or directory", 2);
+	else if (fd == -1 && folder != NULL && i == 0)
 		ft_putendl_fd(": is a directory", 2);
-	else if (fd != -1 && folder == NULL)
+	else if (fd != -1 && folder == NULL && i == 0)
 		ft_putendl_fd(": Permission denied", 2);
 }
 
@@ -95,14 +105,19 @@ void	wsh_path(t_wsh_list *wsh_list, char **path)
 		&& ft_strncmp(wsh_list->wsh_envs[i], "PATH=", 5) != 0)
 		i++;
 	cmd = ft_split(wsh_list->wsh_envs[i], ':');
-	*path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
-	i = 0;
-	while (wsh_list->ast_parsed->wsh_command && cmd[i] && *path == NULL)
-		*path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
-	tmp = ft_strjoin(*path, "/");
-	*path = ft_strjoin(tmp, wsh_list->ast_parsed->wsh_command);
-	if (*path == NULL)
-		*path = cmd[0] + 5;
+	if (wsh_list->ast_parsed->wsh_command[0] == '/' && !(*path))
+		*path = ft_strdup(wsh_list->ast_parsed->wsh_command);
+	else if (cmd)
+	{
+		*path = check_bin(cmd[0] + 5, wsh_list->ast_parsed->wsh_command);
+		i = 0;
+		while (wsh_list->ast_parsed->wsh_command && cmd[i] && *path == NULL)
+			*path = check_bin(cmd[i++], wsh_list->ast_parsed->wsh_command);
+		tmp = ft_strjoin(*path, "/");
+		*path = ft_strjoin(tmp, wsh_list->ast_parsed->wsh_command);
+	}
+	else if (*path == NULL && !cmd)
+		*path = ft_strdup("error");
 	wsh_free((void*) tmp);
 	wsh_loop_free(cmd);
 }

@@ -42,22 +42,17 @@ void	wsh_loop_free(char **data)
 
 int	wsh_garbageCollector(t_wsh_list *wsh_list)
 {
-	int				counter;
 	t_wsh_tokens	*wsh_tmp;
 
-	counter = 0;
-	if (wsh_list->string)
-		wsh_free(wsh_list->string);
+	wsh_free(wsh_list->string);
 	while (wsh_list->ast_parsed)
 	{
 		while (wsh_list->ast_parsed->wsh_redi)
 		{
 			wsh_free(wsh_list->ast_parsed->wsh_redi->filename);
-			wsh_free(wsh_list->ast_parsed->wsh_redi->type);
 			wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
 		}
-		if (wsh_list->ast_parsed->wsh_command)
-			wsh_free(wsh_list->ast_parsed->wsh_command);
+		wsh_free(wsh_list->ast_parsed->wsh_command);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_param);
 		wsh_tmp = wsh_list->ast_parsed;

@@ -151,4 +151,5 @@ void			wsh_pipe(t_wsh_list *wsh_list, char **path);
 void			wsh_redi_in(t_wsh_list *wsh_list);
 void			wsh_redi_out(t_wsh_list *wsh_list);
 void			wsh_exec_parent(t_wsh_list *wsh_list);
+
 #endif

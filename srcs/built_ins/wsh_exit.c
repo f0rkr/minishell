@@ -36,7 +36,8 @@ void	wsh_exit(t_wsh_list *wsh_list)
 
 	j = 0;
 	i = 0;
-	ft_putendl_fd("exit", 1);
+	if (wsh_list->ast_parsed->std_in == 0)
+		ft_putendl_fd("exit", 1);
 	wsh_exit_helper(wsh_list);
 	if (wsh_tab_length(wsh_list->ast_parsed->wsh_param) > 2
 		|| wsh_tab_length(wsh_list->ast_parsed->wsh_arg) > 2)
@@ -53,5 +54,7 @@ void	wsh_exit(t_wsh_list *wsh_list)
 		if (i == -1 || i == 0)
 			wsh_errors(wsh_list, &i, j);
 	}
-	exit(i);
+	if (wsh_list->ast_parsed->std_in == 0)
+		exit(i);
+	return ;
 }

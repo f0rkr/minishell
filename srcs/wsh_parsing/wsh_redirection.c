@@ -66,7 +66,7 @@ void	wsh_escape(char **envs, char pipe[1024])
 		else if (c_dq == 1 && pipe[c_i] == DQUOTE)
 			c_dq = 0;
 		if (c_p == 0 && c_sq == 0 && pipe[c_i] == VAR
-			&& ((!ft_isin(pipe[c_i + 1], "$\"\0")) && ft_isalpha(pipe[c_i + 1])))
+			&& ((!ft_isin(pipe[c_i + 1], "$\"\0")) || ft_isalpha(pipe[c_i + 1])))
 		{
 			wsh_replacevar(envs, pipe, c_i);
 			wsh_escape(envs, pipe);
