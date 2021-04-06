@@ -9,11 +9,11 @@ extern int	wsh_check(char *c_r)
 	return (0);
 }
 
-extern int	ft_isspecial(char *c, int c_pos)
+extern int	ft_isspecial(char c)
 {
-	if (c[c_pos] == '_' || c[c_pos] == '#'
-		|| c[c_pos] == '$' || c[c_pos] == '-'
-		|| c[c_pos] == '?' || c[c_pos] == SQUOTE || c[c_pos] == DQUOTE)
+	if (c == '_' || c == '#'
+		|| c == '$' || c == '-'
+		|| c == '?')
 		return (1);
 	return (0);
 }

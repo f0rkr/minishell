@@ -68,7 +68,7 @@ void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
 		if (wsh_list->ast_parsed->wsh_command[0] == EOL)
 			break ;
 		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
-			wsh_escape(wsh_list->wsh_envs, wsh_list->ast_parsed->wsh_param[i++]);
+			wsh_escape(wsh_list, wsh_list->ast_parsed->wsh_param[i++]);
 		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command)
 			&& wsh_list->ast_parsed->std_out == 1 && !wsh_list->ast_parsed->wsh_redi)
 			wsh_exec_builtin(wsh_list);

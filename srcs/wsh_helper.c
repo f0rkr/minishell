@@ -34,8 +34,8 @@ void	handle_quit(int sig)
 	return ;
 }
 
-void	*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token
-	, char wsh_args[][1024], int *position)
+void	*wsh_fillargs(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
+			char wsh_args[][1024], int *position)
 {
 	int		counter;
 
@@ -47,12 +47,12 @@ void	*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token
 		return (NULL);
 	while (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
 	{	
-		wsh_escape(envs, wsh_args[*position]);
+		wsh_escape(wsh_list, wsh_args[*position]);
 		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
 	}
 	if (wsh_args[*position][0] == '-' && wsh_args[*position][0] != EOL)
 	{
-		wsh_escape(envs, wsh_args[*position]);
+		wsh_escape(wsh_list, wsh_args[*position]);
 		wsh_token->wsh_arg[counter++] = ft_strdup(wsh_args[(*position)++]);
 	}
 	wsh_token->wsh_arg[counter] = 0;

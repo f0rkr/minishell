@@ -112,7 +112,7 @@ void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 char			*wsh_read(t_wsh_list *wsh_list, int *garbage_flag);
-t_wsh_tokens	*wsh_parse(char **envs, char *cmd);
+t_wsh_tokens	*wsh_parse(t_wsh_list *wsh_list, char *cmd);
 void			wsh_exec(t_wsh_list *wsh_list);
 int				ft_isbuiltin(const char *command);
 int				wsh_exec_builtin(t_wsh_list *wsh_list);
@@ -129,13 +129,13 @@ int				wsh_findeq(char *var);
 int				wsh_removevarandadd(char **wsh_envs, char *var, int c_p);
 t_wsh_redi		*wsh_redi_init(void);
 int				wsh_first_char(char *string);
-void			wsh_escape(char **envs, char pipe[1024]);
+void			wsh_escape(t_wsh_list *wsh_list, char pipe[1024]);
 void			wsh_export_error(char *param);
 void			wsh_init_var(int *i, int *j);
 int				expo(char *param, char **envs, char **c_var, int *c_j);
 void			handle_sigin(int sig);
 void			handle_quit(int sig);
-void			*wsh_fillargs(char **envs, t_wsh_tokens *wsh_token,
+void			*wsh_fillargs(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 					char wsh_args[][1024], int *position);
 int				wsh_expo(char *param, char **envs, char **c_var, int *c_j);
 void			wsh_red_help(t_wsh_list *wsh_list, int fd);
