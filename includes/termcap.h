@@ -26,7 +26,7 @@ typedef struct s_term_stack
 }				t_term_stack;
 
 /*
-** MAIN TERMCAP STRUCT HAS ALL VARS I NEEDED
+** MAIN TERMCAP STRUCT HAS ALL VS I NEEDED
 */
 
 typedef struct s_term

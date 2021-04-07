@@ -60,6 +60,20 @@ int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
 	return (1);
 }
 
+void	wsh_exec_loop_norm(t_wsh_list *list, int statval)
+{
+	if (ft_isbuiltin(list->ast_parsed->wsh_command)
+		&& list->ast_parsed->std_out == 1 && !list->ast_parsed->wsh_redi)
+		wsh_exec_builtin(list);
+	else if (list->ast_parsed->type == CMD || list->ast_parsed->wsh_redi
+		|| list->ast_parsed->std_out != 1)
+		wsh_execve(list);
+	if (list->ast_parsed->std_out == 1)
+		while (wait(&statval) > 0)
+			if (WIFEXITED(statval))
+				g_tab[0] = WEXITSTATUS(statval);
+}
+
 void	wsh_exec_loop(t_wsh_list *list, int statval, int i)
 {
 	char	*tmp;
@@ -72,20 +86,12 @@ void	wsh_exec_loop(t_wsh_list *list, int statval, int i)
 		while (list->ast_parsed->wsh_param && list->ast_parsed->wsh_param[i])
 		{
 			tmp = list->ast_parsed->wsh_param[i];
-			list->ast_parsed->wsh_param[i] = wsh_escape(list, list->ast_parsed->wsh_param[i]);
-			free(tmp);
+			list->ast_parsed->wsh_param[i] = wsh_escape(
+					list, list->ast_parsed->wsh_param[i]);
+			wsh_free(&tmp);
 			i++;
 		}
-		if (ft_isbuiltin(list->ast_parsed->wsh_command)
-			&& list->ast_parsed->std_out == 1 && !list->ast_parsed->wsh_redi)
-			wsh_exec_builtin(list);
-		else if (list->ast_parsed->type == CMD || list->ast_parsed->wsh_redi
-			|| list->ast_parsed->std_out != 1)
-			wsh_execve(list);
-		if (list->ast_parsed->std_out == 1)
-			while (wait(&statval) > 0)
-				if (WIFEXITED(statval))
-					g_tab[0] = WEXITSTATUS(statval);
+		wsh_exec_loop_norm(list, statval);
 		g_tab[1] = 0;
 		if (list->ast_parsed->next)
 			list->ast_parsed = list->ast_parsed->next;

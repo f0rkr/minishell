@@ -40,24 +40,30 @@ void	wsh_loop_free(char **data)
 	return ;
 }
 
+void	wsh_garbage_redi(t_wsh_list *wsh_list)
+{
+	t_wsh_redi		*wsh_tmp_redi;
+
+	while (wsh_list->ast_parsed->wsh_redi)
+	{
+		wsh_free(&wsh_list->ast_parsed->wsh_redi->filename);
+		wsh_free(&wsh_list->ast_parsed->wsh_redi->type);
+		wsh_tmp_redi = wsh_list->ast_parsed->wsh_redi;
+		wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
+		free(wsh_tmp_redi);
+		wsh_tmp_redi = NULL;
+	}
+}
+
 int	wsh_garbageCollector(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
-	t_wsh_redi		*wsh_tmp_redi;
 
 	free(wsh_list->string);
 	wsh_list->string = NULL;
 	while (wsh_list->ast_parsed)
 	{
-		while (wsh_list->ast_parsed->wsh_redi)
-		{
-			wsh_free(&wsh_list->ast_parsed->wsh_redi->filename);
-			wsh_free(&wsh_list->ast_parsed->wsh_redi->type);
-			wsh_tmp_redi = wsh_list->ast_parsed->wsh_redi;
-			wsh_list->ast_parsed->wsh_redi = wsh_list->ast_parsed->wsh_redi->next;
-			free(wsh_tmp_redi);
-			wsh_tmp_redi = NULL;
-		}
+		wsh_garbage_redi(wsh_list);
 		free(wsh_list->ast_parsed->wsh_command);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_arg);
 		wsh_loop_free(wsh_list->ast_parsed->wsh_param);

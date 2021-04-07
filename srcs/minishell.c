@@ -24,6 +24,11 @@ int	wsh_loop(t_wsh_list *wsh_list)
 	{
 		wsh_list->garbage_flag = LOOP;
 		wsh_list->string = wsh_read(wsh_list, &wsh_list->garbage_flag);
+		if (!string_checker(wsh_list->string))
+		{
+			wsh_garbageCollector(wsh_list);
+			continue ;
+		}
 		if (wsh_list->garbage_flag != ERROR)
 			wsh_list->ast_parsed = wsh_parse(wsh_list, wsh_list->string);
 		wsh_tmp = wsh_list->ast_parsed;

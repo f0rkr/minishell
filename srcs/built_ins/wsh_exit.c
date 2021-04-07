@@ -58,5 +58,4 @@ void	wsh_exit(t_wsh_list *wsh_list)
 	}
 	if (wsh_list->ast_parsed->std_in == 0)
 		exit(i);
-	return ;
 }

@@ -11,7 +11,7 @@ void	wsh_pipe(t_wsh_list *wsh_list, char **path)
 		wsh_list->ast_parsed->next->std_in = pip[0];
 	}
 	if (wsh_list->ast_parsed->wsh_command[0] == '.')
-		*path = wsh_list->ast_parsed->wsh_command;
+		*path = ft_strdup(wsh_list->ast_parsed->wsh_command);
 }
 
 void	wsh_redi_out(t_wsh_list *wsh_list)

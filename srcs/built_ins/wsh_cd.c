@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing.h"
 
 void	wsh_cd_error(char **tmp)
 {
@@ -85,18 +86,19 @@ void	wsh_cd(t_wsh_list *wsh_list)
 	char			*tmp;
 	int				i;
 
-	tmp = NULL;
+	tmp = wsh_get_envar("HOME", wsh_list->wsh_envs);
 	i = 0;
 	g_tab[0] = 0;
 	if (wsh_list->ast_parsed->wsh_param)
 	{
+		wsh_free(&tmp);
 		tmp = wsh_list->ast_parsed->wsh_param[0];
 		wsh_cd_dot(wsh_list, wsh_list->ast_parsed, &i);
 		if (chdir(wsh_list->ast_parsed->wsh_param[0]) == ERROR)
 			wsh_cd_error(&tmp);
 	}
-	else if (wsh_get_envar("HOME", wsh_list->wsh_envs)[0] != '\0')
-		chdir(ft_strjoin(wsh_get_envar("HOME", wsh_list->wsh_envs), "/"));
+	else if (tmp[0] != '\0')
+		wsh_cd_home(tmp);
 	else
 	{
 		ft_putendl_fd("wsh: cd: HOME not set", 2);
@@ -106,5 +108,4 @@ void	wsh_cd(t_wsh_list *wsh_list)
 		wsh_change_pwd(wsh_list->wsh_envs, NULL);
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
 		exit(0);
-	return ;
 }

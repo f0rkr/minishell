@@ -12,20 +12,20 @@
 
 #include "parsing.h"
 
-extern int	is_and(const char *str, int p, int q_flag, int pipe)
+extern int	is_and(const char *str, int p, int q[2], int pipe)
 {
-	if (str[p] == AND && str[p - 1] != ESC && !q_flag)
+	if (str[p] == AND && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
-	if (str[p] == PIPE && pipe == 1 && str[p - 1] != ESC && !q_flag)
+	if (str[p] == PIPE && pipe == 1 && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
-	if (str[p] == SPACE && pipe == 2 && str[p - 1] != ESC && !q_flag)
+	if (str[p] == SPACE && pipe == 2 && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
-	if (str[p] == INRID && pipe == 3 && str[p - 1] != ESC && !q_flag)
+	if (str[p] == INRID && pipe == 3 && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
-	if (str[p] == OUTRID && pipe == 3 && str[p - 1] != ESC && !q_flag)
+	if (str[p] == OUTRID && pipe == 3 && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
 	if (str[p] == OUTRID && str[p + 1] == OUTRID
-		&& pipe == 3 && str[p - 1] != ESC && !q_flag)
+		&& pipe == 3 && str[p - 1] != ESC && !q[0] && !q[1])
 		return (1);
 	return (0);
 }
@@ -67,28 +67,25 @@ int	is_escaped(char *string, int pos)
 
 extern int	wsh_scan_commands(char *new, const char *str, int pipe)
 {
-	static int	counter = INIT;
+	static int	c_c = INIT;
 	int			scount;
-	int			quote_flag;
+	int			q[2];
 
 	scount = INIT;
-	quote_flag = 0;
-	while (str[counter] == ' ')
-		counter++;
-	while (!is_and(str, counter, quote_flag, pipe) && str[counter] != EOL)
+	q[0] = 0;
+	q[1] = 0;
+	while (str[c_c] == ' ')
+		c_c++;
+	while (!is_and(str, c_c, q, pipe) && str[c_c] != EOL)
 	{
-		if (ft_isin(str[counter], "\'\"") && !is_escaped((char *)str, counter)
-			&& str[counter - 1] != ESC && quote_flag == 0)
-			quote_flag = 1;
-		else if (ft_isin(str[counter], "\'\"")
-			&& !is_escaped((char *)str, counter) && quote_flag == 1)
-			quote_flag = 0;
-		new[scount++] = str[counter++];
+		q[0] = wsh_scan_help((char *)str, c_c, q, 0);
+		q[1] = wsh_scan_help((char *)str, c_c, q, 1);
+		new[scount++] = str[c_c++];
 	}
 	new[scount] = EOL;
-	if (str[counter++] == EOL)
+	if (str[c_c++] == EOL)
 	{
-		counter = 0;
+		c_c = 0;
 		return (0);
 	}
 	return (1);

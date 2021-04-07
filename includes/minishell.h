@@ -23,7 +23,7 @@
 # define ESC		'\\'
 # define DQUOTE		'\"'
 # define SQUOTE		'\''
-# define VAR		'$'
+# define V		'$'
 # define EOL		'\0'
 # define ERROR 		-1
 # define INIT 		0
@@ -88,6 +88,7 @@ typedef struct s_wsh_list
 {
 	t_wsh_tokens		*ast_parsed;
 	char				*string;
+	char				*tmp;
 	int					garbage_flag;
 	char				**wsh_history;
 	int					history_counter;
@@ -106,6 +107,7 @@ void			wsh_env(t_wsh_list *wsh_list);
 void			wsh_exit(t_wsh_list *wsh_list);
 void			wsh_cd(t_wsh_list *wsh_list);
 void			wsh_pwd(t_wsh_list *wsh_list);
+int				wsh_loop(t_wsh_list *wsh_list);
 void			wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
 void			wsh_builtins(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list);
@@ -149,5 +151,6 @@ void			wsh_pipe(t_wsh_list *wsh_list, char **path);
 void			wsh_redi_in(t_wsh_list *wsh_list);
 void			wsh_redi_out(t_wsh_list *wsh_list);
 void			wsh_exec_parent(t_wsh_list *wsh_list);
+int				string_checker(char *string);
 
 #endif

@@ -74,7 +74,7 @@ void	wsh_command_normalizer(char *str)
 				new_str[c_k++] = str[c_i++];
 			new_str[c_k++] = str[c_i++];
 		}
-		if ((str[c_i] == '>' || str[c_i] == '<') && !wsh_isescape(str, c_i - 1))
+		if ((str[c_i] == '>' || str[c_i] == '<') && !isesc(str, c_i - 1))
 			wsh_command_norm(str, new_str, &c_i, &c_k);
 		else
 			new_str[c_k++] = str[c_i];
