@@ -6,7 +6,7 @@
 /*   By: mashad <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 23:05:19 by mashad            #+#    #+#             */
-/*   Updated: 2019/10/19 12:47:29 by mashad           ###   ########.fr       */
+/*   Updated: 2021/04/07 13:00:16 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*ft_calloc(size_t count, size_t size)
 	{
 		while ((int)(count * size) > i)
 		{
-			*(char*)(mem + i) = 0;
+			*(char *)(mem + i) = 0;
 			i++;
 		}
 		return (mem);

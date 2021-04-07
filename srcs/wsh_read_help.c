@@ -57,21 +57,21 @@ void	copy_to_stack(t_term *term, t_term_stack **stack, char *string)
 	return ;
 }
 
-void	print_history_plus(t_wsh_list *wsh_list, t_term *term_stack)
+void	print_history_plus(t_wsh_list *wsh_list, t_term *term)
 {
 	write(1, "\r", 1);
-	term_stack->cur_pos = tgetstr("ce", NULL);
-	tputs(term_stack->cur_pos, STDOUT, wsh_puts);
+	term->cur_pos = tgetstr("ce", NULL);
+	tputs(term->cur_pos, STDOUT, wsh_puts);
 	wsh_print_shell(wsh_list);
-	term_reset(term_stack, 0, NULL);
+	term_reset(term, 0, NULL);
 	if (wsh_list->history_counter != -1
 		&& wsh_list->history_counter < wsh_list->history_len)
 		wsh_list->history_counter++;
 	if (wsh_list->wsh_history[wsh_list->history_counter])
 	{
 		ft_putstr_fd(wsh_list->wsh_history[wsh_list->history_counter], STDOUT);
-		copy_to_stack(term_stack,
-			&(term_stack->right), wsh_list->wsh_history[wsh_list->history_counter]);
+		copy_to_stack(term,
+			&(term->right), wsh_list->wsh_history[wsh_list->history_counter]);
 	}
 	return ;
 }

@@ -95,7 +95,8 @@ void	wsh_read_squote(t_wsh_list *wsh_list,
 	return ;
 }
 
-void	wsh_read_dquote(t_wsh_list *wsh_list, char newstring[1024], char string[1024], int *pos, int *c_j)
+void	wsh_read_dquote(t_wsh_list *wsh_list,
+		char newstring[1024], char str[1024], int *pos, int *c_j)
 {
 	int		c_escape;
 	char	*line;
@@ -105,37 +106,39 @@ void	wsh_read_dquote(t_wsh_list *wsh_list, char newstring[1024], char string[102
 	line = NULL;
 	c_escape = 0;
 	(*pos)++;
-	if (!wsh_is_closed(string, *pos, DQUOTE))
+	if (!wsh_is_closed(str, *pos, DQUOTE))
 	{
 		wsh_list->garbage_flag = STDIN;
-		while (!wsh_is_closed(string, *pos, DQUOTE))
+		while (!wsh_is_closed(str, *pos, DQUOTE))
 		{
 			line = wsh_read(wsh_list, &wsh_list->garbage_flag);
 			line = ft_strjoin("\n", line);
-			line = ft_strjoin(string, line);
-			ft_strlcpy(string, line, ft_strlen(line) + 1);
+			line = ft_strjoin(str, line);
+			ft_strlcpy(str, line, ft_strlen(line) + 1);
 			free(line);
 		}
 		wsh_list->garbage_flag = c_i;
 	}
-	while (string[*pos] != DQUOTE || (string[*pos] == DQUOTE && is_escape(string, *pos)))
+	while (str[*pos] != DQUOTE || (str[*pos] == DQUOTE && is_escape(str, *pos)))
 	{
-		if (string[*pos] == VAR && !is_escape(string, *pos) && string[*pos + 1] != EOL && (ft_isalpha(string[*pos + 1]) || ft_isspecial(string[*pos + 1])))
+		if (str[*pos] == VAR && !is_escape(str, *pos) && str[*pos + 1] != EOL
+			&& (ft_isalpha(str[*pos + 1]) || ft_isspecial(str[*pos + 1])))
 		{
-			wsh_replacevar(wsh_list->wsh_envs, newstring, string, pos, c_j);
-			continue;
+			wsh_replacevar(wsh_list->wsh_envs, newstring, str, pos, c_j);
+			continue ;
 		}
-		if (string[*pos] == ESC && ft_issi(string[*pos]) && c_escape == 0)
+		if (str[*pos] == ESC && ft_issi(str[*pos]) && c_escape == 0)
 			c_escape = 1;
 		else if (c_escape == 1)
 			c_escape = 0;
 		if (c_escape == 0)
-			newstring[(*c_j)++] = string[*pos];
+			newstring[(*c_j)++] = str[*pos];
 		(*pos)++;
 	}
 }
 
-void	wsh_process_quotes(t_wsh_list *wsh_list, char newstring[1024], char string[1024], int *pos, int *c_j)
+void	wsh_process_quotes(t_wsh_list *wsh_list, char newstring[1024],
+		char string[1024], int *pos, int *c_j)
 {
 	if (string[*pos] == SQUOTE)
 		wsh_read_squote(wsh_list, newstring, string, pos, c_j);
@@ -147,34 +150,35 @@ void	wsh_process_quotes(t_wsh_list *wsh_list, char newstring[1024], char string[
 
 char	*wsh_escape(t_wsh_list *wsh_list, char *pipe)
 {
-	int		c_i;
+	int		i;
 	int		c_j;
 	int		c_escape;
 	char	*newpipe;
 
-	c_i = 0;
+	i = 0;
 	c_j = 0;
 	c_escape = 0;
 	newpipe = (char *)malloc(sizeof(char) * 4029);
-	while (pipe[c_i] != EOL)
+	while (pipe[i] != EOL)
 	{
-		if (ft_isin(pipe[c_i], "\'\"") && !is_escape(pipe, c_i))
+		if (ft_isin(pipe[i], "\'\"") && !is_escape(pipe, i))
 		{
-			wsh_process_quotes(wsh_list, newpipe, pipe, &c_i, &c_j);
-			continue;
+			wsh_process_quotes(wsh_list, newpipe, pipe, &i, &c_j);
+			continue ;
 		}
-		else if (pipe[c_i] == VAR && !is_escape(pipe, c_i) && pipe[c_i + 1] != EOL && (ft_isalpha(pipe[c_i + 1]) || ft_isspecial(pipe[c_i + 1])))
+		else if (pipe[i] == VAR && !is_escape(pipe, i) && pipe[i + 1] != EOL
+			&& (ft_isalpha(pipe[i + 1]) || ft_isspecial(pipe[i + 1])))
 		{
-			wsh_replacevar(wsh_list->wsh_envs, newpipe, pipe, &c_i, &c_j);
-			continue;
+			wsh_replacevar(wsh_list->wsh_envs, newpipe, pipe, &i, &c_j);
+			continue ;
 		}
-		if (pipe[c_i] == ESC && !ft_issi(pipe[c_i]) && c_escape == 0)
+		if (pipe[i] == ESC && !ft_issi(pipe[i]) && c_escape == 0)
 			c_escape = 1;
 		else if (c_escape == 1)
 			c_escape = 0;
 		if (c_escape == 0)
-			newpipe[c_j++] = pipe[c_i];
-		c_i++;
+			newpipe[c_j++] = pipe[i];
+		i++;
 	}
 	newpipe[c_j] = EOL;
 	return (newpipe);
@@ -210,7 +214,7 @@ void	wsh_fill_redirection(t_wsh_tokens *wsh_token, char string[][1024])
 	int			c_j;
 	int			c_n;
 	t_wsh_redi	*wsh_redi;
-	
+
 	c_i = 0;
 	c_j = 0;
 	c_n = 0;

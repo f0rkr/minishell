@@ -59,4 +59,6 @@ void			term_reset(t_term *term_stack, int flag, t_wsh_list *wsh_list);
 void			save_history(t_wsh_list *wsh_list, char *string);
 void			copy_to_stack(t_term *term, t_term_stack **stack, char *string);
 void			print_history_plus(t_wsh_list *wsh_list, t_term *term_stack);
+void			print_history(t_wsh_list *wsh_list);
+void			print_history_minus(t_wsh_list *wsh_list, t_term *term);
 #endif

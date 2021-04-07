@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:46:33 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/29 12:21:11 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/04/07 13:05:24 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,36 +60,35 @@ int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
 	return (1);
 }
 
-void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
+void	wsh_exec_loop(t_wsh_list *list, int statval, int i)
 {
-	char *tmp;
+	char	*tmp;
 
-	tmp = NULL;
-	while (wsh_list->ast_parsed && wsh_list->ast_parsed->wsh_command)
+	while (list->ast_parsed && list->ast_parsed->wsh_command)
 	{
 		i = 0;
-		if (wsh_list->ast_parsed->wsh_command[0] == EOL)
+		if (list->ast_parsed->wsh_command[0] == EOL)
 			break ;
-		while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
+		while (list->ast_parsed->wsh_param && list->ast_parsed->wsh_param[i])
 		{
-			tmp = wsh_list->ast_parsed->wsh_param[i];
-			wsh_list->ast_parsed->wsh_param[i] = wsh_escape(wsh_list, wsh_list->ast_parsed->wsh_param[i]);
+			tmp = list->ast_parsed->wsh_param[i];
+			list->ast_parsed->wsh_param[i] = wsh_escape(list, list->ast_parsed->wsh_param[i]);
 			free(tmp);
 			i++;
 		}
-		if (ft_isbuiltin(wsh_list->ast_parsed->wsh_command)
-			&& wsh_list->ast_parsed->std_out == 1 && !wsh_list->ast_parsed->wsh_redi)
-			wsh_exec_builtin(wsh_list);
-		else if (wsh_list->ast_parsed->type == CMD || wsh_list->ast_parsed->wsh_redi
-			|| wsh_list->ast_parsed->std_out != 1)
-			wsh_execve(wsh_list);
-		if (wsh_list->ast_parsed->std_out == 1)
+		if (ft_isbuiltin(list->ast_parsed->wsh_command)
+			&& list->ast_parsed->std_out == 1 && !list->ast_parsed->wsh_redi)
+			wsh_exec_builtin(list);
+		else if (list->ast_parsed->type == CMD || list->ast_parsed->wsh_redi
+			|| list->ast_parsed->std_out != 1)
+			wsh_execve(list);
+		if (list->ast_parsed->std_out == 1)
 			while (wait(&statval) > 0)
 				if (WIFEXITED(statval))
 					g_tab[0] = WEXITSTATUS(statval);
 		g_tab[1] = 0;
-		if (wsh_list->ast_parsed->next)
-			wsh_list->ast_parsed = wsh_list->ast_parsed->next;
+		if (list->ast_parsed->next)
+			list->ast_parsed = list->ast_parsed->next;
 		else
 			break ;
 	}

@@ -41,7 +41,7 @@ int	wsh_red_helper(t_wsh_list *wsh_list, int fd)
 
 void	wsh_error_norm(int fd, char *path, char *command, DIR *folder)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	ft_putstr_fd("wsh: ", 2);

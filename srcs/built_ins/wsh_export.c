@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/28 12:39:19 by oel-ouar          #+#    #+#             */
-/*   Updated: 2021/03/29 12:24:51 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/04/07 13:11:47 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	wsh_remove_spaces(char *param)
 	return ;
 }
 
-void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
+void	wsh_export(t_wsh_tokens *token, t_wsh_list *wsh_list)
 {
 	int		c_i;
 	int		c_j;
@@ -121,18 +121,18 @@ void	wsh_export(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 	c_i = -1;
 	c_j = 0;
 	c_var = NULL;
-	if (!wsh_token->wsh_param)
+	if (!token->wsh_param)
 		wsh_export_only(wsh_list);
-	else if (!ft_isalpha(wsh_token->wsh_param[0][0]))
-		wsh_export_error(wsh_token->wsh_param[0]);
+	else if (!ft_isalpha(token->wsh_param[0][0]))
+		wsh_export_error(token->wsh_param[0]);
 	else
 	{
 		c_j = wsh_tab_length(wsh_list->wsh_envs);
-		while (wsh_token->wsh_param && wsh_token->wsh_param[++c_i] != NULL)
+		while (token->wsh_param && token->wsh_param[++c_i] != NULL)
 		{
-			wsh_remove_spaces(wsh_token->wsh_param[c_i]);
-			wsh_export_valid(wsh_token->wsh_param[c_i]);
-			if (expo(wsh_token->wsh_param[c_i], wsh_list->wsh_envs, &c_var, &c_j))
+			wsh_remove_spaces(token->wsh_param[c_i]);
+			wsh_export_valid(token->wsh_param[c_i]);
+			if (expo(token->wsh_param[c_i], wsh_list->wsh_envs, &c_var, &c_j))
 				break ;
 		}
 	}

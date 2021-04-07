@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 16:25:23 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/29 09:53:40 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/04/07 13:14:56 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,40 +26,6 @@ int	wsh_fillparams(t_wsh_tokens *wsh_token, char string[][1024], int *pos)
 		wsh_token->wsh_param[c_i++] = ft_strdup(string[(*pos)++]);
 	wsh_token->wsh_param[c_i] = 0;
 	return (EXIT);
-}
-
-char	*ft_lowerit(char *string)
-{
-	char	*str;
-	int		c_j;
-
-	c_j = 0;
-	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);
-	while (string[c_j] != EOL)
-	{
-		str[c_j] = ft_tolower(string[c_j]);
-		c_j++;
-	}
-	str[c_j] = EOL;
-	return (str);
-}
-
-int	ft_isubuiltin(const char *command)
-{
-	static char		builin[7][10] = {"echo", "cd", "pwd",
-		"exit", "export", "unset", "env"};
-	int				i;
-	char			*str;
-
-	str = ft_lowerit((char *)command);
-	i = 0;
-	while (ft_strncmp(str, builin[i], ft_strlen(builin[i])) != 0)
-		i++;
-	free(str);
-	str = NULL;
-	if (i == 7)
-		return (0);
-	return (1);
 }
 
 void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
@@ -92,25 +58,7 @@ void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 	wsh_fillparams(wsh_token, string, &c_i);
 }
 
-int	wsh_isescape(char *string, int pos)
-{
-	int	c_c;
-
-	c_c = 0;
-	while (pos >= 0)
-	{
-		if (string[pos] == ESC)
-			c_c++;
-		else
-			break ;
-		pos--;
-	}
-	if (c_c % 2 != 0)
-		return (1);
-	return (0);
-}
-
-void	wsh_command_normalizer(char *string)
+void	wsh_command_normalizer(char *str)
 {
 	char	new_str[1024];
 	int		c_i;
@@ -118,31 +66,22 @@ void	wsh_command_normalizer(char *string)
 
 	c_i = 0;
 	c_k = 0;
-	while (string[c_i] != EOL)
+	while (str[c_i] != EOL)
 	{
-		if (string[c_i] == SQUOTE || string[c_i] == DQUOTE)
+		if (str[c_i] == SQUOTE || str[c_i] == DQUOTE)
 		{
-			while (ft_isin(string[c_i], "\'\""))
-				new_str[c_k++] = string[c_i++];
-			new_str[c_k++] = string[c_i++];
+			while (ft_isin(str[c_i], "\'\""))
+				new_str[c_k++] = str[c_i++];
+			new_str[c_k++] = str[c_i++];
 		}
-		if ((string[c_i] == OUTRID || string[c_i] == INRID)
-			&& !wsh_isescape(string, c_i - 1))
-		{
-			if (string[c_i - 1] != SPACE)
-				new_str[c_k++] = SPACE;
-			new_str[c_k++] = string[c_i];
-			if (string[c_i + 1] == OUTRID)
-				new_str[c_k++] = string[++c_i];
-			new_str[c_k++] = SPACE;
-		}
+		if ((str[c_i] == '>' || str[c_i] == '<') && !wsh_isescape(str, c_i - 1))
+			wsh_command_norm(str, new_str, &c_i, &c_k);
 		else
-			new_str[c_k++] = string[c_i];
+			new_str[c_k++] = str[c_i];
 		c_i++;
 	}
 	new_str[c_k] = EOL;
-	ft_strlcpy(string, new_str, ft_strlen(new_str) + 1);
-	return ;
+	ft_strlcpy(str, new_str, ft_strlen(new_str) + 1);
 }
 
 t_wsh_tokens	*wsh_fillCommands(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token

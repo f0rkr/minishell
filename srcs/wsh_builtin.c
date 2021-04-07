@@ -2,8 +2,8 @@
 
 char	*ft_lower(char *string)
 {
-	char *str;
-	int c_j;
+	char	*str;
+	int		c_j;
 
 	c_j = 0;
 	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);

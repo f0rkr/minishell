@@ -6,7 +6,7 @@
 /*   By: oel-ouar <oel-ouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 14:54:06 by mashad            #+#    #+#             */
-/*   Updated: 2021/03/07 19:38:48 by oel-ouar         ###   ########.fr       */
+/*   Updated: 2021/04/07 12:59:56 by mashad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	**ft_split(char const *str, char c)
 	k = &p;
 	if (!str)
 		return (0);
-	tab = malloc(sizeof(char*) * (tab_aloc((char *)str, c) + 1));
+	tab = (char **)malloc(sizeof(char *)*(tab_aloc((char *)str, c) + 1));
 	while (r < tab_aloc((char *)str, c))
 	{
 		tab[r] = malloc(sizeof(char) * (string((char *)str, k, c) + 1));

@@ -30,6 +30,22 @@ extern int	is_and(const char *str, int p, int q_flag, int pipe)
 	return (0);
 }
 
+char	*ft_lowerit(char *string)
+{
+	char	*str;
+	int		c_j;
+
+	c_j = 0;
+	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);
+	while (string[c_j] != EOL)
+	{
+		str[c_j] = ft_tolower(string[c_j]);
+		c_j++;
+	}
+	str[c_j] = EOL;
+	return (str);
+}
+
 int	is_escaped(char *string, int pos)
 {
 	int	c_c;
@@ -49,7 +65,7 @@ int	is_escaped(char *string, int pos)
 	return (0);
 }
 
-extern int	wsh_scan_commands(char *str, const char *string, int pipe)
+extern int	wsh_scan_commands(char *new, const char *str, int pipe)
 {
 	static int	counter = INIT;
 	int			scount;
@@ -57,21 +73,20 @@ extern int	wsh_scan_commands(char *str, const char *string, int pipe)
 
 	scount = INIT;
 	quote_flag = 0;
-	while (string[counter] == ' ')
+	while (str[counter] == ' ')
 		counter++;
-	while (!is_and(string, counter, quote_flag, pipe) && string[counter] != EOL)
+	while (!is_and(str, counter, quote_flag, pipe) && str[counter] != EOL)
 	{
-		if (ft_isin(string[counter], "\'\"")
-			&& !is_escaped((char *)string, counter)
-			&& string[counter - 1] != ESC && quote_flag == 0)
+		if (ft_isin(str[counter], "\'\"") && !is_escaped((char *)str, counter)
+			&& str[counter - 1] != ESC && quote_flag == 0)
 			quote_flag = 1;
-		else if (ft_isin(string[counter], "\'\"")
-			&& !is_escaped((char *)string, counter) && quote_flag == 1)
+		else if (ft_isin(str[counter], "\'\"")
+			&& !is_escaped((char *)str, counter) && quote_flag == 1)
 			quote_flag = 0;
-		str[scount++] = string[counter++];
+		new[scount++] = str[counter++];
 	}
-	str[scount] = EOL;
-	if (string[counter++] == EOL)
+	new[scount] = EOL;
+	if (str[counter++] == EOL)
 	{
 		counter = 0;
 		return (0);

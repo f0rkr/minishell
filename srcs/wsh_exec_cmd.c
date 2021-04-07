@@ -21,7 +21,7 @@ char	*check_bin(char *cmd, char *command)
 	return (path);
 }
 
-char	**wsh_set_arr(char *path, t_wsh_list *wsh_list)
+char	**wsh_set_arr(char *path, t_wsh_list *list)
 {
 	int		i;
 	int		j;
@@ -33,11 +33,11 @@ char	**wsh_set_arr(char *path, t_wsh_list *wsh_list)
 	if (!arr)
 		return (NULL);
 	arr[0] = path;
-	while (wsh_list->ast_parsed->wsh_arg && wsh_list->ast_parsed->wsh_arg[i])
-		arr[j++] = ft_strdup(wsh_list->ast_parsed->wsh_arg[i++]);
+	while (list->ast_parsed->wsh_arg && list->ast_parsed->wsh_arg[i])
+		arr[j++] = ft_strdup(list->ast_parsed->wsh_arg[i++]);
 	i = 0;
-	while (wsh_list->ast_parsed->wsh_param && wsh_list->ast_parsed->wsh_param[i])
-		arr[j++] = ft_strdup(wsh_list->ast_parsed->wsh_param[i++]);
+	while (list->ast_parsed->wsh_param && list->ast_parsed->wsh_param[i])
+		arr[j++] = ft_strdup(list->ast_parsed->wsh_param[i++]);
 	arr[j] = 0;
 	return (arr);
 }
