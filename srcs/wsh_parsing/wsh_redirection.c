@@ -156,7 +156,10 @@ char	*wsh_escape(t_wsh_list *wsh_list, char *pipe)
 	while (pipe[c_i] != EOL)
 	{
 		if (ft_isin(pipe[c_i], "\'\"") && !is_escape(pipe, c_i))
+		{
 			wsh_process_quotes(wsh_list, newpipe, pipe, &c_i, &c_j);
+			continue;
+		}
 		else if (pipe[c_i] == VAR && !is_escape(pipe, c_i) && pipe[c_i + 1] != EOL && (ft_isalpha(pipe[c_i + 1]) || ft_isspecial(pipe[c_i + 1])))
 		{
 			wsh_replacevar(wsh_list->wsh_envs, newpipe, pipe, &c_i, &c_j);

@@ -66,17 +66,17 @@ void	wsh_cd_dot(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token, int *i)
 			wsh_cd_dot_error(wsh_list->wsh_envs);
 			*i = 1;
 		}
-		wsh_free(&tmp);
 	}
 	else
 	{
 		if (!(ft_isin('/', wsh_token->wsh_param[0] + (
 						ft_strlen(wsh_token->wsh_param[0]) - 1))))
 		{
-			wsh_free(&wsh_token->wsh_param[0]);
+			tmp = wsh_token->wsh_param[0];
 			wsh_token->wsh_param[0] = ft_strjoin(wsh_token->wsh_param[0], "/");
 		}
 	}
+	wsh_free(&tmp);
 	return ;
 }
 

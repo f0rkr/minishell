@@ -20,7 +20,6 @@ int	wsh_loop(t_wsh_list *wsh_list)
 {
 	t_wsh_tokens	*wsh_tmp;
 
-
 	while (1)
 	{
 		wsh_list->garbage_flag = LOOP;

@@ -30,6 +30,25 @@ extern int	is_and(const char *str, int p, int q_flag, int pipe)
 	return (0);
 }
 
+int		is_escaped(char *string, int pos)
+{
+	int	c_c;
+
+	c_c = 0;
+	pos--;
+	while (pos >= 0)
+	{
+		if (string[pos] == ESC)
+			c_c++;
+		else
+			break;
+		pos--;
+	}
+	if (c_c % 2 != 0)
+		return (1);
+	return (0);
+}
+
 extern int	wsh_scan_commands(char *str, const char *string, int pipe)
 {
 	static int	counter = INIT;
@@ -42,10 +61,10 @@ extern int	wsh_scan_commands(char *str, const char *string, int pipe)
 		counter++;
 	while (!is_and(string, counter, quote_flag, pipe) && string[counter] != EOL)
 	{
-		if (ft_isin(string[counter], "\'\"")
+		if (ft_isin(string[counter], "\'\"") && !is_escaped((char *)string, counter)
 			&& string[counter - 1] != ESC && quote_flag == 0)
 			quote_flag = 1;
-		else if (ft_isin(string[counter], "\'\"") && quote_flag == 1)
+		else if (ft_isin(string[counter], "\'\"") && !is_escaped((char *)string, counter) && quote_flag == 1)
 			quote_flag = 0;
 		str[scount++] = string[counter++];
 	}
