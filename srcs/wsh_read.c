@@ -31,8 +31,8 @@ void	ctrl_d_handler(t_wsh_list *wsh_list, t_term *term)
 		wsh_garbageCollector(wsh_list);
 		exit(0);
 	}
-	if (g_pid == 0)
-		g_status = 0;
+	if (g_tab[1] == 0)
+		g_tab[0] = 0;
 	return ;
 }
 
@@ -140,7 +140,7 @@ char	*wsh_read(t_wsh_list *wsh_list, int *garbage_flag)
 	while (TRUE && !string)
 	{
 		key = wsh_read_char();
-		if (g_pid == -1)
+		if (g_tab[1] == -1)
 			term_reset(term, 1, wsh_list);
 		string = handle_key(wsh_list, term, key);
 	}

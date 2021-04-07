@@ -30,8 +30,8 @@ int	wsh_fillparams(t_wsh_tokens *wsh_token, char string[][1024], int *pos)
 
 char	*ft_lowerit(char *string)
 {
-	char *str;
-	int c_j;
+	char	*str;
+	int		c_j;
 
 	c_j = 0;
 	str = (char *)malloc(sizeof(char) * ft_strlen(string) + 1);
@@ -92,7 +92,7 @@ void	wsh_fill_token(t_wsh_list *wsh_list, t_wsh_tokens *wsh_token,
 	wsh_fillparams(wsh_token, string, &c_i);
 }
 
-int		wsh_isescape(char *string, int pos)
+int	wsh_isescape(char *string, int pos)
 {
 	int	c_c;
 
@@ -102,7 +102,7 @@ int		wsh_isescape(char *string, int pos)
 		if (string[pos] == ESC)
 			c_c++;
 		else
-			break;
+			break ;
 		pos--;
 	}
 	if (c_c % 2 != 0)
@@ -126,7 +126,8 @@ void	wsh_command_normalizer(char *string)
 				new_str[c_k++] = string[c_i++];
 			new_str[c_k++] = string[c_i++];
 		}
-		if ((string[c_i] == OUTRID || string[c_i] == INRID) && !wsh_isescape(string, c_i - 1))
+		if ((string[c_i] == OUTRID || string[c_i] == INRID)
+			&& !wsh_isescape(string, c_i - 1))
 		{
 			if (string[c_i - 1] != SPACE)
 				new_str[c_k++] = SPACE;

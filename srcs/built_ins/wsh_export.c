@@ -62,7 +62,7 @@ void	wsh_export_only(t_wsh_list *wsh_list)
 			ft_putchar_fd('\"', 1);
 		ft_putchar_fd('\n', 1);
 	}
-	g_status = 0;
+	g_tab[0] = 0;
 }
 
 void	wsh_export_valid(char *param)
@@ -82,7 +82,7 @@ void	wsh_export_valid(char *param)
 				wsh_export_error(param);
 		i++;
 	}
-	g_status = 0;
+	g_tab[0] = 0;
 }
 
 void	wsh_remove_spaces(char *param)

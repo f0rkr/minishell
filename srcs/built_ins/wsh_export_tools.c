@@ -17,7 +17,7 @@ void	wsh_export_error(char *param)
 	ft_putstr_fd("wsh : export: `", 1);
 	ft_putstr_fd(param, 1);
 	ft_putendl_fd("': not a valid identifier", 1);
-	g_status = 1;
+	g_tab[0] = 1;
 	return ;
 }
 

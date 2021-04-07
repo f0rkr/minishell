@@ -29,7 +29,7 @@ void	term_reset(t_term *term_stack, int flag, t_wsh_list *wsh_list)
 	if (flag)
 	{
 		wsh_list->history_counter = wsh_list->history_len;
-		g_pid = 0;
+		g_tab[1] = 0;
 	}
 	return ;
 }

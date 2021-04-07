@@ -63,9 +63,7 @@
 /*
 ** WESH SHELL STRUCT
 */
-
-int						g_status;
-int						g_pid;
+int	g_tab[2];
 
 typedef struct s_wsh_redirection
 {

@@ -103,10 +103,10 @@ void	wsh_execve(t_wsh_list *wsh_list)
 	else if (path == NULL)
 		wsh_path(wsh_list, &path);
 	arr = wsh_set_arr(path, wsh_list);
-	g_pid = fork();
-	if (g_pid == 0)
+	g_tab[1] = fork();
+	if (g_tab[1] == 0)
 		wsh_child_exec(wsh_list, i, arr, path);
-	else if (g_pid > 0)
+	else if (g_tab[1] > 0)
 		wsh_exec_parent(wsh_list);
 	wsh_loop_free(arr);
 	return ;

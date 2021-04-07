@@ -40,7 +40,8 @@ int	wsh_puts(int key)
 }
 
 /*
-**  THIS FUCNTION TRANSFER OE CHARACTER FROM STACK SRC TO STACK DES! IT'S OBVIOUSE
+**  THIS FUCNTION TRANSFER OE CHARACTER FROM STACK SRC TO STACK DES! IT'S 
+	OBVIOUSE
 */
 
 void	transfer_one_char(t_term_stack **des, t_term_stack **src)

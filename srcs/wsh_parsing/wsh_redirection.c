@@ -1,6 +1,7 @@
 #include "parsing.h"
 
-void	wsh_replacevar(char **envs, char newstring[1024], char string[1024], int *c_pos, int *c_j)
+void	wsh_replacevar(char **envs, char newstring[1024],
+		char string[1024], int *c_pos, int *c_j)
 {
 	char	*var;
 	char	*c_var;
@@ -11,7 +12,8 @@ void	wsh_replacevar(char **envs, char newstring[1024], char string[1024], int *c
 	var = (char *)malloc(sizeof(char) * 4029);
 	if (string[*c_pos] == EOL)
 		return ;
-	while (string[*c_pos] != EOL && (ft_isspecial(string[*c_pos]) || ft_isalpha(string[*c_pos])))
+	while (string[*c_pos] != EOL
+		&& (ft_isspecial(string[*c_pos]) || ft_isalpha(string[*c_pos])))
 		var[c_i++] = string[(*c_pos)++];
 	var[c_i] = EOL;
 	c_var = wsh_get_envar((char *)var, envs);
@@ -30,7 +32,7 @@ int	ft_issi(char c)
 	return (0);
 }
 
-int		is_escape(char *string, int pos)
+int	is_escape(char *string, int pos)
 {
 	int	c_c;
 
@@ -41,7 +43,7 @@ int		is_escape(char *string, int pos)
 		if (string[pos] == ESC)
 			c_c++;
 		else
-			break;
+			break ;
 		pos--;
 	}
 	if (c_c % 2 != 0)
@@ -49,14 +51,14 @@ int		is_escape(char *string, int pos)
 	return (0);
 }
 
-int		wsh_is_closed(char *string, int pos, char c)
+int	wsh_is_closed(char *string, int pos, char c)
 {
 	while (string[pos] != EOL)
 	{
 		if (string[pos] == SQUOTE)
-			break;
+			break ;
 		if (string[pos] == c && !is_escape(string, pos))
-			break;
+			break ;
 		pos++;
 	}
 	if (string[pos] == SQUOTE)
@@ -66,7 +68,8 @@ int		wsh_is_closed(char *string, int pos, char c)
 	return (0);
 }
 
-void	wsh_read_squote(t_wsh_list *wsh_list, char newstring[1024], char string[1024], int *pos, int *c_j)
+void	wsh_read_squote(t_wsh_list *wsh_list,
+		char newstring[1024], char string[1024], int *pos, int *c_j)
 {
 	char	*line;
 	int		c_i;

@@ -5,7 +5,8 @@ void	ft_printarg(t_wsh_tokens *wsh_token)
 	int		i;
 
 	i = 0;
-	while (wsh_token->wsh_arg[i] && !(ft_strncmp(wsh_token->wsh_arg[i], "-n", 3)))
+	while (wsh_token->wsh_arg[i]
+		&& !(ft_strncmp(wsh_token->wsh_arg[i], "-n", 3)))
 		i++;
 	while (wsh_token->wsh_arg[i])
 	{
@@ -37,7 +38,7 @@ void	wsh_echo(t_wsh_tokens *wsh_token)
 	}
 	if (!newline)
 		ft_putchar_fd('\n', 1);
-	g_status = 0;
+	g_tab[0] = 0;
 	if (wsh_token->std_out != 1 || wsh_token->wsh_redi)
 		exit(0);
 	return ;

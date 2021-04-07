@@ -18,7 +18,7 @@ void	wsh_cd_error(char **tmp)
 	ft_putstr_fd(*tmp, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(strerror(errno), 2);
-	g_status = 1;
+	g_tab[0] = 1;
 }
 
 void	wsh_change_pwd(char **envs, char *str)
@@ -87,7 +87,7 @@ void	wsh_cd(t_wsh_list *wsh_list)
 
 	tmp = NULL;
 	i = 0;
-	g_status = 0;
+	g_tab[0] = 0;
 	if (wsh_list->ast_parsed->wsh_param)
 	{
 		tmp = wsh_list->ast_parsed->wsh_param[0];
@@ -100,7 +100,7 @@ void	wsh_cd(t_wsh_list *wsh_list)
 	else
 	{
 		ft_putendl_fd("wsh: cd: HOME not set", 2);
-		g_status = 1;
+		g_tab[0] = 1;
 	}
 	if (i == 0)
 		wsh_change_pwd(wsh_list->wsh_envs, NULL);

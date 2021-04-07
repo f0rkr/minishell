@@ -92,7 +92,7 @@ t_wsh_list	*wsh_init(char *env[])
 	wsh_list->history_len = 0;
 	wsh_list->wsh_history = (char **)malloc(sizeof(char *) * 4029);
 	wsh_list->wsh_envs[i] = 0;
-	g_status = 0;
+	g_tab[0] = 0;
 	return (wsh_list);
 }
 
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **env)
 	t_wsh_list	*wsh_list;
 
 	(void)argv;
-	g_pid = 0;
+	g_tab[1] = 0;
 	signal(SIGINT, handle_sigin);
 	signal(SIGQUIT, handle_quit);
 	wsh_list = wsh_init(env);

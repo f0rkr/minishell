@@ -43,7 +43,7 @@ void	wsh_unset(t_wsh_tokens *wsh_token, t_wsh_list *wsh_list)
 			wsh_removevar(wsh_list->wsh_envs, c_p);
 		c_i++;
 	}
-	g_status = 0;
+	g_tab[0] = 0;
 	if (wsh_list->ast_parsed->std_out != 1 || wsh_list->ast_parsed->wsh_redi)
 		exit(0);
 	return ;

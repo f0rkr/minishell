@@ -19,14 +19,17 @@ void	wsh_exit_helper(t_wsh_list *wsh_list)
 
 void	wsh_errors(t_wsh_list *wsh_list, int *i, int j)
 {
-	if (*i == 0)
-		*i = 255;
-	ft_putstr_fd("bash: exit: ", 1);
-	if (j == 1)
-		ft_putstr_fd(wsh_list->ast_parsed->wsh_param[0], 1);
-	else
-		ft_putstr_fd(wsh_list->ast_parsed->wsh_arg[0], 1);
-	ft_putendl_fd(": numeric argument required", 1);
+	if (*i == -1 || *i == 0)
+	{
+		if (*i == 0)
+			*i = 255;
+		ft_putstr_fd("bash: exit: ", 1);
+		if (j == 1)
+			ft_putstr_fd(wsh_list->ast_parsed->wsh_param[0], 1);
+		else
+			ft_putstr_fd(wsh_list->ast_parsed->wsh_arg[0], 1);
+		ft_putendl_fd(": numeric argument required", 1);
+	}
 }
 
 void	wsh_exit(t_wsh_list *wsh_list)
@@ -51,8 +54,7 @@ void	wsh_exit(t_wsh_list *wsh_list)
 		}
 		else
 			i = atoi(wsh_list->ast_parsed->wsh_arg[0]);
-		if (i == -1 || i == 0)
-			wsh_errors(wsh_list, &i, j);
+		wsh_errors(wsh_list, &i, j);
 	}
 	if (wsh_list->ast_parsed->std_in == 0)
 		exit(i);

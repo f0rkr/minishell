@@ -28,7 +28,7 @@ int	wsh_token_error(t_wsh_list *wsh_list)
 			i++;
 		}
 		ft_putendl_fd("'", 1);
-		g_status = 258;
+		g_tab[0] = 258;
 		return (0);
 	}
 	return (1);
@@ -39,7 +39,7 @@ int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
 	if (wsh_redi->filename[i] == EOL)
 	{
 		ft_putendl_fd("wsh: syntax error near unexpected token `newline'", 1);
-		g_status = 258;
+		g_tab[0] = 258;
 		return (0);
 	}
 	else if (wsh_redi->filename[i] == ';' || wsh_redi->filename[i] == '|'
@@ -54,7 +54,7 @@ int	wsh_redi_error(t_wsh_redi *wsh_redi, int i)
 				break ;
 		}
 		ft_putendl_fd("'", 1);
-		g_status = 258;
+		g_tab[0] = 258;
 		return (0);
 	}
 	return (1);
@@ -86,8 +86,8 @@ void	wsh_exec_loop(t_wsh_list *wsh_list, int statval, int i)
 		if (wsh_list->ast_parsed->std_out == 1)
 			while (wait(&statval) > 0)
 				if (WIFEXITED(statval))
-					g_status = WEXITSTATUS(statval);
-		g_pid = 0;
+					g_tab[0] = WEXITSTATUS(statval);
+		g_tab[1] = 0;
 		if (wsh_list->ast_parsed->next)
 			wsh_list->ast_parsed = wsh_list->ast_parsed->next;
 		else
@@ -110,6 +110,6 @@ void	wsh_exec(t_wsh_list *wsh_list)
 	wsh_exec_loop(wsh_list, statval, i);
 	while (wait(&statval) > 0)
 		if (WIFEXITED(statval))
-			g_status = WEXITSTATUS(statval);
+			g_tab[0] = WEXITSTATUS(statval);
 	return ;
 }

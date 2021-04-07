@@ -24,18 +24,16 @@ char	*wsh_get_envar(char *s, char **env)
 	else if (ft_strncmp(s, "#", 1) == 0)
 		return (ft_strdup("0"));
 	else if (ft_strncmp(s, "?", 1) == 0)
-		return (ft_itoa(g_status));
-	else if (ft_strncmp(s, "PWD", 4) == 0)
+		return (ft_itoa(g_tab[0]));
 	while (env[i])
 	{
 		var = ft_substr(env[i], 0, wsh_findeq(env[i]));
 		if (ft_strncmp(var, s, ft_strlen(s) + 1) == 0)
 		{
-			free(var);
+			wsh_free(&var);
 			return (ft_strdup(env[i] + (ft_strlen(s) + 1)));
 		}
-		free(var);
-		var = NULL;
+		wsh_free(&var);
 		i++;
 	}
 	return (ft_strdup("\0"));
