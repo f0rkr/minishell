@@ -21,6 +21,14 @@ A few of the functions are "built-in", meaning we don't call the executable, we 
 
 You can use arrow keys to edit commands and iterate through last executed ones (``history``). *managed with [termcap](https://man7.org/linux/man-pages/man5/termcap.5.html)*
 
+# How to run it
+
+```shell
+f0rkr@shell$ make
+f0rkr@shell$ ./minishell
+wsh :: /Users/f0rkr/Documents/minishell » wesh a sat
+```
+
 # Teammate 
   - [teslazap](https://github.com/OussamaElouarti)
 
