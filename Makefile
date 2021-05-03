@@ -10,7 +10,7 @@ BSRCS = includes/
 all : $(NAME)
 $(NAME):
 	@$(MAKE) -C $(LIBFT_DIR)
-	@$(CC) $(flags) $(SRCS) -I $(BSRCS) -g -ltermcap $(LIBFT_DIR)/$(LIBFT_NAME) -o $(NAME)
+	@$(CC) $(flags) $(SRCS) -I $(BSRCS) -ltermcap $(LIBFT_DIR)/$(LIBFT_NAME) -o $(NAME)
 
 bonus:
 	@$(CC) $(flags) -I $(BSRCS) $(LIBFT_DIR)/$(LIBFT_NAME) -o $(NAME)
