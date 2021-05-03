@@ -1,6 +1,6 @@
 # minishell
 
-Coding a *shell* from scratch using low level C was one of the most powerfull project I made, construct all those building block of a shell from parsing commands
+Coding a *shell* from scratch using low level C was one of the most powerfull project I made, constructing all those building block of a shell from parsing commands
 through forking process creation and synchronisation, managing pipes and executing it. ✨
 
 <img src="https://images.amcnetworks.com/ifccenter.com/wp-content/uploads/2020/01/ghost-in-the-shell-1280.jpg">
