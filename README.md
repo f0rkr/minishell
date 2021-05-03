@@ -32,4 +32,6 @@ wsh :: /Users/f0rkr/Documents/minishell » wesh a sat
 # Teammate 
   - [teslazap](https://github.com/OussamaElouarti)
 
+# Resources
+
 https://www.gnu.org/software/bash/manual/bash.html
