@@ -30,7 +30,7 @@ wsh :: /Users/f0rkr/Documents/minishell » wesh a sat
 ```
 
 # Teammate 
-  - [f0rkr](https://github.com/f0rkr)
+  - [teslazap](https://github.com/OussamaElouarti)
 
 # Resources
 
